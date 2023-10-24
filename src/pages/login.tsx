@@ -20,7 +20,7 @@ const LoginPage = () => {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
       setUser({ uid: user.uid, email: user.email! });
-      navigate('/');
+      navigate('/profile');
     } catch (error) {
       console.error('Erreur de connexion avec Google :', error);
       setError('Une erreur s\'est produite lors de la connexion.');
@@ -33,7 +33,7 @@ const LoginPage = () => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
       setUser({ uid: auth.currentUser!.uid, email: email });
-      navigate('/');
+      navigate('/profile');
     } catch (error: any) {
       console.error('Erreur de connexion avec e-mail :', error);
       if (error && error.code === 'auth/invalid-login-credentials') {
