@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import { Auth, UserCredential } from "firebase/auth";
 import { auth } from "../db/db";
 import { createUserWithEmailAndPassword } from "firebase/auth";
@@ -15,7 +14,7 @@ const SignUp: React.FC = () => {
     createUserWithEmailAndPassword(auth as Auth, email, password)
       .then((data: UserCredential) => {
         console.log(data, "authData");
-        history("/"); 
+        history("/");
       })
       .catch((err) => {
         alert(err.code);
@@ -35,6 +34,6 @@ const SignUp: React.FC = () => {
       <button onClick={() => history("/")}>Retour à la connexion</button>
     </div>
   );
-}
+};
 
 export default SignUp;
