@@ -14,7 +14,7 @@ const Navbar = () => {
     { path: '', icon: <HomeIcon />, name: 'Home' },
     { path: 'login', icon: <LoginIcon />, name: 'Log in' },
     { path: 'signup', icon: <SignupIcon />, name: 'Signup' },
-    { path: 'profil', icon: <ProfileIcon />, name: 'Profil Utilisateur' },
+    { path: 'profile', icon: <ProfileIcon />, name: 'Profil Utilisateur' },
     { path: 'list', icon: <ListIcon />, name: 'List' },
   ];
 
