@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardMedia, Typography } from '@mui/material';
-import { Show, fetchPopularSeries } from '../services/seriesService';
+import { Show, fetchPopularSeries } from '../../services/seriesService';
 
 const PopularSeriesCorridor: React.FC = () => {
     const [series, setSeries] = useState<Show[]>([]);

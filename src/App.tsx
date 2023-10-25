@@ -1,10 +1,10 @@
 import React from "react";
 import "./App.css";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import LoginPage from "./pages/login";
-import Signup from "./pages/signup";
-import Profile from "./pages/profile";
-import ListPage from "./pages/List";
+import LoginPage from "./pages/login/login";
+import Signup from "./pages/signup/signup";
+import Profile from "./pages/profile/profile";
+import ListPage from "./pages/list/List";
 
 function App(): React.ReactElement {
   return (
