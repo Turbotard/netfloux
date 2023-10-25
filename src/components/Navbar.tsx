@@ -7,19 +7,20 @@ import SignupIcon from '@mui/icons-material/PersonAdd';
 import HomeIcon from '@mui/icons-material/Home';
 import ProfileIcon from '@mui/icons-material/Person';
 import { Link } from 'react-router-dom';
+import '../css/navbar.css';
+
 import ListIcon from '@mui/icons-material/List';
+
 
 const Navbar = () => {
   const Routes = [
     { path: '', icon: <HomeIcon />, name: 'Home' },
-    { path: 'login', icon: <LoginIcon />, name: 'Log in' },
-    { path: 'signup', icon: <SignupIcon />, name: 'Signup' },
     { path: 'profile', icon: <ProfileIcon />, name: 'Profil Utilisateur' },
     { path: 'list', icon: <ListIcon />, name: 'List' },
   ];
 
   return (
-    <AppBar position="static">
+    <AppBar position="static" >
       <Toolbar>
         {Routes.map((route) => (
           <Button
