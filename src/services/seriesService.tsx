@@ -9,25 +9,29 @@ export interface Show {
     nextShowingDate: string;
     genres: string[];
     rating: number;
+    synopsis: string;
 }
 
-
-export const fetchDetailsFromTMDb = async (tmdbId: number): Promise<{ poster: string, genres: string[] }> => {
+export const fetchDetailsFromTMDb = async (tmdbId: number): Promise<{ poster: string, genres: string[], synopsis: string }> => {
     const tmdbApiKey = process.env.REACT_APP_TMDB_API_KEY;
 
     if (!tmdbApiKey) {
         console.error("La clé API (REACT_APP_TMDB_API_KEY) n'est pas définie.");
-        return { poster: '', genres: [] };
+        return { poster: '', genres: [], synopsis: '' };
     }
 
     try {
         const response = await fetch(`${TMDB_BASE_URL}/tv/${tmdbId}?api_key=${tmdbApiKey}`);
         const data = await response.json();
         const genres = data.genres.map((genre: { id: number, name: string }) => genre.name);
-        return { poster: `${TMDB_IMAGE_BASE_URL}${data.poster_path}`, genres };
+        return { 
+            poster: `${TMDB_IMAGE_BASE_URL}${data.poster_path}`, 
+            genres, 
+            synopsis: data.overview // Ajouté
+        };
     } catch (error) {
         console.error("Erreur lors de la récupération des détails depuis TMDb:", error);
-        return { poster: '', genres: [] };
+        return { poster: '', genres: [], synopsis: '' };
     }
 }
 
@@ -111,7 +115,7 @@ export const fetchPopularSeries = async (): Promise<Show[]> => {
         const rawData = await response.json();
 
         const showsWithDetails = await Promise.all(rawData.map(async (show: any) => {
-            const { poster, genres } = await fetchDetailsFromTMDb(show.ids.tmdb);
+            const { poster, genres, synopsis } = await fetchDetailsFromTMDb(show.ids.tmdb);
             const nextShowingDate = await fetchNextShowingDate(show.ids.trakt);
             const rating = await fetchRatingFromTrakt(show.ids.trakt);
             return {
@@ -120,7 +124,8 @@ export const fetchPopularSeries = async (): Promise<Show[]> => {
                 poster: poster,
                 nextShowingDate: nextShowingDate || '',
                 genres: genres,
-                rating: rating
+                rating: rating,
+                synopsis: synopsis
             };
         }));
 
