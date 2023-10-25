@@ -28,7 +28,7 @@ const SignUp: React.FC = () => {
             email: auth.currentUser.email,
           });
         }
-        history("/");
+        history("/profile");
       })
       .catch((err) => {
         alert(err.code);
