@@ -30,6 +30,9 @@ const PopularSeriesCorridor: React.FC = () => {
                         <Typography color="textSecondary">
                             Prochaine projection: {shows.nextShowingDate}
                         </Typography>
+                        <Typography color="textSecondary">
+                            Genre: {shows.genres}
+                        </Typography>
                     </CardContent>
                 </Card>
             ))}
