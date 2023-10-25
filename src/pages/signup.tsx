@@ -6,7 +6,7 @@ import { useUser } from '../types/usertypes';
 import '../css/signup.css'
 import Typography from '@mui/material/Typography';
 import { ThemeProvider } from "styled-components";
-import { Avatar, Box, Button, Checkbox, CssBaseline, Grid, Paper, TextField, createTheme } from "@mui/material";
+import { Box, Button, CssBaseline, Grid, TextField, createTheme } from "@mui/material";
 import { collection, addDoc } from "firebase/firestore";
 
 const SignUp: React.FC = () => {

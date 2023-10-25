@@ -2,8 +2,6 @@ import React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Button from '@mui/material/Button';
-import LoginIcon from '@mui/icons-material/Login';
-import SignupIcon from '@mui/icons-material/PersonAdd';
 import HomeIcon from '@mui/icons-material/Home';
 import ProfileIcon from '@mui/icons-material/Person';
 import { Link } from 'react-router-dom';

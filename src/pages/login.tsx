@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   getAuth,
   signInWithEmailAndPassword,
@@ -10,12 +10,8 @@ import "../css/login.css";
 import { useUser } from "../types/usertypes";
 import Typography from '@mui/material/Typography';
 import { ThemeProvider } from "styled-components";
-import { Avatar, Box, Button, Checkbox, CssBaseline, Grid, Paper, TextField, createTheme } from "@mui/material";
-import { Copyright } from "@mui/icons-material";
-import FormControlLabel from '@mui/material/FormControlLabel';
-import { classes } from "istanbul-lib-coverage";
-import PropTypes from "prop-types";
-import { collection, addDoc, getDoc, doc, setDoc } from "firebase/firestore";
+import { Box, Button, CssBaseline, Grid, TextField, createTheme } from "@mui/material";
+import { getDoc, doc, setDoc } from "firebase/firestore";
 import { firestore } from "../db/db";
 
 const LoginPage = () => {
@@ -25,8 +21,8 @@ const LoginPage = () => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [authing, setAuthing] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [, setAuthing] = useState(false);
+  const [, setError] = useState<string | null>(null);
 
   const handleSignInWithGoogle = async () => {
     const provider = new GoogleAuthProvider();
