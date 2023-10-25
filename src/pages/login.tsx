@@ -15,7 +15,7 @@ import { Copyright } from "@mui/icons-material";
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { classes } from "istanbul-lib-coverage";
 import PropTypes from "prop-types";
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc, getDoc, doc, setDoc } from "firebase/firestore";
 import { firestore } from "../db/db";
 
 const LoginPage = () => {
@@ -34,19 +34,25 @@ const LoginPage = () => {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
       setUser({ uid: user.uid, email: user.email! });
-      const userRef = collection(firestore, "users");
-      if (auth.currentUser) {
-        const userDoc = await addDoc(userRef, {
-          id: auth.currentUser.uid,
-          email: auth.currentUser.email,
+  
+      const userRef = doc(firestore, "users", user.uid);
+  
+      const userDocSnap = await getDoc(userRef);
+  
+      if (!userDocSnap.exists()) {
+        await setDoc(userRef, {
+          id: user.uid,
+          email: user.email!,
         });
       }
+  
       navigate("/profile");
     } catch (error) {
       console.error("Erreur de connexion avec Google :", error);
       setError("Une erreur s'est produite lors de la connexion.");
     }
   };
+  
 
   const handleSignInWithEmail = async () => {
     setAuthing(true);
@@ -75,41 +81,6 @@ const LoginPage = () => {
   
 
   return (
-    // <ThemeProvider
-    //       <div className="hybrid-login-form">
-    //   <h1>Page de connexion</h1>
-    //   {error && <div className="error-message">{error}</div>}
-    //   <div className="hybrid-login-form">
-    //     <label>Email :</label>
-    //     <input
-    //       type="email"
-    //       value={email}
-    //       onChange={(e) => setEmail(e.target.value)}
-    //     />
-    //   </div>
-    //   <div className="login-form">
-    //     <label>Mot de passe :</label>
-    //     <input
-    //       type="password"
-    //       value={password}
-    //       onChange={(e) => setPassword(e.target.value)}
-    //     />
-    //   </div>
-    //   <button onClick={handleSignInWithEmail} disabled={authing} className="btn login-button btn-submit btn-small" >
-    //     Se connecter par e-mail
-    //   </button>
-    //   <button className="login-google-button" onClick={handleSignInWithGoogle}>
-    //     Se connecter avec Google
-    //   </button>
-    //   <p className="login-signup">
-    //     Vous n'avez pas de compte ?{" "}
-    //     <Link to="/signup" className="login-signup-link">
-    //       Inscrivez-vous
-    //     </Link>
-    //   </p>
-    // </div>
-    // </ThemeProvider>
-
     <ThemeProvider theme={defaultTheme}>
     <Grid container component="main" sx={{ height: '100vh' }}>
       <CssBaseline />

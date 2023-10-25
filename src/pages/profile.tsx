@@ -26,7 +26,7 @@ const Profile: React.FC = () => {
         setUser(currentUser);
       } else {
         setUser(null);
-        navigate("/");
+        navigate("/login");
       }
     });
 
@@ -36,7 +36,7 @@ const Profile: React.FC = () => {
   const handleSignOut = () => {
     signOut(authInstance)
       .then(() => {
-        navigate("/");
+        navigate("/login");
       })
       .catch((error) => {
         console.error("Erreur lors de la déconnexion: ", error);
