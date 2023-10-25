@@ -33,6 +33,9 @@ const PopularSeriesCorridor: React.FC = () => {
                         <Typography color="textSecondary">
                             Genre: {shows.genres}
                         </Typography>
+                        <Typography color="textSecondary">
+                            Note: {shows.rating}
+                        </Typography>
                     </CardContent>
                 </Card>
             ))}

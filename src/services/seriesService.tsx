@@ -8,7 +8,9 @@ export interface Show {
     poster: string;
     nextShowingDate: string;
     genres: string[];
+    rating: number;
 }
+
 
 export const fetchDetailsFromTMDb = async (tmdbId: number): Promise<{ poster: string, genres: string[] }> => {
     const tmdbApiKey = process.env.REACT_APP_TMDB_API_KEY;
@@ -26,6 +28,31 @@ export const fetchDetailsFromTMDb = async (tmdbId: number): Promise<{ poster: st
     } catch (error) {
         console.error("Erreur lors de la récupération des détails depuis TMDb:", error);
         return { poster: '', genres: [] };
+    }
+}
+
+export const fetchRatingFromTrakt = async (showId: number): Promise<number> => {
+    const traktApiKey = process.env.REACT_APP_TRAKT_API_CLIENT_ID;
+    if (!traktApiKey) {
+        console.error("La clé API (REACT_APP_TRAKT_API_CLIENT_ID) n'est pas définie.");
+        return 0;
+    }
+
+    try {
+        const response = await fetch(`${TRAKT_BASE_URL}shows/${showId}/ratings`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'trakt-api-version': '2',
+                'trakt-api-key': traktApiKey
+            }
+        });
+
+        const data = await response.json();
+
+        return data.rating;
+    } catch (error) {
+        console.error("Erreur lors de la récupération des évaluations depuis Trakt:", error);
+        return 0;
     }
 }
 
@@ -86,12 +113,14 @@ export const fetchPopularSeries = async (): Promise<Show[]> => {
         const showsWithDetails = await Promise.all(rawData.map(async (show: any) => {
             const { poster, genres } = await fetchDetailsFromTMDb(show.ids.tmdb);
             const nextShowingDate = await fetchNextShowingDate(show.ids.trakt);
+            const rating = await fetchRatingFromTrakt(show.ids.trakt);
             return {
                 title: show.title,
                 year: show.year,
                 poster: poster,
                 nextShowingDate: nextShowingDate || '',
-                genres: genres
+                genres: genres,
+                rating: rating
             };
         }));
 
