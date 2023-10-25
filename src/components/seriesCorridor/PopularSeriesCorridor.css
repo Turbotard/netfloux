@@ -1,0 +1,146 @@
+.carousel-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #141414;
+    padding: 5% 0;
+}
+
+.carousel-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    z-index: 10;
+    border: none;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.carousel-button:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.carousel-button[disabled] {
+    visibility: hidden;
+}
+
+.carousel-button:first-child {
+    left: 0;
+}
+
+.carousel-button:last-child {
+    right: 0;
+}
+
+.carousel {
+    display: flex;
+    overflow-x: auto;
+    gap: 16px;
+    padding: 0 50px;
+    scrollbar-width: thin;
+    scrollbar-color: #888 #202020;
+}
+
+.carousel::-webkit-scrollbar {
+    width: 10px;
+}
+
+.carousel::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 10px;
+}
+
+.card {
+    transition: all 0.3s ease-in-out;
+    z-index: 0;
+    overflow: hidden;
+    width: 250px;
+    height: 350px;
+    position: relative;
+}
+
+.card:hover {
+    width: 300px;
+    height: 380px;
+    margin: 10px;
+    z-index: 1;
+}
+
+.card-description {
+    position: absolute;
+    bottom: -50px;
+    width: 100%;
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.8);
+    transition: bottom 0.3s ease-in-out;
+    font-size: 12px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.card:hover .card-description {
+    bottom: 0;
+}
+
+.card:hover .popup-button {
+    transform: translateY(-30px);
+}
+
+.series-details {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    width: 80%;
+    max-width: 800px;
+    z-index: 1000;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    overflow-y: auto;
+    max-height: 80vh;
+}
+
+.popup-header {
+    text-align: center;
+}
+
+.popup-header img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+
+.popup-body {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.popup-description {
+    flex: 1;
+    overflow-y: auto;
+    margin: 10px;
+    padding: 20px;
+    background-color: rgba(0, 0, 0, 0.6);
+    border-radius: 10px;
+}
+
+.popup-similar {
+    padding: 20px;
+    text-align: center;
+}
+
+.popup-close-button {
+    position: absolute;
+    top: 2%;
+    left: 92%;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+}
