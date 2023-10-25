@@ -10,7 +10,6 @@ function App(): React.ReactElement {
   return (
     <div className="App">
       <Router>
-      <MenuHamburger />
         <Routes>
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<LoginPage />} />
