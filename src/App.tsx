@@ -3,6 +3,7 @@ import "./App.css";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import LoginPage from "./pages/login";
 import Signup from "./pages/signup";
+import Profile from "./pages/profile";
 import MenuHamburger from "./components/MenuHamburger";
 
 function App(): React.ReactElement {
@@ -13,6 +14,7 @@ function App(): React.ReactElement {
         <Routes>
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/profile" element={<Profile />} />
         </Routes>
       </Router>
     </div>
