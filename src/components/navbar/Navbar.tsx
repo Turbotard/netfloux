@@ -5,7 +5,7 @@ import Button from '@mui/material/Button';
 import HomeIcon from '@mui/icons-material/Home';
 import ProfileIcon from '@mui/icons-material/Person';
 import { Link } from 'react-router-dom';
-import '../css/navbar.css';
+import './navbar.css';
 
 import ListIcon from '@mui/icons-material/List';
 
