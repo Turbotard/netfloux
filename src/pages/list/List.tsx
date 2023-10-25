@@ -1,7 +1,7 @@
 import React from 'react';
-import ListWithFilters from '../components/ListWithFilters';
+import ListWithFilters from '../../components/listWithFilters/ListWithFilters';
 import { Typography } from '@mui/material';
-import PopularSeriesCorridor from '../components/PopularSeriesCorridor';
+import PopularSeriesCorridor from '../../components/seriesCorridor/PopularSeriesCorridor';
 
 const ListPage: React.FC = () => {
     return (

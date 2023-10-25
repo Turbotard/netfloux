@@ -1,9 +1,9 @@
 import { Auth, UserCredential } from "firebase/auth";
-import { auth, firestore } from "../db/db";
+import { auth, firestore } from "../../db/db";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { Link, useNavigate } from "react-router-dom";
-import { useUser } from '../types/usertypes'; 
-import '../css/signup.css'
+import { useUser } from '../../types/usertypes'; 
+import './signup.css'
 import Typography from '@mui/material/Typography';
 import { ThemeProvider } from "styled-components";
 import { Box, Button, CssBaseline, Grid, TextField, createTheme } from "@mui/material";
@@ -123,7 +123,7 @@ const SignUp: React.FC = () => {
     sm={4}
     md={7}
     sx={{
-      backgroundImage: 'url(https://assets.nflxext.com/ffe/siteui/vlv3/a73c4363-1dcd-4719-b3b1-3725418fd91d/ef710c60-45ca-4ff6-9133-abd76333d090/FR-fr-20231016-popsignuptwoweeks-perspective_alpha_website_large.jpg)',
+      backgroundImage: 'url(/img/image-series.jpg)',
       backgroundRepeat: 'no-repeat',
       backgroundColor: (t) =>
         t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
