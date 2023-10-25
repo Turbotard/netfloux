@@ -1,15 +1,14 @@
 import React from 'react';
-import SeriesList from '../components/SeriesList';
 import ListWithFilters from '../components/ListWithFilters';
 import { Typography } from '@mui/material';
+import PopularSeriesCorridor from '../components/PopularSeriesCorridor';
 
 const ListPage: React.FC = () => {
     return (
         <div>
             <Typography variant="h4" gutterBottom>
+                <PopularSeriesCorridor />
             </Typography>
-            <SeriesList />
-
             <Typography variant="h4" gutterBottom style={{marginTop: '20px'}}>
                 Liste avec filtres:
             </Typography>

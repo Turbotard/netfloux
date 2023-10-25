@@ -5,7 +5,6 @@ import LoginPage from "./pages/login";
 import Signup from "./pages/signup";
 import Profile from "./pages/profile";
 import ListPage from "./pages/List";
-import PopularSeriesCorridor from "./components/PopularSeriesCorridor";
 
 function App(): React.ReactElement {
   return (
@@ -17,7 +16,6 @@ function App(): React.ReactElement {
           <Route path="/profile" element={<Profile />} />
           <Route path="/list" element={<ListPage />} />
         </Routes>
-        <PopularSeriesCorridor />
       </Router>
     </div>
   );
