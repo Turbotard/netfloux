@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   getAuth,
   signInWithEmailAndPassword,
@@ -6,8 +6,13 @@ import {
   signInWithPopup,
 } from "firebase/auth";
 import { Link, useNavigate } from "react-router-dom";
-import "../App.css";
+import "../css/login.css";
 import { useUser } from "../types/usertypes";
+import Typography from '@mui/material/Typography';
+import { ThemeProvider } from "styled-components";
+import { Box, Button, CssBaseline, Grid, TextField, createTheme } from "@mui/material";
+import { getDoc, doc, setDoc } from "firebase/firestore";
+import { firestore } from "../db/db";
 
 const LoginPage = () => {
   const auth = getAuth();
@@ -16,8 +21,8 @@ const LoginPage = () => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [authing, setAuthing] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [, setAuthing] = useState(false);
+  const [, setError] = useState<string | null>(null);
 
   const handleSignInWithGoogle = async () => {
     const provider = new GoogleAuthProvider();
@@ -25,20 +30,32 @@ const LoginPage = () => {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
       setUser({ uid: user.uid, email: user.email! });
+  
+      const userRef = doc(firestore, "users", user.uid);
+  
+      const userDocSnap = await getDoc(userRef);
+  
+      if (!userDocSnap.exists()) {
+        await setDoc(userRef, {
+          id: user.uid,
+          email: user.email!,
+        });
+      }
+  
       navigate("/profile");
     } catch (error) {
       console.error("Erreur de connexion avec Google :", error);
       setError("Une erreur s'est produite lors de la connexion.");
     }
   };
+  
 
   const handleSignInWithEmail = async () => {
     setAuthing(true);
     setError(null);
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user;
-      setUser({ uid: user.uid, email: user.email! });
+      await signInWithEmailAndPassword(auth, email, password);
+      setUser({ uid: auth.currentUser!.uid, email: email });
       navigate("/profile");
     } catch (error: any) {
       console.error("Erreur de connexion avec e-mail :", error);
@@ -56,41 +73,106 @@ const LoginPage = () => {
       setAuthing(false);
     }
   };
+  const defaultTheme = createTheme();
+  
 
   return (
-    <div className="login-container">
-      <h1>Page de connexion</h1>
-      {error && <div className="error-message">{error}</div>}
-      <div className="login-form">
-        <label>Email :</label>
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-      </div>
-      <div className="login-form">
-        <label>Mot de passe :</label>
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-      </div>
-      <button onClick={handleSignInWithEmail} disabled={authing}>
-        Se connecter par e-mail
-      </button>
-      <button className="login-google-button" onClick={handleSignInWithGoogle}>
-        Se connecter avec Google
-      </button>
-      <p className="login-signup">
-        Vous n'avez pas de compte ?{" "}
-        <Link to="/signup" className="login-signup-link">
-          Inscrivez-vous
-        </Link>
-      </p>
-    </div>
+    <ThemeProvider theme={defaultTheme}>
+    <Grid container component="main" sx={{ height: '100vh' }}>
+      <CssBaseline />
+      <Grid
+        item
+        xs={false}
+        sm={4}
+        md={7}
+        sx={{
+          backgroundImage: 'url(https://assets.nflxext.com/ffe/siteui/vlv3/a73c4363-1dcd-4719-b3b1-3725418fd91d/ef710c60-45ca-4ff6-9133-abd76333d090/FR-fr-20231016-popsignuptwoweeks-perspective_alpha_website_large.jpg)',
+          backgroundRepeat: 'no-repeat',
+          backgroundColor: (t) =>
+            t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
+      />
+      <Grid item xs={12} sm={8} md={5} sx={{backgroundColor:'black'}}> 
+        <Box
+          sx={{
+            my: 8,
+            mx: 4,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            backgroundColor:'tansparent',
+          }}
+          
+        >
+          <Typography component="h1" variant="h5" sx={{color:'white'}}>
+            Sign in
+          </Typography>
+          <Box sx={{ mt: 1 }}>
+            <TextField
+              color="info"
+              margin="normal"
+              required
+              fullWidth
+              id="email"
+              label="Email Address"
+              name="email"
+              type="email"
+              className="textfield"
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Password"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2, backgroundColor:'red'}}
+              onClick={handleSignInWithEmail}
+            >
+              Sign In
+            </Button>
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2,  backgroundColor:'red'}}
+              onClick={handleSignInWithGoogle}
+            >
+              Sign In With Google
+            </Button>
+          </Box>
+        <Grid container>
+          {/* <Grid item xs>
+            <Link href="#" variant="body2">
+              Forgot password?
+            </Link>
+          </Grid> */}
+          <Grid item>
+            <Link to="/signup">
+              {"Don't have an account? Sign Up"}
+            </Link>
+          </Grid>
+        </Grid>
+        {/* <Copyright sx={{ mt: 5 }} /> */}
+        </Box>
+        </Grid>
+      </Grid>
+  </ThemeProvider>
+
   );
 };
+
 
 export default LoginPage;
