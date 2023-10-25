@@ -36,8 +36,9 @@ const LoginPage = () => {
     setAuthing(true);
     setError(null);
     try {
-      await signInWithEmailAndPassword(auth, email, password);
-      setUser({ uid: auth.currentUser!.uid, email: email });
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+      setUser({ uid: user.uid, email: user.email! });
       navigate("/profile");
     } catch (error: any) {
       console.error("Erreur de connexion avec e-mail :", error);

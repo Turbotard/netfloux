@@ -2,9 +2,11 @@ import { Auth, UserCredential } from "firebase/auth";
 import { auth } from "../db/db";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
+import { useUser } from '../types/usertypes'; 
 
 const SignUp: React.FC = () => {
   const history = useNavigate();
+  const { setUser } = useUser();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -13,7 +15,7 @@ const SignUp: React.FC = () => {
 
     createUserWithEmailAndPassword(auth as Auth, email, password)
       .then((data: UserCredential) => {
-        console.log(data, "authData");
+        setUser({ uid: data.user.uid, email: data.user.email! });
         history("/");
       })
       .catch((err) => {
