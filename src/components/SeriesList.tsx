@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { List, ListItem, ListItemText, Typography, Divider } from '@mui/material';
 
-interface Show {
+interface shows {
     title: string;
     year: number;
     ids: {
@@ -9,9 +10,9 @@ interface Show {
 }
 
 const SeriesList: React.FC = () => {
-    const [series, setSeries] = useState<Show[]>([]);
+    const [series, setSeries] = useState<shows[]>([]);
     const [error, setError] = useState<string | null>(null);
-    const CLIENT_ID = process.env.REACT_APP_CLIENT_ID;
+    const CLIENT_ID = process.env.TRAKT_API_CLIENT_ID;
 
     useEffect(() => {
         const fetchSeries = async () => {
@@ -31,7 +32,7 @@ const SeriesList: React.FC = () => {
                     throw new Error(`Erreur: ${response.statusText}`);
                 }
 
-                const data: Show[] = JSON.parse(rawResponse);
+                const data: shows[] = JSON.parse(rawResponse);
                 setSeries(data);
 
             } catch (err) {
@@ -48,17 +49,22 @@ const SeriesList: React.FC = () => {
 
     return (
         <div>
-            <h2>Liste des séries populaires :</h2>
+            <Typography variant="h4" gutterBottom>
+                Liste des séries populaires :
+            </Typography>
             {error ? (
-                <p>Erreur lors du chargement : {error}</p>
+                <Typography color="error">
+                    Erreur lors du chargement : {error}
+                </Typography>
             ) : (
-                <ul>
-                    {series.map((show) => (
-                        <li key={show.ids.trakt}>
-                            {show.title} ({show.year})
-                        </li>
+                <List component="nav" aria-label="main series list">
+                    {series.map((shows) => (
+                        <ListItem key={shows.ids.trakt} >
+                            <ListItemText primary={`${shows.title} (${shows.year})`} />
+                            <Divider />
+                        </ListItem>
                     ))}
-                </ul>
+                </List>
             )}
         </div>
     );
