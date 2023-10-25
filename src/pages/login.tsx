@@ -15,16 +15,8 @@ import { Copyright } from "@mui/icons-material";
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { classes } from "istanbul-lib-coverage";
 import PropTypes from "prop-types";
-
-
-const styles = {
-  root: {
-    background: "black"
-  },
-  input: {
-    color: "white"
-  }
-};
+import { collection, addDoc } from "firebase/firestore";
+import { firestore } from "../db/db";
 
 const LoginPage = () => {
   const auth = getAuth();
@@ -42,6 +34,13 @@ const LoginPage = () => {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
       setUser({ uid: user.uid, email: user.email! });
+      const userRef = collection(firestore, "users");
+      if (auth.currentUser) {
+        const userDoc = await addDoc(userRef, {
+          id: auth.currentUser.uid,
+          email: auth.currentUser.email,
+        });
+      }
       navigate("/profile");
     } catch (error) {
       console.error("Erreur de connexion avec Google :", error);

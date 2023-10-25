@@ -1,5 +1,5 @@
 import { Auth, UserCredential } from "firebase/auth";
-import { auth } from "../db/db";
+import { auth, firestore } from "../db/db";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { Link, useNavigate } from "react-router-dom";
 import { useUser } from '../types/usertypes'; 
@@ -7,6 +7,9 @@ import '../css/signup.css'
 import Typography from '@mui/material/Typography';
 import { ThemeProvider } from "styled-components";
 import { Avatar, Box, Button, Checkbox, CssBaseline, Grid, Paper, TextField, createTheme } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import { useUser } from "../types/usertypes";
+import { collection, addDoc } from "firebase/firestore";
 
 const SignUp: React.FC = () => {
   const history = useNavigate();
@@ -18,8 +21,15 @@ const SignUp: React.FC = () => {
     const password = (e.target as any).password.value;
 
     createUserWithEmailAndPassword(auth as Auth, email, password)
-      .then((data: UserCredential) => {
+      .then(async (data: UserCredential) => {
         setUser({ uid: data.user.uid, email: data.user.email! });
+        const userRef = collection(firestore, "users");
+        if (auth.currentUser) {
+          const userDoc = await addDoc(userRef, {
+            id: auth.currentUser.uid,
+            email: auth.currentUser.email,
+          });
+        }
         history("/");
       })
       .catch((err) => {

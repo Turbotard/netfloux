@@ -5,6 +5,7 @@ import LoginPage from "./pages/login";
 import Signup from "./pages/signup";
 import MenuHamburger from "./components/Navbar";
 import Profile from "./pages/profile";
+import SeriesList from "./components/SeriesList";
 
 function App(): React.ReactElement {
   return (
@@ -14,6 +15,7 @@ function App(): React.ReactElement {
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/list" element={<SeriesList />} />
         </Routes>
       </Router>
     </div>
