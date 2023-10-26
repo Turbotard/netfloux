@@ -4,6 +4,9 @@ import {
   signInWithEmailAndPassword,
   GoogleAuthProvider,
   signInWithPopup,
+  User,
+  sendPasswordResetEmail,
+  Auth,
 } from "firebase/auth";
 import { Link, useNavigate } from "react-router-dom";
 import "./login.css";
@@ -17,7 +20,10 @@ import { firestore } from "../../db/db";
 const LoginPage = () => {
   const auth = getAuth();
   const navigate = useNavigate();
-  const { setUser } = useUser();
+  const authInstance: Auth = getAuth();
+  const { user, setUser } = useUser();
+
+
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -73,6 +79,23 @@ const LoginPage = () => {
       setAuthing(false);
     }
     
+  };
+  const handleSendPasswordResetEmail = () => {
+    if (user && user.email) {
+      sendPasswordResetEmail(authInstance, user.email)
+        .then(() => {
+          alert(
+            "Lien de réinitialisation du mot de passe envoyé à votre e-mail!"
+          );
+        })
+        .catch((error) => {
+          console.error(
+            "Erreur lors de l'envoi du lien de réinitialisation: ",
+            error
+          );
+          alert("Erreur lors de l'envoi du lien de réinitialisation.");
+        });
+    }
   };
   const defaultTheme = createTheme();
   
