@@ -2,7 +2,6 @@ import React from 'react';
 import ListWithFilters from '../../components/listWithFilters/ListWithFilters';
 import { Box, ThemeProvider, Typography, createTheme } from '@mui/material';
 import PopularSeriesCorridor from '../../components/seriesCorridor/PopularSeriesCorridor';
-import './list.css';
 import Navbar from '../../components/navbar/Navbar';
 
 const ListPage: React.FC = () => {

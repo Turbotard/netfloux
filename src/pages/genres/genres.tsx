@@ -3,11 +3,7 @@ import {
   Auth,
   getAuth,
   onAuthStateChanged,
-  signOut,
   User,
-  updateEmail,
-  sendEmailVerification,
-  sendPasswordResetEmail,
 } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { doc, setDoc, getFirestore, getDoc } from "firebase/firestore";
@@ -18,24 +14,20 @@ import {
   Box,
   Button,
   Grid,
-  TextField,
   Checkbox,
   FormControlLabel,
   createTheme,
-  Autocomplete,
 } from "@mui/material";
 import Navbar from "../../components/navbar/Navbar";
 import { firestore } from "../../db/db";
 
-const Profile: React.FC = () => {
+
+const Genres: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
-  const [newEmail, setNewEmail] = useState("");
   const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
-  const [updateStatus, setUpdateStatus] = useState<
-    "IDLE" | "PENDING" | "SUCCESS" | "ERROR"
-  >("IDLE");
   const navigate = useNavigate();
   const authInstance: Auth = getAuth();
+
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(authInstance, (currentUser) => {
@@ -68,7 +60,6 @@ const Profile: React.FC = () => {
       console.error("Erreur lors de la récupération des genres: ", error);
     }
   };
-
   const handleGenreChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const genre = e.target.name;
     setSelectedGenres((prev) => {
@@ -79,20 +70,19 @@ const Profile: React.FC = () => {
       }
     });
   };
-
   const handleSaveGenres = async () => {
     if (user) {
       try {
         const userRef = doc(firestore, "users", user.uid);
         await setDoc(userRef, { genres: selectedGenres }, { merge: true });
         alert("Genres sauvegardés avec succès!");
+        navigate("/profile");
+
       } catch (error) {
         console.error("Erreur lors de la mise à jour des genres: ", error);
       }
     }
   };
-  if (!user) return <p>Chargement...</p>;
-
   const defaultTheme = createTheme();
 
   return (
@@ -380,7 +370,6 @@ const Profile: React.FC = () => {
           <br />
           <Button
             onClick={handleSaveGenres}
-            href="/profile"
             variant="contained"
             sx={{ mt: 3, mb: 2, backgroundColor: "red" }}
           >
@@ -392,4 +381,4 @@ const Profile: React.FC = () => {
   );
 };
 
-export default Profile;
+export default Genres;
