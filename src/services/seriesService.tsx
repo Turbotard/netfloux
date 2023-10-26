@@ -1,4 +1,4 @@
-const TRAKT_BASE_URL = 'https://cors-anywhere.herokuapp.com/https://api.trakt.tv/';
+const TRAKT_BASE_URL = 'http://localhost:8080/https://api.trakt.tv/';
 const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
 const TMDB_IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500';
 
@@ -92,6 +92,31 @@ export const fetchNextShowingDate = async (showId: number): Promise<string> => {
     } catch (error) {
         console.error("Erreur lors de la récupération de la prochaine date de diffusion:", error);
         return '';
+    }
+}
+
+export const fetchAllGenresFromTrakt = async (): Promise<string[]> => {
+    const traktApiKey = process.env.REACT_APP_TRAKT_API_CLIENT_ID;
+
+    if (!traktApiKey) {
+        console.error("La clé API (REACT_APP_TRAKT_API_CLIENT_ID) n'est pas définie.");
+        return [];
+    }
+
+    try {
+        const response = await fetch(`${TRAKT_BASE_URL}genres/movies`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'trakt-api-version': '2',
+                'trakt-api-key': traktApiKey
+            }
+        });
+        const data = await response.json();
+        const genres = data.map((genre: { name: string }) => genre.name);
+        return genres;
+    } catch (error) {
+        console.error("Erreur lors de la récupération des genres depuis Trakt:", error);
+        return [];
     }
 }
 
