@@ -1,17 +1,24 @@
-fieldset.css-1d3z3hw-MuiOutlinedInput-notchedOutline{
+/* fieldset.css-1d3z3hw-MuiOutlinedInput-notchedOutline{
     border-color: white;
 }
+fieldset.css-1d3z3hw-MuiOutlinedInput-notchedOutline:hover{
+    border-color: red;
+}
 
-label.css-rp6sv4-MuiFormLabel-root-MuiInputLabel-root {
+div.MuiInputBase-root.MuiOutlinedInput-root.MuiInputBase-colorPrimary.MuiInputBase-fullWidth.MuiInputBase-formControl.css-md26zr-MuiInputBase-root-MuiOutlinedInput-root:hover{
+    border-color: red;
+} */
+
+/* label.css-rp6sv4-MuiFormLabel-root-MuiInputLabel-root {
     color: #FFF;
 }
 label.css-14s5rfu-MuiFormLabel-root-MuiInputLabel-root  {
     color:#fff;
 
-}
-div.css-1udmear-MuiInputBase-root-MuiOutlinedInput-root{
+} */
+/* div.css-1udmear-MuiInputBase-root-MuiOutlinedInput-root{
     color: white;
-}
+} */
 div.link{
     text-align: left;
     
@@ -19,4 +26,20 @@ div.link{
 .link2{
     color: white;
 }
-
+button.button{
+    background-color: red;
+    color: #fff;
+}
+button.button:hover{
+    background-color: #fff;
+    color: red;
+}
+.link2:hover{
+    color:red
+}
+input.textfield{
+    color:#FFF
+} 
+.textfield:hover{
+    color: red;
+}

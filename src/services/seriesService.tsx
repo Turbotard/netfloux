@@ -175,6 +175,7 @@ export const fetchRatingFromTrakt = async (showId: number): Promise<number> => {
         return 0;
     }
 }
+
 export const fetchAllGenresFromTrakt = async (): Promise<string[]> => {
     const traktApiKey = process.env.REACT_APP_TRAKT_API_CLIENT_ID;
 

@@ -369,6 +369,7 @@ const Genres: React.FC = () => {
 
           <br />
           <Button
+          className="button"
             onClick={handleSaveGenres}
             variant="contained"
             sx={{ mt: 3, mb: 2, backgroundColor: "red" }}

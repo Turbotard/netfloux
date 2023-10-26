@@ -149,6 +149,7 @@ const LoginPage = () => {
             </Typography>
             <Box sx={{ mt: 1 }}>
               <TextField
+                className="textfield"
                 color="info"
                 margin="normal"
                 required
@@ -157,10 +158,10 @@ const LoginPage = () => {
                 label="Email Address"
                 name="email"
                 type="email"
-                className="textfield"
                 onChange={(e) => setEmail(e.target.value)}
               />
               <TextField
+                className="field"
                 margin="normal"
                 required
                 fullWidth
@@ -173,6 +174,7 @@ const LoginPage = () => {
                 onChange={(e) => setPassword(e.target.value)}
               />
               <Button
+              className="button"
                 type="submit"
                 fullWidth
                 variant="contained"
@@ -182,6 +184,7 @@ const LoginPage = () => {
                 Sign In
               </Button>
               <Button
+              className="button"
                 type="submit"
                 fullWidth
                 variant="contained"
@@ -192,13 +195,11 @@ const LoginPage = () => {
               </Button>
             </Box>
             <Grid container>
-              <Grid item>
-                <Link onClick={() => setOpen(true)} to={""}>
+              <Grid item className="divlink">
+                <Link onClick={() => setOpen(true)} to={""} className="link">
                   {"Forgot Password?"}
                 </Link>
-              </Grid>
-              <Grid item>
-                <Link to="/signup">{"Don't have an account? Sign Up"}</Link>
+                <Link to="/signup" className="link">{"Don't have an account? Sign Up"}</Link>
               </Grid>
             </Grid>
           </Box>
