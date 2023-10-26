@@ -1,3 +1,8 @@
+import { updateDoc, arrayUnion } from "@firebase/firestore";
+import { doc } from "prettier";
+import { doc as doc2, getDoc } from "firebase/firestore";
+import { firestore } from "../db/db";
+
 const TRAKT_BASE_URL = 'http://localhost:8080/https://api.trakt.tv/';
 const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
 const TMDB_IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500';
@@ -262,3 +267,15 @@ export const fetchPopularSeriesFromTrakt = async (page: number = 1, limit: numbe
     }
     
 }
+export const addToFavorites = async (userId: string, seriesName: string) => {
+    const userDocRef = doc2(firestore, 'users', userId);
+
+    try {
+        await updateDoc(userDocRef, {
+            fav: arrayUnion(seriesName)  // utilise arrayUnion pour s'assurer que les doublons ne sont pas ajoutés
+        });
+    } catch (error) {
+        console.error("Erreur lors de l'ajout aux favoris: ", error);
+        throw error;
+    }
+};
