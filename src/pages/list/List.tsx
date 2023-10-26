@@ -3,6 +3,7 @@ import ListWithFilters from '../../components/listWithFilters/ListWithFilters';
 import { Box, ThemeProvider, Typography, createTheme } from '@mui/material';
 import PopularSeriesCorridor from '../../components/seriesCorridor/PopularSeriesCorridor';
 import './list.css';
+import Navbar from '../../components/navbar/Navbar';
 
 const ListPage: React.FC = () => {
     const defaultTheme = createTheme();
@@ -11,7 +12,7 @@ const ListPage: React.FC = () => {
     return (
         <ThemeProvider theme={defaultTheme}>
         
-
+            <Navbar/>
             <Box className="populaires">
                 <Typography variant="h4" className='titre'>
                     Les Plus Populaires:

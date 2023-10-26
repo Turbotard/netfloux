@@ -53,7 +53,7 @@ const PopularSeriesCorridor: React.FC = () => {
                         <CardMedia
                             component="img"
                             alt={show.title}
-                            height="300"
+                            height="325"
                             image={show.poster}
                             onClick={() => openSeriesDetails(show)}
                         />
