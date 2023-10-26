@@ -152,7 +152,7 @@ export const fetchAllGenresFromTrakt = async (): Promise<string[]> => {
         return [];
     }
 }
-export const fetchPopularSeriesFromTrakt = async (page: number = 1, limit: number = 10): Promise<Show[]> => {
+export const fetchPopularSeriesFromTrakt = async (page: number = 1, limit: number = 10, searchQuery?: string): Promise<Show[]> => {
     const traktApiKey = process.env.REACT_APP_TRAKT_API_CLIENT_ID;
 
     if (!traktApiKey) {
@@ -160,8 +160,13 @@ export const fetchPopularSeriesFromTrakt = async (page: number = 1, limit: numbe
         return [];
     }
 
+    // Choisir l'endpoint en fonction de la présence de searchQuery
+    const seriesEndpoint = searchQuery
+        ? `${TRAKT_BASE_URL}search/show?query=${encodeURIComponent(searchQuery)}&page=${page}&limit=${limit}`
+        : `${TRAKT_BASE_URL}shows/popular?page=${page}&limit=${limit}`;
+
     try {
-        const response = await fetch(`${TRAKT_BASE_URL}shows/popular?page=${page}&limit=${limit}`, {
+        const response = await fetch(seriesEndpoint, {
             headers: {
                 'Content-Type': 'application/json',
                 'trakt-api-version': '2',
@@ -170,18 +175,21 @@ export const fetchPopularSeriesFromTrakt = async (page: number = 1, limit: numbe
         });
 
         if (!response.ok) {
-            throw new Error(`Erreur lors de la requête à l'API Trakt.tv pour les séries populaires - Status: ${response.statusText}`);
+            throw new Error(`Erreur lors de la requête à l'API Trakt.tv - Status: ${response.statusText}`);
         }
 
         const rawData = await response.json();
 
-        rawData.forEach(({ids, title, year, ...rest}: any) => {
+        // Si c'est une recherche, nous devons extraire les données de show des résultats
+        const showsData = searchQuery ? rawData.map((item: any) => item.show) : rawData;
+
+        showsData.forEach(({ ids, title, year, ...rest }: any) => {
             if (!ids) {
-                console.warn('ids non fonctionnel', {title, year, ...rest});
+                console.warn('ids non fonctionnel', { title, year, ...rest });
             }
         });
 
-        const popularShowsDetails = await Promise.all(rawData.map(async (show: any) => {
+        const popularShowsDetails = await Promise.all(showsData.map(async (show: any) => {
             if (show && show.ids && show.ids.tmdb && show.ids.trakt && typeof show.ids.tmdb === "number") {
                 const { poster, genres, synopsis } = await fetchDetailsFromTMDb(show.ids.tmdb);
                 const rating = await fetchRatingFromTrakt(show.ids.trakt);
