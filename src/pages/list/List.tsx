@@ -2,6 +2,7 @@ import React from 'react';
 import ListWithFilters from '../../components/listWithFilters/ListWithFilters';
 import { Typography } from '@mui/material';
 import PopularSeriesCorridor from '../../components/seriesCorridor/PopularSeriesCorridor';
+import ListGenre from '../../components/ListGenre/ListGenre';
 
 const ListPage: React.FC = () => {
     return (
@@ -10,7 +11,7 @@ const ListPage: React.FC = () => {
                 <PopularSeriesCorridor />
             </Typography>
             <Typography variant="h4" gutterBottom style={{marginTop: '20px'}}>
-                Liste avec filtres:
+                <ListGenre />
             </Typography>
             <ListWithFilters />
         </div>
