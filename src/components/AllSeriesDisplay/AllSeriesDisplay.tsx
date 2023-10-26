@@ -7,6 +7,10 @@ import { useUser } from '../../types/usertypes';
 import { auth } from '../../db/db';
 import { Auth, User, getAuth, onAuthStateChanged } from '@firebase/auth';
 import { useNavigate } from 'react-router';
+import StarIcon from '@mui/icons-material/Star';
+import './AllSeriesDisplay.css'
+import { PassThrough } from 'stream';
+import { boolean } from 'yargs';
 
 interface AllSeriesDisplayProps {
     searchQuery: string;
@@ -21,7 +25,7 @@ const AllSeriesDisplay: React.FC<AllSeriesDisplayProps> = ({ searchQuery }) => {
     const [user, setUser] = useState<User | null>(null);
     const navigate = useNavigate();
     const authInstance: Auth = getAuth();
-  
+    
 
     const limit = 10;
 
@@ -36,6 +40,11 @@ const AllSeriesDisplay: React.FC<AllSeriesDisplayProps> = ({ searchQuery }) => {
             
             return Promise.all(ratingsPromises);
         };
+
+        const handleFavorite = () =>{
+            PassThrough
+            
+        }
     
         const fetchSeries = async () => {
             const fetchedSeries = await fetchAllSeriesFromTMDb(page, limit, searchQuery);
@@ -123,7 +132,7 @@ const AllSeriesDisplay: React.FC<AllSeriesDisplayProps> = ({ searchQuery }) => {
         <Box>
             <Box display="flex" flexWrap="wrap" gap={2}>
                 {series.map((serie, index) => (
-                    <Card key={index} style={{ maxWidth: '300px' }} onClick={() => handleOpen(serie)}>
+                    <Card key={index} style={{ maxWidth: '300px' }} onClick={() => handleOpen(serie)} className="card">
                         <CardMedia
                             component="img"
                             alt={serie.title}
@@ -131,17 +140,20 @@ const AllSeriesDisplay: React.FC<AllSeriesDisplayProps> = ({ searchQuery }) => {
                             width="70%"
                             image={serie.poster}
                         />
-                        <CardContent>
+                        <CardContent className='card-description'>
                             <Typography variant="h6" noWrap>
                                 {serie.title}
                             </Typography>
                             <Typography variant="subtitle1">
+                                <Box className="card-d">
                                 Genres: {serie.genres.join(', ')}
+                                </Box>
                             </Typography>
                             <Box component="fieldset" borderColor="transparent">
                                 <Typography component="legend">Rating:</Typography>
-                                <Rating name="read-only" value={serie.rating / 2} readOnly precision={0.5} />
+                                <Rating name="read-only" value={serie.rating / 2} readOnly precision={0.5} className='rating'/>
                             </Box>
+  
                         </CardContent>
                     </Card>
                 ))}
@@ -150,8 +162,17 @@ const AllSeriesDisplay: React.FC<AllSeriesDisplayProps> = ({ searchQuery }) => {
             <Dialog open={open} onClose={handleClose}>
     {selectedSeries && (
         <>
-            <DialogTitle>{selectedSeries.title}</DialogTitle>
+        <Box className="fav">
+        <DialogTitle>{selectedSeries.title}</DialogTitle>
+            <Button
+            // onClick={}
+            >
+                    <StarIcon className='star'/>
+            </Button>
+        </Box>
+            
             <DialogContent>
+               
                 <CardMedia
                     component="img"
                     alt={selectedSeries.title}
@@ -168,6 +189,7 @@ const AllSeriesDisplay: React.FC<AllSeriesDisplayProps> = ({ searchQuery }) => {
                     <Typography component="legend">Noter cette série:</Typography>
                     <Rating name="rating-value" value={ratingValue} onChange={handleRatingChange} />
                 </Box>
+                
             </DialogContent>
             <DialogActions>
                 <Button onClick={handleClose} color="primary">
@@ -176,6 +198,7 @@ const AllSeriesDisplay: React.FC<AllSeriesDisplayProps> = ({ searchQuery }) => {
                 <Button onClick={handleSendRating} color="primary">
                     Envoyer la note
                 </Button>
+                
             </DialogActions>
         </>
     )}
