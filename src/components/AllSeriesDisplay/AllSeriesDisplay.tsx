@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { fetchAllSeriesFromTrakt } from '../../services/seriesService';
+import { fetchAllSeriesFromTMDb } from '../../services/seriesService';
 import { Box, Button, Typography, Card, CardMedia, CardContent } from '@mui/material';
 
 const AllSeriesDisplay: React.FC = () => {
     const [series, setSeries] = useState<any[]>([]);
     const [page, setPage] = useState<number>(1);
-    const limit = 10; // Nombre d'éléments par page
+    const limit = 10;
 
     useEffect(() => {
         const fetchSeries = async () => {
-            const fetchedSeries = await fetchAllSeriesFromTrakt(page, limit);
+            const fetchedSeries = await fetchAllSeriesFromTMDb(page, limit);
             setSeries(fetchedSeries);
         };
 
@@ -23,16 +23,22 @@ const AllSeriesDisplay: React.FC = () => {
                 <Card key={index} style={{ maxWidth: '300px' }}>
                     <CardMedia
                         component="img"
-                        alt={serie.show.title}
+                        alt={serie.title}
                         height="auto"
                         width="70%"
-                        image={serie.show.image}
+                        image={serie.poster}
                     />
                     <CardContent>
                         <Typography variant="h6" noWrap>
-                            {serie.show.title}
-                            nombre d'épisodes :{serie.episode.number}
-                            nombre de saisons :{serie.episode.season}
+                            {serie.title}
+                        </Typography>
+                        {/* Les propriétés "episode.number" et "episode.season" ne correspondent pas au modèle fourni dans le code précédent. 
+                           Vous devrez peut-être ajouter des logiques supplémentaires pour obtenir ces détails depuis TMDB. */}
+                        <Typography variant="subtitle1">
+                            Nombre d'épisodes : {serie.episode?.number ?? "N/A"}
+                        </Typography>
+                        <Typography variant="subtitle1">
+                            Nombre de saisons : {serie.episode?.season ?? "N/A"}
                         </Typography>
                     </CardContent>
                 </Card>
