@@ -69,7 +69,7 @@
     z-index: 1;
 }
 
-.card-description {
+.card-c-description {
     position: absolute;
     bottom: -34%;
     width: 80%;
@@ -87,7 +87,7 @@
     align-items: center;
 }
 
-.card:hover .card-description {
+.card:hover .card-c-description {
     bottom: 0;
 }
 
@@ -150,14 +150,14 @@
     font-size: 24px;
     cursor: pointer;
 }
-.card-d{
+.card-c-d{
     font-size: 0.75rem;
     width: 100%;
     display: flex;
    justify-content: center;
    align-items: center;
 }
-.rating{
+.c-rating{
     background-color: #343434;
     opacity: 0.9;
 }
