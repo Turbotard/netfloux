@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { fetchAllGenresFromTrakt } from '../../services/seriesService';
-import { Card, CardMedia, Typography, Button, Box, Modal } from '@mui/material';
-import { Title } from '@mui/icons-material';
+import { Typography, Box, createTheme } from '@mui/material';
+import { ThemeProvider } from '@emotion/react';
+import Navbar from '../../components/navbar/Navbar';
+import PopularSeriesCorridor from '../../components/seriesCorridor/PopularSeriesCorridor';
 
-const ParentComponent: React.FC = () => {
+const ListPage: React.FC = () => {
     const [genres, setGenres] = useState<string[]>([]);
 
     useEffect(() => {
@@ -14,9 +16,18 @@ const ParentComponent: React.FC = () => {
 
         testFetchGenres();
     }, []);
+    const defaultTheme = createTheme();
 
     return (
-        <Box>
+        <ThemeProvider theme={defaultTheme}>
+
+            <Navbar/>
+            <Box className="populaires">
+                <Typography variant="h4" className='titre'>
+                    Les Plus Populaires:
+                </Typography>
+                <PopularSeriesCorridor />
+            </Box>
             <Typography variant="h4" component="div" gutterBottom>
                 Liste des Genres
             </Typography>
@@ -27,8 +38,8 @@ const ParentComponent: React.FC = () => {
                     </Typography>
                 ))}
             </Box>
-        </Box>
+        </ThemeProvider>
     );
 };
 
-export default ParentComponent;
+export default ListPage;
