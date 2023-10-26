@@ -1,7 +1,6 @@
 import React from 'react';
 import { Typography, Box, createTheme } from '@mui/material';
 import { ThemeProvider } from '@emotion/react';
-import ListGenre from '../../components/ListGenre/ListGenre';
 import Navbar from '../../components/navbar/Navbar';
 import PopularSeriesCorridor from '../../components/seriesCorridor/PopularSeriesCorridor';
 import AllSeriesDisplay from '../../components/AllSeriesDisplay/AllSeriesDisplay';
