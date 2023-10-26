@@ -5,7 +5,7 @@
     justify-content: center;
     align-items: center;
     background-color: #141414;
-    padding: 5% 0;
+    padding: 2% 0;
 }
 
 .carousel-button {
@@ -59,14 +59,12 @@
     transition: all 0.3s ease-in-out;
     z-index: 0;
     overflow: hidden;
-    width: 250px;
-    height: 350px;
+    width: 270px;
+    height: 300px;
     position: relative;
 }
 
 .card:hover {
-    width: 300px;
-    height: 380px;
     margin: 10px;
     z-index: 1;
 }
