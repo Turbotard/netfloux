@@ -14,7 +14,7 @@ import {
   TextField,
   createTheme,
 } from "@mui/material";
-import { collection, addDoc, doc, setDoc } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
 
 const SignUp: React.FC = () => {
   const history = useNavigate();
@@ -29,8 +29,8 @@ const SignUp: React.FC = () => {
       .then(async (data: UserCredential) => {
         setUser({ uid: data.user.uid, email: data.user.email! });
         
-        if (data.user.uid) { // s'assurer que l'uid existe
-          const userDocRef = doc(firestore, "users", data.user.uid); // Créer une référence avec l'UID comme identifiant
+        if (data.user.uid) {
+          const userDocRef = doc(firestore, "users", data.user.uid);
           await setDoc(userDocRef, {
             id: data.user.uid,
             email: data.user.email,

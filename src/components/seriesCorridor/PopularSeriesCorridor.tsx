@@ -53,16 +53,10 @@ const PopularSeriesCorridor: React.FC = () => {
                         <CardMedia
                             component="img"
                             alt={show.title}
-                            height="140"
+                            height="325"
                             image={show.poster}
                             onClick={() => openSeriesDetails(show)}
                         />
-                        {/* Afficher le titre, le genre et la note au survol */}
-                        <Box className="card-overlay">
-                            <Typography variant="h6">{show.title}</Typography>
-                            <Typography>{show.genres.join(", ")}</Typography>
-                            <Typography>Note: {show.rating}</Typography>
-                        </Box>
                     </Card>
                 ))}
             </Box>
