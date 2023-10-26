@@ -3,13 +3,13 @@ import { fetchAllGenresFromTrakt } from '../../services/seriesService';
 import { Card, CardMedia, Typography, Button, Box, Modal } from '@mui/material';
 import { Title } from '@mui/icons-material';
 
-const ParentComponent: React.FC = () => {
-    const [genres, setGenres] = useState<string[]>([]);
+const ListGenre: React.FC = () => {
+    const [genres, setGenres] = useState<string[]>([]);  // État pour stocker les genres
 
     useEffect(() => {
         const testFetchGenres = async () => {
             const fetchedGenres = await fetchAllGenresFromTrakt();
-            setGenres(fetchedGenres);
+            setGenres(fetchedGenres);  // Mettre à jour l'état avec les genres récupérés
         };
 
         testFetchGenres();
@@ -31,4 +31,4 @@ const ParentComponent: React.FC = () => {
     );
 };
 
-export default ParentComponent;
+export default ListGenre;
