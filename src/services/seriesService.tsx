@@ -11,6 +11,8 @@ export interface Show {
     genres: string[];
     rating: number;
     synopsis: string;
+    summary?: string;
+    actors?: string[]; 
 }
 
 export const fetchDetailsFromTMDb = async (tmdbId: number): Promise<{ poster: string, genres: string[], synopsis: string }> => {
@@ -53,14 +55,16 @@ export const fetchAllSeriesFromTMDb = async (page: number, limit: number) => {
         seriesData.results.map(async (serie: any) => {
             const serieDetailResponse = await fetch(`https://api.themoviedb.org/3/tv/${serie.id}?api_key=${tmdbApiKey}`);
             const serieDetail = await serieDetailResponse.json();
-            console.log(seriesData);
+            
             return {
                 title: serie.name,
                 poster: `https://image.tmdb.org/t/p/w500${serie.poster_path}`,
                 numberOfSeasons: serieDetail.number_of_seasons,
                 numberOfEpisodes: serieDetail.number_of_episodes,
                 releaseDate: serie.first_air_date,
-                genres: serie.genre_ids.map((id: number) => genreMap.get(id) || "N/A")
+                genres: serie.genre_ids.map((id: number) => genreMap.get(id) || "N/A"),
+                summary: serieDetail.overview,
+                actors: serieDetail.cast?.map((actor: any) => actor.name)
             };
         })
     );
