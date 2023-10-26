@@ -45,54 +45,45 @@ export const fetchDetailsFromTMDb = async (tmdbId: number): Promise<{ poster: st
 }
 
 export const fetchAllSeriesFromTMDb = async (page: number, limit: number) => {
-    // 1. Récupérez la liste des séries
     const seriesResponse = await fetch(`https://api.themoviedb.org/3/discover/tv?page=${page}&api_key=${tmdbApiKey}`);
     const seriesData = await seriesResponse.json();
+    const genreMap = await fetchAllGenresFromTMDb();
 
-    // 2. Pour chaque série, récupérez les détails supplémentaires pour obtenir le nombre de saisons et d'épisodes
     const detailedSeriesData = await Promise.all(
         seriesData.results.map(async (serie: any) => {
-        const serieDetailResponse = await fetch(`https://api.themoviedb.org/3/tv/${serie.id}?api_key=${tmdbApiKey}`);
-        const serieDetail = await serieDetailResponse.json();
-        console.log(seriesData);
-        return {
-            title: serie.name,
-            poster: `https://image.tmdb.org/t/p/w500${serie.poster_path}`,
-            numberOfSeasons: serieDetail.number_of_seasons,
-            numberOfEpisodes: serieDetail.number_of_episodes,
-            releaseDate: serie.first_air_date
-        };
+            const serieDetailResponse = await fetch(`https://api.themoviedb.org/3/tv/${serie.id}?api_key=${tmdbApiKey}`);
+            const serieDetail = await serieDetailResponse.json();
+            console.log(seriesData);
+            return {
+                title: serie.name,
+                poster: `https://image.tmdb.org/t/p/w500${serie.poster_path}`,
+                numberOfSeasons: serieDetail.number_of_seasons,
+                numberOfEpisodes: serieDetail.number_of_episodes,
+                releaseDate: serie.first_air_date,
+                genres: serie.genre_ids.map((id: number) => genreMap.get(id) || "N/A")
+            };
         })
     );
 
     return detailedSeriesData;
 };
 
-export const fetchRatingFromTrakt = async (showId: number): Promise<number> => {
-    const traktApiKey = process.env.REACT_APP_TRAKT_API_CLIENT_ID;
-    if (!traktApiKey) {
-        console.error("La clé API (REACT_APP_TRAKT_API_CLIENT_ID) n'est pas définie.");
-        return 0;
-    }
-
+export const fetchAllGenresFromTMDb = async (): Promise<Map<number, string>> => {
     try {
-        const response = await fetch(`${TRAKT_BASE_URL}shows/${showId}/ratings`, {
-            headers: {
-                'Content-Type': 'application/json',
-                'trakt-api-version': '2',
-                'trakt-api-key': traktApiKey
-            }
-        });
-
+        const response = await fetch(`${TMDB_BASE_URL}/genre/tv/list?api_key=${tmdbApiKey}`);
         const data = await response.json();
-
-        return data.rating;
+        let genreMap = new Map();
+        data.genres.forEach((genre: { id: number, name: string }) => {
+            genreMap.set(genre.id, genre.name);
+        });
+        return genreMap;
     } catch (error) {
-        console.error("Erreur lors de la récupération des évaluations depuis Trakt:", error);
-        return 0;
+        console.error("Erreur lors de la récupération des genres depuis TMDb:", error);
+        return new Map();
     }
-}
+};
 
+//TRAKT
 export const fetchNextShowingDate = async (showId: number): Promise<string> => {
     const traktApiKey = process.env.REACT_APP_TRAKT_API_CLIENT_ID;
     if (!traktApiKey) {
@@ -127,7 +118,30 @@ export const fetchNextShowingDate = async (showId: number): Promise<string> => {
         return '';
     }
 }
+export const fetchRatingFromTrakt = async (showId: number): Promise<number> => {
+    const traktApiKey = process.env.REACT_APP_TRAKT_API_CLIENT_ID;
+    if (!traktApiKey) {
+        console.error("La clé API (REACT_APP_TRAKT_API_CLIENT_ID) n'est pas définie.");
+        return 0;
+    }
 
+    try {
+        const response = await fetch(`${TRAKT_BASE_URL}shows/${showId}/ratings`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'trakt-api-version': '2',
+                'trakt-api-key': traktApiKey
+            }
+        });
+
+        const data = await response.json();
+
+        return data.rating;
+    } catch (error) {
+        console.error("Erreur lors de la récupération des évaluations depuis Trakt:", error);
+        return 0;
+    }
+}
 export const fetchAllGenresFromTrakt = async (): Promise<string[]> => {
     const traktApiKey = process.env.REACT_APP_TRAKT_API_CLIENT_ID;
 

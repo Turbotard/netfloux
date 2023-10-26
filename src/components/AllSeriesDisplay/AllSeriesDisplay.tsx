@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Show, fetchAllSeriesFromTMDb, fetchPopularSeriesFromTrakt } from '../../services/seriesService';
-import { Box, Button, Typography, Card, CardMedia, CardContent } from '@mui/material';
+import { Box, Button, Typography, Card, CardMedia, CardContent, Rating } from '@mui/material';
 
 interface AllSeriesDisplayProps {
     searchQuery: string;
@@ -37,18 +37,24 @@ const AllSeriesDisplay: React.FC<AllSeriesDisplayProps> = ({ searchQuery }) => {
                                 {serie.title}
                             </Typography>
                             <Typography variant="subtitle1">
-                                Rating: {serie.rating}
+                                Genres: {serie.genres.join(', ')}
                             </Typography>
+                            <Box component="fieldset" borderColor="transparent">
+                                <Typography component="legend">Rating:</Typography>
+                                <Rating name="read-only" value={serie.rating / 2} readOnly precision={0.5} />
+                            </Box>
                         </CardContent>
                     </Card>
                 ))}
             </Box>
+
+            {/* Pas de changements ici pour la pagination */}
             <Box mt={3} display="flex" justifyContent="center">
                 <Button onClick={() => setPage(prev => Math.max(prev - 1, 1))}>Précédent</Button>
                 <Button onClick={() => setPage(prev => prev + 1)}>Suivant</Button>
             </Box>
         </Box>
     );
-};
+};    
 
 export default AllSeriesDisplay;
