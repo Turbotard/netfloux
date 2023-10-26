@@ -1,7 +1,11 @@
 header.css-hip9hq-MuiPaper-root-MuiAppBar-root {
     background-color: black;
 }
-.logo{
+
+.navbar{
     height: 5vh;
-    width: 5vh;
+    display: flex;
+    justify-content: space-between;
+    opacity: 0.9;
+    position:sticky;
 }

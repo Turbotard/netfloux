@@ -3,7 +3,7 @@ import { Typography, Box, createTheme } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Button from '@mui/material/Button';
-import HomeIcon from '@mui/icons-material/Home';
+import StarIcon from '@mui/icons-material/Star';
 import ProfileIcon from '@mui/icons-material/Person';
 import { Link, useNavigate } from 'react-router-dom';
 import './navbar.css';
@@ -18,7 +18,6 @@ const Navbar = () => {
   }
   const Routes = [
     { path: 'profile', icon: <ProfileIcon />, name: 'Profil Utilisateur' },
-    { path: 'list', icon: <ListIcon />, name: 'List' },
   ];
 
   return (
