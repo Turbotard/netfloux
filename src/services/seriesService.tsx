@@ -47,30 +47,58 @@ export const fetchDetailsFromTMDb = async (tmdbId: number): Promise<{ poster: st
     }
 }
 
-export const fetchAllSeriesFromTMDb = async (page: number, limit: number, searchQuery?: string) => {
-    const seriesResponse = await fetch(`https://api.themoviedb.org/3/discover/tv?page=${page}&api_key=${tmdbApiKey}`);
-    const seriesData = await seriesResponse.json();
-    const genreMap = await fetchAllGenresFromTMDb();
+export const fetchAllSeriesFromTMDb = async (page: number, limit: number, searchQuery?: string): Promise<Show[]> => {
+    const tmdbApiKey = process.env.REACT_APP_TMDB_API_KEY;
 
-    const detailedSeriesData = await Promise.all(
-        seriesData.results.map(async (serie: any) => {
-            const serieDetailResponse = await fetch(`https://api.themoviedb.org/3/tv/${serie.id}?api_key=${tmdbApiKey}`);
-            const serieDetail = await serieDetailResponse.json();
-            
-            return {
-                title: serie.name,
-                poster: `https://image.tmdb.org/t/p/w500${serie.poster_path}`,
-                numberOfSeasons: serieDetail.number_of_seasons,
-                numberOfEpisodes: serieDetail.number_of_episodes,
-                releaseDate: serie.first_air_date,
-                genres: serie.genre_ids.map((id: number) => genreMap.get(id) || "N/A"),
-                summary: serieDetail.overview,
-                actors: serieDetail.cast?.map((actor: any) => actor.name)
-            };
-        })
-    );
+    if (!tmdbApiKey) {
+        console.error("La clé API (REACT_APP_TMDB_API_KEY) n'est pas définie.");
+        return [];
+    }
 
-    return detailedSeriesData;
+    // Choisir l'endpoint en fonction de la présence de searchQuery
+    const seriesEndpoint = searchQuery
+        ? `https://api.themoviedb.org/3/search/tv?query=${encodeURIComponent(searchQuery)}&page=${page}&api_key=${tmdbApiKey}`
+        : `https://api.themoviedb.org/3/discover/tv?page=${page}&api_key=${tmdbApiKey}`;
+
+    try {
+        const seriesResponse = await fetch(seriesEndpoint);
+        const seriesData = await seriesResponse.json();
+
+        if (seriesResponse.status !== 200) {
+            throw new Error(`Erreur lors de la requête à l'API TMDb - Status: ${seriesResponse.statusText}`);
+        }
+
+        const genreMap = await fetchAllGenresFromTMDb();
+
+        const detailedSeriesData = await Promise.all(
+            seriesData.results.map(async (serie: any) => {
+                if (!serie.id) {
+                    console.warn("ID de série manquant:", serie);
+                    return null;
+                }
+
+                const serieDetailResponse = await fetch(`https://api.themoviedb.org/3/tv/${serie.id}?api_key=${tmdbApiKey}&append_to_response=credits`);
+                const serieDetail = await serieDetailResponse.json();
+
+                return {
+                    title: serie.name ?? 'Titre non disponible',
+                    year: new Date(serie.first_air_date).getFullYear(),
+                    poster: `https://image.tmdb.org/t/p/w500${serie.poster_path}`,
+                    genres: serie.genre_ids.map((id: number) => genreMap.get(id) || "N/A"),
+                    rating: serieDetail.vote_average,
+                    synopsis: serieDetail.overview ?? 'Synopsis non disponible',
+                    numberOfSeasons: serieDetail.number_of_seasons,
+                    numberOfEpisodes: serieDetail.number_of_episodes,
+                    actors: serieDetail.credits?.cast?.slice(0, 5).map((actor: any) => actor.name) || []  // top 5 actors
+                };
+            })
+        );
+
+        return detailedSeriesData.filter(Boolean) as Show[];
+    } catch (error) {
+        console.error("Erreur lors de la récupération des séries depuis TMDb:", error);
+        return [];
+    }
 };
 
 export const fetchAllGenresFromTMDb = async (): Promise<Map<number, string>> => {
