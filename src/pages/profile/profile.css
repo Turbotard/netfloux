@@ -10,3 +10,11 @@
 .css-1l5ed33-MuiGrid-root{
     padding: 4%;
 }
+
+
+span.css-12wnr2w-MuiButtonBase-root-MuiCheckbox-root.Mui-checked, .css-12wnr2w-MuiButtonBase-root-MuiCheckbox-root.MuiCheckbox-indeterminate {
+    color: red;
+}
+span.css-12wnr2w-MuiButtonBase-root-MuiCheckbox-root {
+    color: white;
+}

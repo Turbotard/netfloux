@@ -275,7 +275,7 @@ const Profile: React.FC = () => {
           <Button
             onClick={handleSaveGenres}
             variant="contained"
-            color="primary"
+            sx={{ mt: 3, mb: 2, backgroundColor: "red" }}
           >
             Sauvegarder les genres
           </Button>

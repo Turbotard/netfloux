@@ -72,6 +72,7 @@ const LoginPage = () => {
       }
       setAuthing(false);
     }
+    
   };
   const defaultTheme = createTheme();
   
@@ -163,6 +164,9 @@ const LoginPage = () => {
             <Link to="/signup">
               {"Don't have an account? Sign Up"}
             </Link>
+            {/* <Link onClick={}>
+              {"Forgot Password ?"}
+            </Link> */}
           </Grid>
         </Grid>
         {/* <Copyright sx={{ mt: 5 }} /> */}
