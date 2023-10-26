@@ -33,12 +33,12 @@ div.css-154xyx0-MuiInputBase-root-MuiOutlinedInput-root{
 button.button{
     background-color: red;
     color: #fff;
+    width: 100%;
 }
 button.button:hover{
     background-color: #fff;
     color: red;
     width: 100%;
-    height: 93vh;
 }
 
 button.css-4jbj29-MuiButtonBase-root-MuiButton-root{
