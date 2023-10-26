@@ -5,6 +5,7 @@ import LoginPage from "./pages/login/login";
 import Signup from "./pages/signup/signup";
 import Profile from "./pages/profile/profile";
 import ListPage from "./pages/list/List";
+import Genres from "./pages/genres/genres"
 
 function App(): React.ReactElement {
   return (
@@ -15,6 +16,7 @@ function App(): React.ReactElement {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/list" element={<ListPage />} />
+          <Route path="/genres" element={<Genres />} />
         </Routes>
       </Router>
     </div>

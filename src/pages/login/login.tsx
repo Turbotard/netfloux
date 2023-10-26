@@ -99,7 +99,7 @@ const LoginPage = () => {
       sendPasswordResetEmail(authInstance, email)
         .then(() => {
           alert("Lien de réinitialisation du mot de passe envoyé!");
-          setOpen(false); // Fermez la boîte de dialogue après l'envoi
+          setOpen(false);
         })
         .catch((error) => {
           console.error(
