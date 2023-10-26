@@ -1,29 +1,34 @@
 import React, { useEffect, useState } from 'react';
-import { Typography, Box, createTheme } from '@mui/material';
-import { ThemeProvider } from '@emotion/react';
-import ListGenre from '../../components/ListGenre/ListGenre';
-import Navbar from '../../components/navbar/Navbar';
-import PopularSeriesCorridor from '../../components/seriesCorridor/PopularSeriesCorridor';
-import AllSeriesDisplay from '../../components/AllSeriesDisplay/AllSeriesDisplay';
-const ListPage: React.FC = () => {
-    const defaultTheme = createTheme();
+import { fetchAllGenresFromTrakt } from '../../services/seriesService';
+import { Card, CardMedia, Typography, Button, Box, Modal } from '@mui/material';
+import { Title } from '@mui/icons-material';
+
+const ParentComponent: React.FC = () => {
+    const [genres, setGenres] = useState<string[]>([]);
+
+    useEffect(() => {
+        const testFetchGenres = async () => {
+            const fetchedGenres = await fetchAllGenresFromTrakt();
+            setGenres(fetchedGenres);
+        };
+
+        testFetchGenres();
+    }, []);
 
     return (
-        <ThemeProvider theme={defaultTheme}>
-
-            <Navbar/>
-            <Box className="populaires">
-                <Typography variant="h4" className='titre'>
-                    Les Plus Populaires:
-                </Typography>
-                <PopularSeriesCorridor />
+        <Box>
+            <Typography variant="h4" component="div" gutterBottom>
+                Liste des Genres
+            </Typography>
+            <Box>
+                {genres.map((genre, index) => (
+                    <Typography key={index} variant="body1" component="div" gutterBottom>
+                        {genre}
+                    </Typography>
+                ))}
             </Box>
-                <ListGenre />
-                <Box>
-                    <AllSeriesDisplay />
-                </Box>
-        </ThemeProvider>
+        </Box>
     );
 };
 
-export default ListPage;
+export default ParentComponent;
