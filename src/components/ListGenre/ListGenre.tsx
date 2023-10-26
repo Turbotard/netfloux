@@ -3,7 +3,7 @@ import { fetchAllGenresFromTrakt } from '../../services/seriesService';
 import { Card, CardMedia, Typography, Button, Box, Modal } from '@mui/material';
 import { Title } from '@mui/icons-material';
 
-const ParentComponent: React.FC = () => {
+const ListGenre: React.FC = () => {
     const [genres, setGenres] = useState<string[]>([]);  // État pour stocker les genres
 
     useEffect(() => {
@@ -31,4 +31,4 @@ const ParentComponent: React.FC = () => {
     );
 };
 
-export default ParentComponent;
+export default ListGenre;

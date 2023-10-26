@@ -120,6 +120,35 @@ export const fetchAllGenresFromTrakt = async (): Promise<string[]> => {
     }
 }
 
+export const fetchAllSeriesFromTrakt = async (page: number = 1, limit: number = 10): Promise<any[]> => {
+    const traktApiKey = process.env.REACT_APP_TRAKT_API_CLIENT_ID;
+
+    if (!traktApiKey) {
+        console.error("La clé API (REACT_APP_TRAKT_API_CLIENT_ID) n'est pas définie.");
+        return [];
+    }
+
+    try {
+        const response = await fetch(`${TRAKT_BASE_URL}calendars/all/shows?page=${page}&limit=${limit}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'trakt-api-version': '2',
+                'trakt-api-key': traktApiKey
+            }
+        });
+        if (!response.ok) {
+            throw new Error('Erreur lors de la requête à l\'API Trakt.tv');
+        }
+
+        const data = await response.json();
+        console.log(data);
+        return data;
+    } catch (error) {
+        console.error("Erreur lors de la récupération des séries tendances depuis Trakt:", error);
+        return [];
+    }
+}
+
 export const fetchPopularSeries = async (): Promise<Show[]> => {
     const traktApiKey = process.env.REACT_APP_TRAKT_API_CLIENT_ID;
 

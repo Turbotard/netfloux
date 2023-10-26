@@ -1,21 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { fetchAllGenresFromTrakt } from '../../services/seriesService';
 import { Typography, Box, createTheme } from '@mui/material';
 import { ThemeProvider } from '@emotion/react';
+import ListGenre from '../../components/ListGenre/ListGenre';
 import Navbar from '../../components/navbar/Navbar';
 import PopularSeriesCorridor from '../../components/seriesCorridor/PopularSeriesCorridor';
-
+import AllSeriesDisplay from '../../components/AllSeriesDisplay/AllSeriesDisplay';
 const ListPage: React.FC = () => {
-    const [genres, setGenres] = useState<string[]>([]);
-
-    useEffect(() => {
-        const testFetchGenres = async () => {
-            const fetchedGenres = await fetchAllGenresFromTrakt();
-            setGenres(fetchedGenres);
-        };
-
-        testFetchGenres();
-    }, []);
     const defaultTheme = createTheme();
 
     return (
@@ -28,16 +18,10 @@ const ListPage: React.FC = () => {
                 </Typography>
                 <PopularSeriesCorridor />
             </Box>
-            <Typography variant="h4" component="div" gutterBottom>
-                Liste des Genres
-            </Typography>
-            <Box>
-                {genres.map((genre, index) => (
-                    <Typography key={index} variant="body1" component="div" gutterBottom>
-                        {genre}
-                    </Typography>
-                ))}
-            </Box>
+                <ListGenre />
+                <Box>
+                    <AllSeriesDisplay />
+                </Box>
         </ThemeProvider>
     );
 };
