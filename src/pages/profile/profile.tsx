@@ -152,36 +152,6 @@ const Profile: React.FC = () => {
   //   }
   // };
   if (!user) return <p>Chargement...</p>;
-  const options = [
-    'Action',
-'Adventure',
-'Animation',
-'Anime',
-'Comedy',
-'Crime',
-'Documentary',
-'Donghua',
-'Drama',
-'Family',
-'Fantasy',
-'History',
-'Holiday',
-'Horror',
-'Music',
-'Musical',
-'Mystery',
-'None',
-'Romance',
-'Science Fiction',
-'Short',
-'Sporting Event',
-'Superhero',
-'Suspense',
-'Thriller',
-'War',
-'Western',
-
-  ];
   const defaultTheme = createTheme();
 
   return (
@@ -198,6 +168,7 @@ const Profile: React.FC = () => {
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
+        className="fond"
       >
         <Box className="profil">
           <Typography component="h1" variant="h5" sx={{ color: "white" }}>
@@ -218,6 +189,7 @@ const Profile: React.FC = () => {
             Nouvel Email
           </TextField>
           <Button
+            className="button"
             type="submit"
             fullWidth
             variant="contained"
@@ -232,10 +204,11 @@ const Profile: React.FC = () => {
           {!user.emailVerified && (
             <>
               <Button
+               className="button"
                 type="submit"
                 fullWidth
                 variant="contained"
-                sx={{ mt: 3, mb: 2, backgroundColor: "red" }}
+                sx={{ mt: 3, mb: 2 }}
                 onClick={handleSendEmailVerification}
               >
                 Envoyer l'e-mail de vérification
@@ -255,28 +228,31 @@ const Profile: React.FC = () => {
 
           {user.emailVerified && (
             <Button
+            className="button"
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2, backgroundColor: "red" }}
+              sx={{ mt: 3, mb: 2 }}
               onClick={handleSendPasswordResetEmail}
             >
               Réinitialiser le mot de passe
             </Button>
           )}
           <Button
+           className="button"
             type="submit"
             fullWidth
             variant="contained"
-            sx={{ mt: 3, mb: 2, backgroundColor: "red" }}
+            sx={{ mt: 3, mb: 2 }}
             onClick={handleSignOut}
           >
             Déconnexion
           </Button>
           <Button
+           className="button"
             href="/genres"
             variant="contained"
-            sx={{ mt: 3, mb: 2, backgroundColor: "red" }}
+            sx={{ mt: 3, mb: 2, backgroundColor: "red"}}
           >
             Gerer vos preferences
           </Button>

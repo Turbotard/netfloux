@@ -379,6 +379,7 @@ const Profile: React.FC = () => {
 
           <br />
           <Button
+          className="button"
             onClick={handleSaveGenres}
             href="/profile"
             variant="contained"

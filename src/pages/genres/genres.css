@@ -22,3 +22,18 @@ span.css-12wnr2w-MuiButtonBase-root-MuiCheckbox-root {
 div.css-154xyx0-MuiInputBase-root-MuiOutlinedInput-root{
     color: #fff;
 }
+.css-1c8tok6-MuiButtonBase-root-MuiButton-root:hover{
+    background-color: #fff;
+    color: red;
+}
+span.css-8je8zh-MuiTouchRipple-root:hover{
+    background-color: #fff;
+}
+button.button{
+    background-color: red;
+    color: #fff;
+}
+button.button:hover{
+    background-color: #fff;
+    color: red;
+}

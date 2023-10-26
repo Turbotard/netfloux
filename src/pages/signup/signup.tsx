@@ -69,6 +69,7 @@ const SignUp: React.FC = () => {
               sx={{ mt: 1 }}
             >
               <TextField
+                className="textfield"
                 margin="normal"
                 required
                 fullWidth
@@ -79,6 +80,7 @@ const SignUp: React.FC = () => {
                 autoFocus
               />
               <TextField
+                className="textfield"
                 margin="normal"
                 required
                 fullWidth
@@ -89,6 +91,7 @@ const SignUp: React.FC = () => {
                 autoComplete="current-password"
               />
               <Button
+              className="button"
                 type="submit"
                 fullWidth
                 variant="contained"
