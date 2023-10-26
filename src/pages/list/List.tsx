@@ -1,20 +1,28 @@
 import React from 'react';
 import ListWithFilters from '../../components/listWithFilters/ListWithFilters';
-import { Typography } from '@mui/material';
+import { Box, ThemeProvider, Typography, createTheme } from '@mui/material';
 import PopularSeriesCorridor from '../../components/seriesCorridor/PopularSeriesCorridor';
+import './List.css';
+import Navbar from '../../components/navbar/Navbar';
 import ListGenre from '../../components/ListGenre/ListGenre';
 
 const ListPage: React.FC = () => {
+    const defaultTheme = createTheme();
+
+
     return (
-        <div>
-            <Typography variant="h4" gutterBottom>
+        <ThemeProvider theme={defaultTheme}>
+
+            <Navbar/>
+            <Box className="populaires">
+                <Typography variant="h4" className='titre'>
+                    Les Plus Populaires:
+                </Typography>
                 <PopularSeriesCorridor />
-            </Typography>
-            <Typography variant="h4" gutterBottom style={{marginTop: '20px'}}>
-                <ListGenre />
-            </Typography>
-            <ListWithFilters />
-        </div>
+            </Box>
+            <ListGenre />
+        </ThemeProvider>
+
     );
 }
 
