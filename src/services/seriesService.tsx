@@ -4,6 +4,7 @@ const TMDB_IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500';
 const tmdbApiKey = process.env.REACT_APP_TMDB_API_KEY;
 
 export interface Show {
+    id : number;
     title: string;
     year: number;
     poster: string;
@@ -230,4 +231,5 @@ export const fetchPopularSeriesFromTrakt = async (page: number = 1, limit: numbe
         console.error("Erreur lors de la récupération des séries populaires depuis Trakt:", error);
         return [];
     }
+    
 }
