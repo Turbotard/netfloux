@@ -1,4 +1,5 @@
 .carousel-container {
+    width: 100%;
     position: relative;
     display: flex;
     justify-content: center;
@@ -35,12 +36,14 @@
 }
 
 .carousel {
+    width: 100%;
     display: flex;
     overflow-x: auto;
     gap: 16px;
     padding: 0 50px;
     scrollbar-width: thin;
     scrollbar-color: #888 #202020;
+    background-color: transparent;
 }
 
 .carousel::-webkit-scrollbar {

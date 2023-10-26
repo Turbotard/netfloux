@@ -168,7 +168,7 @@ const Profile: React.FC = () => {
           backgroundPosition: "center",
         }}
       >
-        <Box>
+        <Box className="profil">
           <Typography component="h1" variant="h5" sx={{ color: "white" }}>
             Profil:
           </Typography>

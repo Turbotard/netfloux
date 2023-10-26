@@ -1,12 +1,3 @@
-.css-0{
-    background-color: black;
-    width: 30%;
-    height: 40%;
-    margin: auto;
-    margin-top: 1.6%;
-    padding: 5%;
-    opacity:0.90;
-}
 .css-1l5ed33-MuiGrid-root{
     padding: 4%;
 }
@@ -17,4 +8,14 @@ span.css-12wnr2w-MuiButtonBase-root-MuiCheckbox-root.Mui-checked, .css-12wnr2w-M
 }
 span.css-12wnr2w-MuiButtonBase-root-MuiCheckbox-root {
     color: white;
+}
+
+.profil{
+    background-color: black;
+    width: 30%;
+    height: 40%;
+    margin: auto;
+    margin-top: 1.6%;
+    padding: 5%;
+    opacity:0.90;
 }
