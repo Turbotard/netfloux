@@ -77,20 +77,23 @@ const LoginPage = () => {
       navigate("/profile");
     } catch (error: any) {
       console.error("Erreur de connexion avec e-mail :", error);
+      let errorMessage = "";
       if (error && error.code === "auth/invalid-login-credentials") {
-        setError(
-          "Les informations de connexion sont invalides. Vérifiez votre e-mail et votre mot de passe."
-        );
+        errorMessage =
+          "Les informations de connexion sont invalides. Vérifiez votre e-mail et votre mot de passe.";
       } else if (error && error.code === "auth/user-not-found") {
-        setError("Aucun utilisateur avec cet e-mail n'a été trouvé.");
+        errorMessage = "Aucun utilisateur avec cet e-mail n'a été trouvé.";
       } else if (error && error.code === "auth/wrong-password") {
-        setError("Le mot de passe est incorrect.");
+        errorMessage = "Le mot de passe est incorrect.";
       } else {
-        setError("Une erreur s'est produite lors de la connexion.");
+        errorMessage = "Une erreur s'est produite lors de la connexion.";
       }
+      setError(errorMessage);
+      alert(errorMessage);  
       setAuthing(false);
     }
   };
+  
   const handleResetPassword = () => {
     if (email) {
       sendPasswordResetEmail(authInstance, email)

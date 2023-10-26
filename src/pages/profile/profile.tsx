@@ -129,28 +129,6 @@ const Profile: React.FC = () => {
     }
   };
 
-  // const handleGenreChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const genre = e.target.name;
-  //   setSelectedGenres((prev) => {
-  //     if (prev.includes(genre)) {
-  //       return prev.filter((g) => g !== genre);
-  //     } else {
-  //       return [...prev, genre];
-  //     }
-  //   });
-  // };
-
-  // const handleSaveGenres = async () => {
-  //   if (user) {
-  //     try {
-  //       const userRef = doc(firestore, "users", user.uid);
-  //       await setDoc(userRef, { genres: selectedGenres }, { merge: true });
-  //       alert("Genres sauvegardés avec succès!");
-  //     } catch (error) {
-  //       console.error("Erreur lors de la mise à jour des genres: ", error);
-  //     }
-  //   }
-  // };
   if (!user) return <p>Chargement...</p>;
   const defaultTheme = createTheme();
 

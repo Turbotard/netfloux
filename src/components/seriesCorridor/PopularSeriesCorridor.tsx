@@ -3,7 +3,7 @@ import { Card, CardMedia, Typography, Button, Box, Modal } from '@mui/material';
 import ArrowForwardIos from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIos from '@mui/icons-material/ArrowBackIos';
 import { CloseSharp } from '@mui/icons-material';
-import { Show, fetchPopularSeries } from '../../services/seriesService';
+import { Show, fetchPopularSeriesFromTrakt } from '../../services/seriesService';
 import './PopularSeriesCorridor.css';
 
 const PopularSeriesCorridor: React.FC = () => {
@@ -13,7 +13,7 @@ const PopularSeriesCorridor: React.FC = () => {
 
     useEffect(() => {
         const getSeries = async () => {
-            const fetchedSeries = await fetchPopularSeries();
+            const fetchedSeries = await fetchPopularSeriesFromTrakt();
             console.log("Séries récupérées:", fetchedSeries);
             setSeries(fetchedSeries);
         };

@@ -1,8 +1,10 @@
 const TRAKT_BASE_URL = 'http://localhost:8080/https://api.trakt.tv/';
 const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
 const TMDB_IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500';
+const tmdbApiKey = process.env.REACT_APP_TMDB_API_KEY;
 
 export interface Show {
+    id : number;
     title: string;
     year: number;
     poster: string;
@@ -10,10 +12,11 @@ export interface Show {
     genres: string[];
     rating: number;
     synopsis: string;
+    summary?: string;
+    actors?: string[]; 
 }
 
 export const fetchDetailsFromTMDb = async (tmdbId: number): Promise<{ poster: string, genres: string[], synopsis: string }> => {
-    const tmdbApiKey = process.env.REACT_APP_TMDB_API_KEY;
 
     if (!tmdbApiKey) {
         console.error("La clé API (REACT_APP_TMDB_API_KEY) n'est pas définie.");
@@ -22,12 +25,21 @@ export const fetchDetailsFromTMDb = async (tmdbId: number): Promise<{ poster: st
 
     try {
         const response = await fetch(`${TMDB_BASE_URL}/tv/${tmdbId}?api_key=${tmdbApiKey}`);
+        if (!response.ok) {
+            console.error(`Erreur lors de la requête à l'API TMDb pour l'ID: ${tmdbId} - Status: ${response.statusText}`);
+            return { poster: '', genres: [], synopsis: '' };
+        }
         const data = await response.json();
+
+        if (!data.poster_path) {
+            console.warn(`Poster path manquant pour l'ID TMDb: ${tmdbId}`);
+        }
+
         const genres = data.genres.map((genre: { id: number, name: string }) => genre.name);
-        return { 
-            poster: `${TMDB_IMAGE_BASE_URL}${data.poster_path}`, 
-            genres, 
-            synopsis: data.overview // Ajouté
+        return {
+            poster: `${TMDB_IMAGE_BASE_URL}${data.poster_path}`,
+            genres,
+            synopsis: data.overview
         };
     } catch (error) {
         console.error("Erreur lors de la récupération des détails depuis TMDb:", error);
@@ -35,6 +47,110 @@ export const fetchDetailsFromTMDb = async (tmdbId: number): Promise<{ poster: st
     }
 }
 
+export const fetchAllSeriesFromTMDb = async (page: number, limit: number, searchQuery?: string): Promise<Show[]> => {
+    const tmdbApiKey = process.env.REACT_APP_TMDB_API_KEY;
+
+    if (!tmdbApiKey) {
+        console.error("La clé API (REACT_APP_TMDB_API_KEY) n'est pas définie.");
+        return [];
+    }
+
+    // Choisir l'endpoint en fonction de la présence de searchQuery
+    const seriesEndpoint = searchQuery
+        ? `https://api.themoviedb.org/3/search/tv?query=${encodeURIComponent(searchQuery)}&page=${page}&api_key=${tmdbApiKey}`
+        : `https://api.themoviedb.org/3/discover/tv?page=${page}&api_key=${tmdbApiKey}`;
+
+    try {
+        const seriesResponse = await fetch(seriesEndpoint);
+        const seriesData = await seriesResponse.json();
+
+        if (seriesResponse.status !== 200) {
+            throw new Error(`Erreur lors de la requête à l'API TMDb - Status: ${seriesResponse.statusText}`);
+        }
+
+        const genreMap = await fetchAllGenresFromTMDb();
+
+        const detailedSeriesData = await Promise.all(
+            seriesData.results.map(async (serie: any) => {
+                if (!serie.id) {
+                    console.warn("ID de série manquant:", serie);
+                    return null;
+                }
+
+                const serieDetailResponse = await fetch(`https://api.themoviedb.org/3/tv/${serie.id}?api_key=${tmdbApiKey}&append_to_response=credits`);
+                const serieDetail = await serieDetailResponse.json();
+
+                return {
+                    title: serie.name ?? 'Titre non disponible',
+                    year: new Date(serie.first_air_date).getFullYear(),
+                    poster: `https://image.tmdb.org/t/p/w500${serie.poster_path}`,
+                    genres: serie.genre_ids.map((id: number) => genreMap.get(id) || "N/A"),
+                    rating: serieDetail.vote_average,
+                    synopsis: serieDetail.overview ?? 'Synopsis non disponible',
+                    numberOfSeasons: serieDetail.number_of_seasons,
+                    numberOfEpisodes: serieDetail.number_of_episodes,
+                    actors: serieDetail.credits?.cast?.slice(0, 5).map((actor: any) => actor.name) || []  // top 5 actors
+                };
+            })
+        );
+
+        return detailedSeriesData.filter(Boolean) as Show[];
+    } catch (error) {
+        console.error("Erreur lors de la récupération des séries depuis TMDb:", error);
+        return [];
+    }
+};
+
+export const fetchAllGenresFromTMDb = async (): Promise<Map<number, string>> => {
+    try {
+        const response = await fetch(`${TMDB_BASE_URL}/genre/tv/list?api_key=${tmdbApiKey}`);
+        const data = await response.json();
+        let genreMap = new Map();
+        data.genres.forEach((genre: { id: number, name: string }) => {
+            genreMap.set(genre.id, genre.name);
+        });
+        return genreMap;
+    } catch (error) {
+        console.error("Erreur lors de la récupération des genres depuis TMDb:", error);
+        return new Map();
+    }
+};
+
+//TRAKT
+export const fetchNextShowingDate = async (showId: number): Promise<string> => {
+    const traktApiKey = process.env.REACT_APP_TRAKT_API_CLIENT_ID;
+    if (!traktApiKey) {
+        console.error("La clé API (REACT_APP_TRAKT_API_CLIENT_ID) n'est pas définie.");
+        return '';
+    }
+
+    try {
+        const response = await fetch(`${TRAKT_BASE_URL}/shows/${showId}/last_episode`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'trakt-api-version': '2',
+                'trakt-api-key': traktApiKey
+            }
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            console.error(`Erreur lors de la récupération de la prochaine date de diffusion pour la série avec l'ID ${showId}: ${response.statusText}`);
+            return '';
+        }
+
+        if (data && data.first_aired) {
+            return data.first_aired;
+        } else {
+            console.error(`Pas de prochaine date de diffusion trouvée pour la série avec l'ID ${showId}`, data);
+            return "N/A"; 
+        }
+    } catch (error) {
+        console.error("Erreur lors de la récupération de la prochaine date de diffusion:", error);
+        return '';
+    }
+}
 export const fetchRatingFromTrakt = async (showId: number): Promise<number> => {
     const traktApiKey = process.env.REACT_APP_TRAKT_API_CLIENT_ID;
     if (!traktApiKey) {
@@ -57,41 +173,6 @@ export const fetchRatingFromTrakt = async (showId: number): Promise<number> => {
     } catch (error) {
         console.error("Erreur lors de la récupération des évaluations depuis Trakt:", error);
         return 0;
-    }
-}
-
-export const fetchNextShowingDate = async (showId: number): Promise<string> => {
-    const traktApiKey = process.env.REACT_APP_TRAKT_API_CLIENT_ID;
-    if (!traktApiKey) {
-        console.error("La clé API (REACT_APP_TRAKT_API_CLIENT_ID) n'est pas définie.");
-        return '';
-    }
-
-    try {
-        const response = await fetch(`${TRAKT_BASE_URL}/shows/${showId}/last_episode`, {
-            headers: {
-                'Content-Type': 'application/json',
-                'trakt-api-version': '2',
-                'trakt-api-key': traktApiKey
-            }
-        });
-
-        if (!response.ok || !response.bodyUsed) {
-            console.error(`Erreur lors de la récupération de la prochaine date de diffusion pour la série avec l'ID ${showId}: ${response.statusText}`);
-            return '';
-        }
-
-        const data = await response.json();
-
-        if (data && data.first_aired) {
-            return data.first_aired;
-        } else {
-            console.error(`Pas de prochaine date de diffusion trouvée pour la série avec l'ID ${showId}`);
-            return "N/A"; 
-        }
-    } catch (error) {
-        console.error("Erreur lors de la récupération de la prochaine date de diffusion:", error);
-        return '';
     }
 }
 
@@ -119,8 +200,7 @@ export const fetchAllGenresFromTrakt = async (): Promise<string[]> => {
         return [];
     }
 }
-
-export const fetchAllSeriesFromTrakt = async (page: number =1, limit: number = 10): Promise<any[]> => {
+export const fetchPopularSeriesFromTrakt = async (page: number = 1, limit: number = 10, searchQuery?: string): Promise<Show[]> => {
     const traktApiKey = process.env.REACT_APP_TRAKT_API_CLIENT_ID;
 
     if (!traktApiKey) {
@@ -128,64 +208,57 @@ export const fetchAllSeriesFromTrakt = async (page: number =1, limit: number = 1
         return [];
     }
 
+    // Choisir l'endpoint en fonction de la présence de searchQuery
+    const seriesEndpoint = searchQuery
+        ? `${TRAKT_BASE_URL}search/show?query=${encodeURIComponent(searchQuery)}&page=${page}&limit=${limit}`
+        : `${TRAKT_BASE_URL}shows/popular?page=${page}&limit=${limit}`;
+
     try {
-        const response = await fetch(`${TRAKT_BASE_URL}calendars/all/shows?page=${page}&limit=${limit}`, {
+        const response = await fetch(seriesEndpoint, {
             headers: {
                 'Content-Type': 'application/json',
                 'trakt-api-version': '2',
                 'trakt-api-key': traktApiKey
             }
         });
+
         if (!response.ok) {
-            throw new Error('Erreur lors de la requête à l\'API Trakt.tv');
+            throw new Error(`Erreur lors de la requête à l'API Trakt.tv - Status: ${response.statusText}`);
         }
-
-        const data = await response.json();
-        console.log(data);
-        return data;
-    } catch (error) {
-        console.error("Erreur lors de la récupération des séries tendances depuis Trakt:", error);
-        return [];
-    }
-}
-
-export const fetchPopularSeries = async (): Promise<Show[]> => {
-    const traktApiKey = process.env.REACT_APP_TRAKT_API_CLIENT_ID;
-
-    if (!traktApiKey) {
-        console.error("La clé API (TRAKT_API_CLIENT_ID) n'est pas définie.");
-        return [];
-    }
-
-    try {
-        const response = await fetch(`${TRAKT_BASE_URL}/shows/popular`, {
-            headers: {
-                'Content-Type': 'application/json',
-                'trakt-api-version': '2',
-                'trakt-api-key': traktApiKey
-            }
-        });
 
         const rawData = await response.json();
 
-        const showsWithDetails = await Promise.all(rawData.map(async (show: any) => {
-            const { poster, genres, synopsis } = await fetchDetailsFromTMDb(show.ids.tmdb);
-            const nextShowingDate = await fetchNextShowingDate(show.ids.trakt);
-            const rating = await fetchRatingFromTrakt(show.ids.trakt);
-            return {
-                title: show.title,
-                year: show.year,
-                poster: poster,
-                nextShowingDate: nextShowingDate || '',
-                genres: genres,
-                rating: rating,
-                synopsis: synopsis
-            };
+        // Si c'est une recherche, nous devons extraire les données de show des résultats
+        const showsData = searchQuery ? rawData.map((item: any) => item.show) : rawData;
+
+        showsData.forEach(({ ids, title, year, ...rest }: any) => {
+            if (!ids) {
+                console.warn('ids non fonctionnel', { title, year, ...rest });
+            }
+        });
+
+        const popularShowsDetails = await Promise.all(showsData.map(async (show: any) => {
+            if (show && show.ids && show.ids.tmdb && show.ids.trakt && typeof show.ids.tmdb === "number") {
+                const { poster, genres, synopsis } = await fetchDetailsFromTMDb(show.ids.tmdb);
+                const rating = await fetchRatingFromTrakt(show.ids.trakt);
+                return {
+                    title: show.title ?? 'Titre non disponible',
+                    year: show.year ?? new Date().getFullYear(),
+                    poster: poster,
+                    genres: genres,
+                    rating: rating,
+                    synopsis: synopsis ?? 'Synopsis non disponible'
+                };
+            } else {
+                console.warn("Données manquantes ou mal formées pour:", show);
+                return null;
+            }
         }));
 
-        return showsWithDetails;
+        return popularShowsDetails.filter(Boolean) as Show[];
     } catch (error) {
-        console.error("Erreur lors de la récupération des séries populaires:", error);
+        console.error("Erreur lors de la récupération des séries populaires depuis Trakt:", error);
         return [];
     }
+    
 }
