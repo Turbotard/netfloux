@@ -97,8 +97,8 @@ const SignUp: React.FC = () => {
                 Sign Up
               </Button>
               <Grid container>
-                <Grid item>
-                  <Link to="/login">{"Alreay Have An Account? Sign In"}</Link>
+                <Grid item className="link">
+                  <Link to="/login" className="link2">{"Alreay Have An Account? Sign In"}</Link>
                 </Grid>
               </Grid>
             </Box>
