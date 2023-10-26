@@ -47,7 +47,7 @@ export const fetchDetailsFromTMDb = async (tmdbId: number): Promise<{ poster: st
     }
 }
 
-export const fetchAllSeriesFromTMDb = async (page: number, limit: number) => {
+export const fetchAllSeriesFromTMDb = async (page: number, limit: number, searchQuery?: string) => {
     const seriesResponse = await fetch(`https://api.themoviedb.org/3/discover/tv?page=${page}&api_key=${tmdbApiKey}`);
     const seriesData = await seriesResponse.json();
     const genreMap = await fetchAllGenresFromTMDb();

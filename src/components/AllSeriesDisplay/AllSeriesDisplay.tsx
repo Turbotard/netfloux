@@ -38,7 +38,7 @@ const AllSeriesDisplay: React.FC<AllSeriesDisplayProps> = ({ searchQuery }) => {
         };
     
         const fetchSeries = async () => {
-            const fetchedSeries = await fetchPopularSeriesFromTrakt(page, limit, searchQuery);
+            const fetchedSeries = await fetchAllSeriesFromTMDb(page, limit, searchQuery);
     
             if (user) {
                 const userRatings = await fetchUserRatingForSeries(user.uid, fetchedSeries);
