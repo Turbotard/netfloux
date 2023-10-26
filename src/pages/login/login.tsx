@@ -246,13 +246,13 @@ const LoginPage = () => {
         <DialogActions>
           <Button
             onClick={() => setOpen(false)}
-            style={{ backgroundColor: "red", color: "white" }} // Bouton rouge avec texte en blanc
+            className="button-p"
           >
             Annuler
           </Button>
           <Button
             onClick={handleResetPassword}
-            style={{ backgroundColor: "red", color: "white" }} // Bouton rouge avec texte en blanc
+             className="button-p"
           >
             Envoyer
           </Button>

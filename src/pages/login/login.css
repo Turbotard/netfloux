@@ -37,6 +37,15 @@ button.button:hover{
     width: 100%;
 }
 
+button.button-p{
+    background-color: red;
+    color: #fff;
+}
+button.button-p:hover{
+    background-color: #fff;
+    color: red;
+}
+
 
 
 
