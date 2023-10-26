@@ -22,6 +22,7 @@ import {
   Checkbox,
   FormControlLabel,
   createTheme,
+  Autocomplete,
 } from "@mui/material";
 import Navbar from "../../components/navbar/Navbar";
 import { firestore } from "../../db/db";
@@ -128,29 +129,59 @@ const Profile: React.FC = () => {
     }
   };
 
-  const handleGenreChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const genre = e.target.name;
-    setSelectedGenres((prev) => {
-      if (prev.includes(genre)) {
-        return prev.filter((g) => g !== genre);
-      } else {
-        return [...prev, genre];
-      }
-    });
-  };
+  // const handleGenreChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const genre = e.target.name;
+  //   setSelectedGenres((prev) => {
+  //     if (prev.includes(genre)) {
+  //       return prev.filter((g) => g !== genre);
+  //     } else {
+  //       return [...prev, genre];
+  //     }
+  //   });
+  // };
 
-  const handleSaveGenres = async () => {
-    if (user) {
-      try {
-        const userRef = doc(firestore, "users", user.uid);
-        await setDoc(userRef, { genres: selectedGenres }, { merge: true });
-        alert("Genres sauvegardés avec succès!");
-      } catch (error) {
-        console.error("Erreur lors de la mise à jour des genres: ", error);
-      }
-    }
-  };
+  // const handleSaveGenres = async () => {
+  //   if (user) {
+  //     try {
+  //       const userRef = doc(firestore, "users", user.uid);
+  //       await setDoc(userRef, { genres: selectedGenres }, { merge: true });
+  //       alert("Genres sauvegardés avec succès!");
+  //     } catch (error) {
+  //       console.error("Erreur lors de la mise à jour des genres: ", error);
+  //     }
+  //   }
+  // };
   if (!user) return <p>Chargement...</p>;
+  const options = [
+    'Action',
+'Adventure',
+'Animation',
+'Anime',
+'Comedy',
+'Crime',
+'Documentary',
+'Donghua',
+'Drama',
+'Family',
+'Fantasy',
+'History',
+'Holiday',
+'Horror',
+'Music',
+'Musical',
+'Mystery',
+'None',
+'Romance',
+'Science Fiction',
+'Short',
+'Sporting Event',
+'Superhero',
+'Suspense',
+'Thriller',
+'War',
+'Western',
+
+  ];
   const defaultTheme = createTheme();
 
   return (
@@ -242,43 +273,28 @@ const Profile: React.FC = () => {
           >
             Déconnexion
           </Button>
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={selectedGenres.includes("Action")}
-                onChange={handleGenreChange}
-                name="Action"
-              />
-            }
-            label={<Typography color="white">Action</Typography>}
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={selectedGenres.includes("Romance")}
-                onChange={handleGenreChange}
-                name="Romance"
-              />
-            }
-            label={<Typography color="white">Romance</Typography>}
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={selectedGenres.includes("Science-Fiction")}
-                onChange={handleGenreChange}
-                name="Science-Fiction"
-              />
-            }
-            label={<Typography color="white">Science-Fiction</Typography>}
-          />
           <Button
-            onClick={handleSaveGenres}
+            href="/genres"
             variant="contained"
             sx={{ mt: 3, mb: 2, backgroundColor: "red" }}
           >
-            Sauvegarder les genres
+            Gerer vos preferences
           </Button>
+          {/* <Autocomplete
+      options={options}
+      renderInput={(params) => (
+        <TextField
+          {...params}
+          label="Rechercher"
+          variant="outlined"
+          className="genre"
+        />
+      )}
+      renderOption={(props, option) => (
+        <li {...props}>{option}</li>
+      )}
+      fullWidth
+    /> */}
         </Box>
       </Grid>
     </ThemeProvider>
