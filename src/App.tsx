@@ -17,7 +17,7 @@ function App(): React.ReactElement {
     <div className="App">
       <Router>
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/calendar" element={<Home />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/profile" element={<Profile />} />
