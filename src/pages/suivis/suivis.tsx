@@ -4,6 +4,7 @@ import {
   fetchAllSeriesFromTMDb,
   addToFavorites,
   removeFromFavorites,
+  fetchSeriesDetailsByTitle,
 } from "../../services/seriesService";
 import {
   Box,
@@ -25,7 +26,7 @@ import { doc, getDoc, arrayRemove } from "firebase/firestore";
 import { firestore } from "../../db/db";
 import { Auth, User, getAuth, onAuthStateChanged } from "@firebase/auth";
 import Navbar from "../../components/navbar/Navbar";
-import './suivis.css'
+import "./suivis.css";
 
 const Suivis: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -36,6 +37,8 @@ const Suivis: React.FC = () => {
   const [open, setOpen] = useState<boolean>(false);
   const [selectedSeries, setSelectedSeries] = useState<Show | null>(null);
   const authInstance: Auth = getAuth();
+  const [userFavoritesTitles, setUserFavoritesTitles] = useState<string[]>([]); 
+  const PAGE_SIZE = 20;
 
   const handleRatingChange = (
     event: React.ChangeEvent<{}>,
@@ -52,12 +55,21 @@ const Suivis: React.FC = () => {
           const userDocRef = doc(firestore, "users", currentUser.uid);
           const userDoc = await getDoc(userDocRef);
           if (userDoc.exists()) {
-            const userFavorites = userDoc.data().fav;
-            const allSeries = await fetchAllSeriesFromTMDb(page, 10);
-            const filteredSeries = allSeries.filter((serie) =>
-              userFavorites.includes(serie.title)
+            const userFavoritesTitles = userDoc.data().fav;
+            setUserFavoritesTitles(userFavoritesTitles);
+
+            const startIndex = (page - 1) * PAGE_SIZE;
+            const currentFavoritesTitles = userFavoritesTitles.slice(
+              startIndex,
+              startIndex + PAGE_SIZE
             );
-            setSeries(filteredSeries);
+
+            const allSeries = await Promise.all(
+              currentFavoritesTitles.map((title: any) =>
+                fetchSeriesDetailsByTitle(title)
+              )
+            );
+            setSeries(allSeries);
           }
         }
       }
@@ -73,13 +85,9 @@ const Suivis: React.FC = () => {
           prevSeries.filter((serie) => serie.title !== seriesName)
         );
       } catch (error) {
-        console.error(
-          "Error while remove from followed",
-          error
-        );
+        console.error("Error while remove from followed", error);
       }
     }
-
   };
   const handleOpen = async (serie: any) => {
     if (user) {
@@ -101,21 +109,31 @@ const Suivis: React.FC = () => {
   const handleClose = () => {
     setOpen(false);
   };
+  const handlePrevious = () => {
+    setPage((prev) => Math.max(prev - 1, 1));
+  };
+
+  const handleNext = () => {
+    setPage((prev) => prev + 1);
+  };
+  const canGoNext = (page * PAGE_SIZE) < userFavoritesTitles.length;
+
 
   return (
     <ThemeProvider theme={defaultTheme}>
       <Navbar />
       <Grid className="background">
-        <Typography variant="h4" className='titre'>
+        <Typography variant="h4" className="titre">
           Vos series et films favoris:
         </Typography>
         <Box display="flex" flexWrap="wrap" gap={2}>
           {series.map((serie, index) => (
-            <Card 
-            key={index} 
-            style={{ maxWidth: "300px" }}
-            onClick={() => handleOpen(serie)}
-             className="card">
+            <Card
+              key={index}
+              style={{ maxWidth: "300px" }}
+              onClick={() => handleOpen(serie)}
+              className="card"
+            >
               <CardMedia
                 component="img"
                 alt={serie.title}
@@ -142,64 +160,60 @@ const Suivis: React.FC = () => {
           ))}
         </Box>
 
-        <Dialog open={open} onClose={handleClose} >
-        {selectedSeries && (
-          <>
-          <Grid  className="background-dia">
-          <Box className="fav">
-              <DialogTitle >{selectedSeries.title}</DialogTitle>
+        <Dialog open={open} onClose={handleClose}>
+          {selectedSeries && (
+            <>
+              <Grid className="background-dia">
+                <Box className="fav">
+                  <DialogTitle>{selectedSeries.title}</DialogTitle>
+                </Box>
 
-            </Box>
+                <DialogContent>
+                  <CardMedia
+                    component="img"
+                    alt={selectedSeries.title}
+                    height="auto"
+                    width="70%"
+                    image={selectedSeries.poster}
+                  />
+                  <Box className="details">
+                    <Typography variant="h6">{selectedSeries.title}</Typography>
+                    <Typography variant="subtitle1">
+                      {selectedSeries.synopsis}
+                    </Typography>
+                    <Typography variant="subtitle2">
+                      Acteurs: {selectedSeries.actors?.join(", ")}
+                    </Typography>
+                  </Box>
 
-            <DialogContent >
-              <CardMedia
-                component="img"
-                alt={selectedSeries.title}
-                height="auto"
-                width="70%"
-                image={selectedSeries.poster}
-              />
-              <Box className="details">
-              <Typography variant="h6">{selectedSeries.title}</Typography>
-              <Typography variant="subtitle1">
-                {selectedSeries.synopsis}
-              </Typography>
-              <Typography variant="subtitle2">
-                Acteurs: {selectedSeries.actors?.join(", ")}
-              </Typography>
-              </Box>
-              
-              <Box component="fieldset" borderColor="#343434">
-                <Typography component="legend">Rate this serie</Typography>
-                <Rating
-                  name="rating-value"
-                  value={ratingValue}
-                  onChange={handleRatingChange}
-                  className="note"
-                />
-              </Box>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={handleClose} className="button-all">
-                Close
-              </Button>
-            </DialogActions>
-          </Grid>
-           
-          </>
-        )}
-      </Dialog>
+                  <Box component="fieldset" borderColor="#343434">
+                    <Typography component="legend">Rate this serie</Typography>
+                    <Rating
+                      name="rating-value"
+                      value={ratingValue}
+                      onChange={handleRatingChange}
+                      className="note"
+                    />
+                  </Box>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={handleClose} className="button-all">
+                    Close
+                  </Button>
+                </DialogActions>
+              </Grid>
+            </>
+          )}
+        </Dialog>
 
         <Box mt={3} display="flex" justifyContent="center">
-          <Button
-            onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
-            className="button-suivis"
-          >
+          <Button onClick={handlePrevious} className="button-suivis">
             Précédent
           </Button>
           <Button
-            onClick={() => setPage((prev) => prev + 1)}
+            onClick={handleNext}
             className="button-suivis"
+            disabled={!canGoNext}
           >
             Suivant
           </Button>
