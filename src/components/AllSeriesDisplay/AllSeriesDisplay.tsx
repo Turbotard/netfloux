@@ -122,7 +122,7 @@ const AllSeriesDisplay: React.FC<AllSeriesDisplayProps> = ({ searchQuery }) => {
     setRatingValue(newValue as number);
   };
   const formatSeriesName = (name: string) => {
-    return name.replace(/[^a-zA-Z0-9]/g, "_"); // Remplace les caractères non-alphanumériques par des underscores
+    return name.replace(/[^a-zA-Z0-9]/g, "_");
   };
   const handleSendRating = async () => {
     if (!user) return alert("Veuillez vous connecter pour noter cette série!");
@@ -139,7 +139,7 @@ const AllSeriesDisplay: React.FC<AllSeriesDisplayProps> = ({ searchQuery }) => {
 
     const evalDocRef = doc(firestore, "eval", docId);
     try {
-      await setDoc(evalDocRef, evalData, { merge: true }); // use merge: true to update or create
+      await setDoc(evalDocRef, evalData, { merge: true });
       alert("Votre note a été envoyée avec succès!");
       handleClose();
     } catch (error) {
