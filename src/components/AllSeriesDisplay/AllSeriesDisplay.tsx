@@ -3,7 +3,6 @@ import {
   Show,
   addToFavorites,
   fetchAllSeriesFromTMDb,
-  fetchPopularSeriesFromTrakt,
 } from "../../services/seriesService";
 import {
   Box,
@@ -14,17 +13,15 @@ import {
   CardContent,
   Rating,
   Dialog,
-  DialogTitle,
   DialogContent,
   DialogActions,
 } from "@mui/material";
-import { doc, setDoc, getDoc, arrayUnion } from "firebase/firestore";
+import { doc, setDoc, getDoc } from "firebase/firestore";
 import { firestore } from "../../db/db";
 import { Auth, User, getAuth, onAuthStateChanged } from "@firebase/auth";
 import { useNavigate } from "react-router";
 import StarIcon from "@mui/icons-material/Star";
 import "./AllSeriesDisplay.css";
-import { PassThrough } from "stream";
 
 interface AllSeriesDisplayProps {
   searchQuery: string;
@@ -124,7 +121,7 @@ const AllSeriesDisplay: React.FC<AllSeriesDisplayProps> = ({ searchQuery }) => {
     setRatingValue(newValue as number);
   };
   const formatSeriesName = (name: string) => {
-    return name.replace(/[^a-zA-Z0-9]/g, "_"); // Remplace les caractères non-alphanumériques par des underscores
+    return name.replace(/[^a-zA-Z0-9]/g, "_");
   };
   const handleSendRating = async () => {
     if (!user) return alert("Veuillez vous connecter pour noter cette série!");
@@ -141,7 +138,7 @@ const AllSeriesDisplay: React.FC<AllSeriesDisplayProps> = ({ searchQuery }) => {
 
     const evalDocRef = doc(firestore, "eval", docId);
     try {
-      await setDoc(evalDocRef, evalData, { merge: true }); // use merge: true to update or create
+      await setDoc(evalDocRef, evalData, { merge: true });
       alert("Votre note a été envoyée avec succès!");
       handleClose();
     } catch (error) {
@@ -166,28 +163,26 @@ const AllSeriesDisplay: React.FC<AllSeriesDisplayProps> = ({ searchQuery }) => {
   };
 
   return (
-    <Box>
-      <Box display="flex" flexWrap="wrap" gap={2}>
+    <Box className="series-container">
+      <Box className="series-wrapper">
         {series.map((serie, index) => (
           <Card
             key={index}
-            style={{ maxWidth: "300px" }}
+            className="series-card"
             onClick={() => handleOpen(serie)}
-            className="card"
           >
             <CardMedia
               component="img"
               alt={serie.title}
-              height="auto"
-              width="70%"
+              className="series-card-media"
               image={serie.poster}
             />
-            <CardContent className="card-description">
-              <Typography variant="h6" noWrap>
+            <CardContent className="card-content">
+              <Typography variant="h6" className="card-title">
                 {serie.title}
               </Typography>
-              <Typography variant="subtitle1">
-                <Box className="card-d">Genres: {serie.genres.join(", ")}</Box>
+              <Typography variant="subtitle1" className="card-genres">
+                Genres: {serie.genres.join(", ")}
               </Typography>
               <Box component="fieldset" borderColor="transparent">
                 <Typography component="legend">Rating:</Typography>
@@ -196,7 +191,7 @@ const AllSeriesDisplay: React.FC<AllSeriesDisplayProps> = ({ searchQuery }) => {
                   value={serie.rating / 2}
                   readOnly
                   precision={0.5}
-                  className="rating"
+                  className="card-rating"
                 />
               </Box>
             </CardContent>
@@ -208,7 +203,6 @@ const AllSeriesDisplay: React.FC<AllSeriesDisplayProps> = ({ searchQuery }) => {
         {selectedSeries && (
           <>
             <Box className="fav">
-              <DialogTitle>{selectedSeries.title}</DialogTitle>
               <Button onClick={handleFavoriteClick}>
                 <StarIcon className="star" />
               </Button>
@@ -229,6 +223,15 @@ const AllSeriesDisplay: React.FC<AllSeriesDisplayProps> = ({ searchQuery }) => {
               <Typography variant="subtitle2">
                 Acteurs: {selectedSeries.actors?.join(", ")}
               </Typography>
+              <Typography variant="subtitle2">
+                Nombre de saisons: {selectedSeries.numberOfSeasons}
+              </Typography>
+
+              {selectedSeries.seasons && selectedSeries.seasons.map((season) => (
+                  <Typography variant="subtitle2" key={season.seasonNumber}>
+                      Saison {season.seasonNumber}: {season.episodeCount} épisodes
+                  </Typography>
+              ))}
               <Box component="fieldset" borderColor="transparent">
                 <Typography component="legend">Noter cette série:</Typography>
                 <Rating

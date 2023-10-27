@@ -1,6 +1,5 @@
 import { updateDoc, arrayUnion } from "@firebase/firestore";
-import { doc } from "prettier";
-import { doc as doc2, getDoc } from "firebase/firestore";
+import { doc as doc2 } from "firebase/firestore";
 import { firestore } from "../db/db";
 
 const TRAKT_BASE_URL = 'http://localhost:8080/https://api.trakt.tv/';
@@ -18,7 +17,15 @@ export interface Show {
     rating: number;
     synopsis: string;
     summary?: string;
-    actors?: string[]; 
+    actors?: string[];
+    numberOfSeasons: number;
+    numberOfEpisodes: number;
+    seasons: Season[];
+}
+
+interface Season {
+    seasonNumber: number;
+    episodeCount: number;
 }
 
 export const fetchDetailsFromTMDb = async (tmdbId: number): Promise<{ poster: string, genres: string[], synopsis: string }> => {
@@ -94,7 +101,11 @@ export const fetchAllSeriesFromTMDb = async (page: number, limit: number, search
                     synopsis: serieDetail.overview ?? 'Synopsis non disponible',
                     numberOfSeasons: serieDetail.number_of_seasons,
                     numberOfEpisodes: serieDetail.number_of_episodes,
-                    actors: serieDetail.credits?.cast?.slice(0, 5).map((actor: any) => actor.name) || []  // top 5 actors
+                    seasons: serieDetail.seasons.map((season: any) => ({
+                        seasonNumber: season.season_number,
+                        episodeCount: season.episode_count
+                    })),
+                    actors: serieDetail.credits?.cast?.slice(0, 5).map((actor: any) => actor.name) || []
                 };
             })
         );

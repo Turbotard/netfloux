@@ -1,53 +1,59 @@
-.card-d{
-    font-size: 0.75rem;
-    width: 100%;
-    display: flex;
-   justify-content: center;
-   align-items: center;
-}
-.rating{
-    background-color: #343434;
-    opacity: 0.9;
-}
-.card {
-    transition: all 0.3s ease-in-out;
-    z-index: 0;
-    overflow: hidden;
-    width: 100%;
-    height: auto;
-    position: relative;
-}
-
-
-.card-description {
-    position: absolute;
-    bottom: -25%;
-    width: 80%;
-    margin-left: 4.5%;
-    background-color: rgba(0, 0, 0, 0.95);
-    transition: bottom 0.3s ease-in-out;
-    font-size: 1rem;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    color: white;
+.series-container {
     display: flex;
     flex-direction: column;
+    align-items: center;
+    width: 96%;
+    max-width: 1600px;
+    margin: 0 auto;
+}
+
+.series-wrapper {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 2rem;
+    width: 100%;
+    justify-items: center;
+}
+
+.series-card {
+    max-width: 300px;
+    cursor: pointer;
+    width: 100%;
+}
+
+.series-card-media {
+    height: auto;
+    width: 70%;
+    margin: 0 auto;
+}
+
+.card-content {
+    text-align: center;
+}
+
+.card-title {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.card-genres {
+    font-size: 0.75rem;
+    display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.card:hover .card-description {
-    bottom: 0;
+.card-rating {
+    margin-top: 5px;
 }
-.star{
+
+.star {
     color: #343434;
 }
-/* .star{
-    color: red;
-} */
-.fav{
+
+.fav {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: flex-end;
 }
