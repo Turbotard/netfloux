@@ -91,7 +91,6 @@ export const fetchAllSeriesFromTMDb = async (
     return [];
   }
 
-  // Choose the endpoint based on the presence of searchQuery
   const seriesEndpoint = searchQuery
     ? `https://api.themoviedb.org/3/search/tv?query=${encodeURIComponent(
         searchQuery
@@ -303,7 +302,6 @@ export const fetchPopularSeriesFromTrakt = async (
     return [];
   }
 
-  // Choose the endpoint based on the presence of searchQuery
   const seriesEndpoint = searchQuery
     ? `${TRAKT_BASE_URL}search/show?query=${encodeURIComponent(
         searchQuery

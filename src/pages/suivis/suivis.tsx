@@ -37,7 +37,7 @@ const Suivis: React.FC = () => {
   const [open, setOpen] = useState<boolean>(false);
   const [selectedSeries, setSelectedSeries] = useState<Show | null>(null);
   const authInstance: Auth = getAuth();
-  const [userFavoritesTitles, setUserFavoritesTitles] = useState<string[]>([]); 
+  const [userFavoritesTitles, setUserFavoritesTitles] = useState<string[]>([]);
   const PAGE_SIZE = 20;
 
   const handleRatingChange = (
@@ -55,7 +55,7 @@ const Suivis: React.FC = () => {
           const userDocRef = doc(firestore, "users", currentUser.uid);
           const userDoc = await getDoc(userDocRef);
           if (userDoc.exists()) {
-            const userFavoritesTitles = userDoc.data().fav;
+            const userFavoritesTitles = userDoc.data().fav || [];
             setUserFavoritesTitles(userFavoritesTitles);
 
             const startIndex = (page - 1) * PAGE_SIZE;
@@ -70,6 +70,8 @@ const Suivis: React.FC = () => {
               )
             );
             setSeries(allSeries);
+          }else{
+            alert("Vous n'avez pas de séries favorites")
           }
         }
       }
@@ -116,15 +118,14 @@ const Suivis: React.FC = () => {
   const handleNext = () => {
     setPage((prev) => prev + 1);
   };
-  const canGoNext = (page * PAGE_SIZE) < userFavoritesTitles.length;
-
+  const canGoNext = page * PAGE_SIZE < userFavoritesTitles.length;
 
   return (
     <ThemeProvider theme={defaultTheme}>
       <Navbar />
       <Grid className="background">
         <Typography variant="h4" className="titre">
-          Vos series et films favoris:
+          Vos séries et films favoris :
         </Typography>
         <Box display="flex" flexWrap="wrap" gap={2} className="card-container">
           {series.map((serie, index) => (
@@ -144,10 +145,11 @@ const Suivis: React.FC = () => {
               <CardContent className="card-description">
                 <Typography className="title">{serie.title}</Typography>
                 <Typography variant="subtitle1">
-                  Genres:
-                  <Box className="card-d">{serie.genres.join(", ")}</Box>
+                  Genres:{" "}
+                  <Box component="span" className="card-d">
+                    {serie.genres.join(", ")}
+                  </Box>
                 </Typography>
-
                 <Button
                   variant="contained"
                   color="secondary"
@@ -168,7 +170,6 @@ const Suivis: React.FC = () => {
                 <Box className="fav">
                   <DialogTitle>{selectedSeries.title}</DialogTitle>
                 </Box>
-
                 <DialogContent>
                   <CardMedia
                     component="img"
@@ -186,9 +187,10 @@ const Suivis: React.FC = () => {
                       Acteurs: {selectedSeries.actors?.join(", ")}
                     </Typography>
                   </Box>
-
                   <Box component="fieldset" borderColor="#343434">
-                    <Typography component="legend">Rate this serie</Typography>
+                    <Typography component="legend">
+                      Notez cette série
+                    </Typography>
                     <Rating
                       name="rating-value"
                       value={ratingValue}
@@ -199,7 +201,7 @@ const Suivis: React.FC = () => {
                 </DialogContent>
                 <DialogActions>
                   <Button onClick={handleClose} className="button-all">
-                    Close
+                    Fermer
                   </Button>
                 </DialogActions>
               </Grid>
@@ -220,6 +222,23 @@ const Suivis: React.FC = () => {
           >
             Suivant
           </Button>
+
+        <Box className="boutons">
+          <Box mt={3} display="flex" justifyContent="center">
+            <Button
+              onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+              className="button-suivis"
+            >
+              Précédent
+            </Button>
+            <Button
+              onClick={handleNext}
+              className="button-suivis"
+              disabled={!canGoNext}
+            >
+              Suivant
+            </Button>
+          </Box>
         </Box>
 
       </Grid>
@@ -228,4 +247,3 @@ const Suivis: React.FC = () => {
 };
 
 export default Suivis;
-
