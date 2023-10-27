@@ -245,7 +245,6 @@ export const fetchPopularSeriesFromTrakt = async (page: number = 1, limit: numbe
 
         const rawData = await response.json();
 
-        // Si c'est une recherche, nous devons extraire les données de show des résultats
         const showsData = searchQuery ? rawData.map((item: any) => item.show) : rawData;
 
         showsData.forEach(({ ids, title, year, ...rest }: any) => {

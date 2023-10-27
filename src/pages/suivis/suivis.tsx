@@ -53,7 +53,7 @@ const Suivis: React.FC = () => {
             );
             setSeries(filteredSeries);
           }
-        }else{
+        } else {
           navigate("/login");
         }
       }
@@ -95,7 +95,7 @@ const Suivis: React.FC = () => {
             <CardContent className="card-description">
               <Typography className="title">{serie.title}</Typography>
               <Typography variant="subtitle1">
-                Genres:
+                Genres : 
                 <Box className="card-d">{serie.genres.join(", ")}</Box>
               </Typography>
               <Button
@@ -103,7 +103,7 @@ const Suivis: React.FC = () => {
                 color="secondary"
                 onClick={() => handleRemoveFromFavorites(serie.title)}
               >
-                Supprimer des favoris
+                unfollow
               </Button>
             </CardContent>
           </Card>
@@ -113,13 +113,13 @@ const Suivis: React.FC = () => {
             onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
             className="button"
           >
-            Précédent
+            Previous
           </Button>
           <Button
             onClick={() => setPage((prev) => prev + 1)}
             className="button"
           >
-            Suivant
+            Next
           </Button>
         </Box>
       </Grid>

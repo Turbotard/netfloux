@@ -89,11 +89,11 @@ const LoginPage = () => {
         errorMessage = "Une erreur s'est produite lors de la connexion.";
       }
       setError(errorMessage);
-      alert(errorMessage);  
+      alert(errorMessage);
       setAuthing(false);
     }
   };
-  
+
   const handleResetPassword = () => {
     if (email) {
       sendPasswordResetEmail(authInstance, email)
@@ -133,7 +133,7 @@ const LoginPage = () => {
             backgroundPosition: "center",
           }}
         />
-        <Grid item xs={12} sm={8} md={5} sx={{ backgroundColor: "black" }} >
+        <Grid item xs={12} sm={8} md={5} sx={{ backgroundColor: "black" }}>
           <Box
             sx={{
               my: 8,
@@ -174,7 +174,7 @@ const LoginPage = () => {
                 onChange={(e) => setPassword(e.target.value)}
               />
               <Button
-              className="button-l"
+                className="button-l"
                 type="submit"
                 fullWidth
                 variant="contained"
@@ -184,7 +184,7 @@ const LoginPage = () => {
                 Sign In
               </Button>
               <Button
-              className="button-l"
+                className="button-l"
                 type="submit"
                 fullWidth
                 variant="contained"
@@ -199,7 +199,9 @@ const LoginPage = () => {
                 <Link onClick={() => setOpen(true)} to={""} className="link">
                   {"Forgot Password?"}
                 </Link>
-                <Link to="/signup" className="link">{"Don't have an account? Sign Up"}</Link>
+                <Link to="/signup" className="link">
+                  {"Don't have an account? Sign Up"}
+                </Link>
               </Grid>
             </Grid>
           </Box>
@@ -214,13 +216,10 @@ const LoginPage = () => {
           },
         }}
       >
-        <DialogTitle style={{ color: "white" }}>
-          Réinitialiser le mot de passe
-        </DialogTitle>
+        <DialogTitle style={{ color: "white" }}>Reset Password </DialogTitle>
         <DialogContent>
           <DialogContentText style={{ color: "white" }}>
-            Pour réinitialiser votre mot de passe, veuillez entrer votre adresse
-            e-mail.
+            For reset your password, please enter your email address here.
           </DialogContentText>
           <TextField
             autoFocus
@@ -244,17 +243,11 @@ const LoginPage = () => {
           />
         </DialogContent>
         <DialogActions>
-          <Button
-            onClick={() => setOpen(false)}
-            className="button-l"
-          >
-            Annuler
+          <Button onClick={() => setOpen(false)} className="button-l">
+            Cancel
           </Button>
-          <Button
-            onClick={handleResetPassword}
-             className="button-l"
-          >
-            Envoyer
+          <Button onClick={handleResetPassword} className="button-l">
+            Send
           </Button>
         </DialogActions>
       </Dialog>

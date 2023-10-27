@@ -129,7 +129,7 @@ const Profile: React.FC = () => {
     }
   };
 
-  if (!user) return <p>Chargement...</p>;
+  if (!user) return <p>Loading...</p>;
   const defaultTheme = createTheme();
 
   return (
@@ -153,7 +153,7 @@ const Profile: React.FC = () => {
             Profil:
           </Typography>
           <Typography component="p" variant="h5" sx={{ color: "white" }}>
-            Email actuel: {user.email}
+            Your Email : {user.email}
           </Typography>
           <TextField
             margin="normal"
@@ -174,81 +174,63 @@ const Profile: React.FC = () => {
             sx={{ mt: 3, mb: 2, backgroundColor: "red" }}
             onClick={handleEmailUpdate}
           >
-            {updateStatus === "PENDING"
-              ? "Mise à jour..."
-              : "Mettre à jour l'e-mail"}
+            {updateStatus === "PENDING" ? "Loading..." : "Update Email"}
           </Button>
 
           {!user.emailVerified && (
             <>
               <Button
-               className="button-p"
+                className="button-p"
                 type="submit"
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
                 onClick={handleSendEmailVerification}
               >
-                Envoyer l'e-mail de vérification
+                Send Email Verification
               </Button>
               <Typography component="p" variant="h5" sx={{ color: "white" }}>
-                Si vous n'avez pas reçu l'e-mail, veuillez vérifier votre
-                dossier de spam.
+                If you have not received the email, please check your spam
               </Typography>
             </>
           )}
-          {updateStatus === "SUCCESS" && <p>Email mis à jour avec succès!</p>}
+          {updateStatus === "SUCCESS" && <p>Email updated successfully !</p>}
           {updateStatus === "ERROR" && (
             <Typography component="p" variant="h5" sx={{ color: "white" }}>
-              Erreur lors de la mise à jour de l'e-mail.
+              Error while updating the email
             </Typography>
           )}
 
           {user.emailVerified && (
             <Button
-            className="button-p"
+              className="button-p"
               type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
               onClick={handleSendPasswordResetEmail}
             >
-              Réinitialiser le mot de passe
+              Reset Password
             </Button>
           )}
           <Button
-           className="button-p"
+            className="button-p"
             type="submit"
             fullWidth
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
             onClick={handleSignOut}
           >
-            Déconnexion
+            Logout
           </Button>
           <Button
-           className="button-p"
+            className="button-p"
             href="/genres"
             variant="contained"
-            sx={{ mt: 3, mb: 2, backgroundColor: "red"}}
+            sx={{ mt: 3, mb: 2, backgroundColor: "red" }}
           >
-            Gerer vos preferences
+            Change your favorite genres
           </Button>
-          {/* <Autocomplete
-      options={options}
-      renderInput={(params) => (
-        <TextField
-          {...params}
-          label="Rechercher"
-          variant="outlined"
-          className="genre"
-        />
-      )}
-      renderOption={(props, option) => (
-        <li {...props}>{option}</li>
-      )}
-      fullWidth
-    /> */}
         </Box>
       </Grid>
     </ThemeProvider>

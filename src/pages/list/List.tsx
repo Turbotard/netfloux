@@ -33,7 +33,7 @@ const ListPage: React.FC = () => {
               }}
             >
                 <Typography variant="h4" className='titre'>
-                    Les Plus Populaires:
+                    Most Popular:
                 </Typography>
                 <PopularSeriesCorridor />
             </Grid>
@@ -41,7 +41,7 @@ const ListPage: React.FC = () => {
                 <TextField 
                     className='search-input'
                     variant="outlined" 
-                    placeholder="Recherchez une série" 
+                    placeholder="Searche Series" 
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     
