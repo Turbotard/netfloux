@@ -26,7 +26,6 @@ import { firestore } from "../../db/db";
 import { Auth, User, getAuth, onAuthStateChanged } from "@firebase/auth";
 import Navbar from "../../components/navbar/Navbar";
 import './suivis.css'
-import { useNavigate } from "react-router-dom";
 
 const Suivis: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -37,7 +36,7 @@ const Suivis: React.FC = () => {
   const [open, setOpen] = useState<boolean>(false);
   const [selectedSeries, setSelectedSeries] = useState<Show | null>(null);
   const authInstance: Auth = getAuth();
-  const navigate = useNavigate();
+
   const handleRatingChange = (
     event: React.ChangeEvent<{}>,
     newValue: number | null
@@ -60,12 +59,9 @@ const Suivis: React.FC = () => {
             );
             setSeries(filteredSeries);
           }
-        } else {
-          navigate("/login");
         }
       }
     );
-
     return () => unsubscribe();
   }, [page]);
 
@@ -78,7 +74,7 @@ const Suivis: React.FC = () => {
         );
       } catch (error) {
         console.error(
-          "Error removing serie from favorites in firestore",
+          "Erreur lors de la suppression de la série des favoris: ",
           error
         );
       }
@@ -125,7 +121,6 @@ const Suivis: React.FC = () => {
                 alt={serie.title}
                 height="auto"
                 width="70%"
-                className="card"
                 image={serie.poster}
               />
               <CardContent className="card-description">
@@ -175,7 +170,7 @@ const Suivis: React.FC = () => {
               </Box>
               
               <Box component="fieldset" borderColor="#343434">
-                <Typography component="legend">Note this serie:</Typography>
+                <Typography component="legend">Noter cette série:</Typography>
                 <Rating
                   name="rating-value"
                   value={ratingValue}
@@ -187,16 +182,6 @@ const Suivis: React.FC = () => {
             <DialogActions>
               <Button onClick={handleClose} className="button-all">
                 Fermer
-
-                Genres : 
-                <Box className="card-d">{serie.genres.join(", ")}</Box>
-              </Typography>
-              <Button
-                variant="contained"
-                color="secondary"
-                onClick={() => handleRemoveFromFavorites(serie.title)}
-              >
-                unfollow
               </Button>
             </DialogActions>
           </Grid>
@@ -210,13 +195,13 @@ const Suivis: React.FC = () => {
             onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
             className="button-suivis"
           >
-            Previous
+            Précédent
           </Button>
           <Button
             onClick={() => setPage((prev) => prev + 1)}
             className="button-suivis"
           >
-            Next
+            Suivant
           </Button>
         </Box>
       </Grid>
