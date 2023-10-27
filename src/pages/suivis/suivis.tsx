@@ -55,7 +55,7 @@ const Suivis: React.FC = () => {
           const userDocRef = doc(firestore, "users", currentUser.uid);
           const userDoc = await getDoc(userDocRef);
           if (userDoc.exists()) {
-            const userFavoritesTitles = userDoc.data().fav;
+            const userFavoritesTitles = userDoc.data().fav || [];
             setUserFavoritesTitles(userFavoritesTitles);
 
             const startIndex = (page - 1) * PAGE_SIZE;
@@ -70,6 +70,8 @@ const Suivis: React.FC = () => {
               )
             );
             setSeries(allSeries);
+          }else{
+            alert("Vous n'avez pas de séries favorites")
           }
         }
       }
@@ -208,21 +210,19 @@ const Suivis: React.FC = () => {
         </Dialog>
 
         <Box className="boutons">
-          <Box mt={3} display="flex" justifyContent="center">
-            <Button
-              onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
-              className="button-suivis"
-            >
-              Précédent
-            </Button>
-            <Button
-              onClick={handleNext}
-              className="button-suivis"
-              disabled={!canGoNext}
-            >
-              Suivant
-            </Button>
-          </Box>
+          <Button
+            onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+            className="button-suivis"
+          >
+            Précédent
+          </Button>
+          <Button
+            onClick={handleNext}
+            className="button-suivis"
+            disabled={!canGoNext}
+          >
+            Suivant
+          </Button>
         </Box>
       </Grid>
     </ThemeProvider>
