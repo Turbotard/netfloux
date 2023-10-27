@@ -59,6 +59,10 @@
     transform: translateY(-30px);
 }
 
+button.css-1e6y48t-MuiButtonBase-root-MuiButton-root.Mui-disabled {
+    color: #fff; 
+}
+
 .star{
     color: #343434;
 }
