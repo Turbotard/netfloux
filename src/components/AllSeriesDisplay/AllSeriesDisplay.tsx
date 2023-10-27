@@ -123,10 +123,10 @@ const AllSeriesDisplay: React.FC<AllSeriesDisplayProps> = ({ searchQuery }) => {
     setRatingValue(newValue as number);
   };
   const formatSeriesName = (name: string) => {
-    return name.replace(/[^a-zA-Z0-9]/g, "_"); // Remplace les caractères non-alphanumériques par des underscores
+    return name.replace(/[^a-zA-Z0-9]/g, "_");
   };
   const handleSendRating = async () => {
-    if (!user) return alert("Veuillez vous connecter pour noter cette série!");
+    if (!user) return alert("Please log in to rate this series!");
 
     const docId = `${user.uid}_${formatSeriesName(
       selectedSeries?.title || ""
@@ -140,27 +140,26 @@ const AllSeriesDisplay: React.FC<AllSeriesDisplayProps> = ({ searchQuery }) => {
 
     const evalDocRef = doc(firestore, "eval", docId);
     try {
-      await setDoc(evalDocRef, evalData, { merge: true }); // use merge: true to update or create
-      alert("Votre note a été envoyée avec succès!");
+      await setDoc(evalDocRef, evalData, { merge: true });
+      alert("Your rating has been successfully sent!");
       handleClose();
     } catch (error) {
-      console.error("Erreur lors de l'envoi de la note: ", error);
-      alert("Une erreur s'est produite. Veuillez réessayer.");
+      console.error("Error while sending the rating: ", error);
+      alert("An error occurred. Please try again.");
     }
   };
   const handleFavoriteClick = async () => {
     if (!user) {
-      alert("Veuillez vous connecter pour ajouter cette série à vos favoris!");
+      alert("Please log in to add this series to your favorites!");
       return;
     }
-    
+
     try {
       await addToFavorites(user.uid, selectedSeries?.title || "");
-      alert("Série ajoutée à vos favoris!");
-      
+      alert("Series added to your favorites!");
     } catch (error) {
       alert(
-        "Une erreur s'est produite lors de l'ajout aux favoris. Veuillez réessayer."
+        "An error occurred while adding to favorites. Please try again."
       );
     }
   };
@@ -183,11 +182,9 @@ const AllSeriesDisplay: React.FC<AllSeriesDisplayProps> = ({ searchQuery }) => {
               image={serie.poster}
             />
             <CardContent className="card-description">
-              <Typography className="title">
-                {serie.title}
-              </Typography>
+              <Typography className="title">{serie.title}</Typography>
               <Typography variant="subtitle1">
-                Genres: 
+                Genres:
                 <Box className="card-d">{serie.genres.join(", ")}</Box>
               </Typography>
               <Box component="fieldset" borderColor="transparent">
@@ -205,66 +202,71 @@ const AllSeriesDisplay: React.FC<AllSeriesDisplayProps> = ({ searchQuery }) => {
         ))}
       </Box>
 
-      <Dialog open={open} onClose={handleClose} >
+      <Dialog open={open} onClose={handleClose}>
         {selectedSeries && (
           <>
-          <Grid  className="background-dia">
-          <Box className="fav">
-              <DialogTitle >{selectedSeries.title}</DialogTitle>
-              <Button 
-              onClick={handleFavoriteClick}
-              >
-                <StarIcon className="star" />
-              </Button>
-            </Box>
+            <Grid className="background-dia">
+              <Box className="fav">
+                <DialogTitle>{selectedSeries.title}</DialogTitle>
+                <Button onClick={handleFavoriteClick}>
+                  <StarIcon className="star" />
+                </Button>
+              </Box>
 
-            <DialogContent >
-              <CardMedia
-                component="img"
-                alt={selectedSeries.title}
-                height="auto"
-                width="70%"
-                image={selectedSeries.poster}
-              />
-              <Box className="details">
-              <Typography variant="h6">{selectedSeries.title}</Typography>
-              <Typography variant="subtitle1">
-                {selectedSeries.synopsis}
-              </Typography>
-              <Typography variant="subtitle2">
-                Acteurs: {selectedSeries.actors?.join(", ")}
-              </Typography>
-              </Box>
-              
-              <Box component="fieldset" borderColor="#343434">
-                <Typography component="legend">Noter cette série:</Typography>
-                <Rating
-                  name="rating-value"
-                  value={ratingValue}
-                  onChange={handleRatingChange}
-                  className="note"
+              <DialogContent>
+                <CardMedia
+                  component="img"
+                  alt={selectedSeries.title}
+                  height="auto"
+                  width="70%"
+                  image={selectedSeries.poster}
                 />
-              </Box>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={handleClose} className="button-all">
-                Fermer
-              </Button>
-              <Button onClick={handleSendRating} className="button-note">
-                Envoyer la note
-              </Button>
-            </DialogActions>
-          </Grid>
-           
+                <Box className="details">
+                  <Typography variant="h6">{selectedSeries.title}</Typography>
+                  <Typography variant="subtitle1">
+                    {selectedSeries.synopsis}
+                  </Typography>
+                  <Typography variant="subtitle2">
+                    Actors: {selectedSeries.actors?.join(", ")}
+                  </Typography>
+                </Box>
+
+                <Box component="fieldset" borderColor="#343434">
+                  <Typography component="legend">Rate this series:</Typography>
+                  <Rating
+                    name="rating-value"
+                    value={ratingValue}
+                    onChange={handleRatingChange}
+                    className="note"
+                  />
+                </Box>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleClose} className="button-all">
+                  Close
+                </Button>
+                <Button onClick={handleSendRating} className="button-note">
+                  Send Rating
+                </Button>
+              </DialogActions>
+            </Grid>
           </>
         )}
       </Dialog>
 
       <Box mt={3} display="flex" justifyContent="center">
-        <Button onClick={() => setPage((prev) => Math.max(prev - 1, 1))} className="button-all">
-          Précédent
+        <Button
+          onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+          className="button-all"
+        >
+          Previous
         </Button>
-        <Button onClick={() => setPage((prev) => prev + 1)} className="button-all">Suivant</Button>
+        <Button
+          onClick={() => setPage((prev) => prev + 1)}
+          className="button-all"
+        >
+          Next
+        </Button>
       </Box>
     </Box>
   );
