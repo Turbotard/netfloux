@@ -167,7 +167,7 @@ const Profile: React.FC = () => {
             Nouvel Email
           </TextField>
           <Button
-            className="button"
+            className="button-p"
             type="submit"
             fullWidth
             variant="contained"
@@ -182,7 +182,7 @@ const Profile: React.FC = () => {
           {!user.emailVerified && (
             <>
               <Button
-               className="button"
+               className="button-p"
                 type="submit"
                 fullWidth
                 variant="contained"
@@ -206,7 +206,7 @@ const Profile: React.FC = () => {
 
           {user.emailVerified && (
             <Button
-            className="button"
+            className="button-p"
               type="submit"
               fullWidth
               variant="contained"
@@ -217,7 +217,7 @@ const Profile: React.FC = () => {
             </Button>
           )}
           <Button
-           className="button"
+           className="button-p"
             type="submit"
             fullWidth
             variant="contained"
@@ -227,7 +227,7 @@ const Profile: React.FC = () => {
             Déconnexion
           </Button>
           <Button
-           className="button"
+           className="button-p"
             href="/genres"
             variant="contained"
             sx={{ mt: 3, mb: 2, backgroundColor: "red"}}

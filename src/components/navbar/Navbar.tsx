@@ -4,6 +4,7 @@ import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Button from '@mui/material/Button';
 import StarIcon from '@mui/icons-material/Star';
+import CalendarIcon from '@mui/icons-material/CalendarMonth';
 import ProfileIcon from '@mui/icons-material/Person';
 import { Link, useNavigate } from 'react-router-dom';
 import './navbar.css';
@@ -18,6 +19,8 @@ const Navbar = () => {
   }
   const Routes = [
     { path: 'profile', icon: <ProfileIcon />, name: 'Profil Utilisateur' },
+    { path: 'suivis', icon: <StarIcon />, name: 'Films et series suisvis' },
+    { path: 'calendar', icon: <CalendarIcon />, name: 'Calendrier' },
   ];
 
   return (
@@ -31,6 +34,7 @@ const Navbar = () => {
           </Box>
           
         </Button>
+        <Box>
         {Routes.map((route) => (
           <Button
             key={route.name}
@@ -42,6 +46,8 @@ const Navbar = () => {
             {route.name}
           </Button>
         ))}
+        </Box>
+
       </Toolbar>
     </AppBar>
   );

@@ -49,7 +49,7 @@ const SignUp: React.FC = () => {
     <ThemeProvider theme={defaultTheme}>
       <Grid container component="main" sx={{ height: "100vh" }}>
         <CssBaseline />
-        <Grid item xs={12} sm={8} md={5} sx={{ backgroundColor: "black" }}>
+        <Grid item xs={12} sm={8} md={5} sx={{ backgroundColor: "black" }} >
           <Box
             sx={{
               my: 8,
@@ -91,7 +91,7 @@ const SignUp: React.FC = () => {
                 autoComplete="current-password"
               />
               <Button
-              className="button"
+              className="button-s"
                 type="submit"
                 fullWidth
                 variant="contained"

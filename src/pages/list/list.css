@@ -1,0 +1,25 @@
+.background{
+   background-color: rgb(0, 0, 0);
+}
+input.css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input{
+    color: #fff;
+    text-align: center;
+}
+
+div.search-input{
+    margin-top: 1%;
+    margin-bottom: 3%;
+    width: 30%;
+}
+.search{
+    
+    color: #fff;
+}
+.titre{
+    padding: 1%;
+    color: #fff;
+    background-color:transparent;
+}
+.all{
+    margin-left: 3.75%;
+}
