@@ -65,7 +65,7 @@ const Profile: React.FC = () => {
         }
       }
     } catch (error) {
-      console.error("Erreur lors de la récupération des genres: ", error);
+      console.error("Error while fetching genres: ", error);
     }
   };
   const handleSignOut = () => {
@@ -74,7 +74,7 @@ const Profile: React.FC = () => {
         navigate("/login");
       })
       .catch((error) => {
-        console.error("Erreur lors de la déconnexion: ", error);
+        console.error("Error while signing out: ", error);
       });
   };
 
@@ -82,14 +82,14 @@ const Profile: React.FC = () => {
     if (user) {
       sendEmailVerification(user)
         .then(() => {
-          alert("E-mail de vérification envoyé!");
+          alert("Verification email sent!");
         })
         .catch((error) => {
           console.error(
-            "Erreur lors de l'envoi de l'e-mail de vérification: ",
+            "Error while sending email verification: ",
             error
           );
-          alert("Erreur lors de l'envoi de l'e-mail de vérification.");
+          alert("Error while sending email verification.");
         });
     }
   };
@@ -100,13 +100,13 @@ const Profile: React.FC = () => {
       updateEmail(user, newEmail)
         .then(() => {
           setUpdateStatus("SUCCESS");
-          alert("Email mis à jour avec succès!");
+          alert("Email updated successfully!");
           setUser(authInstance.currentUser);
         })
         .catch((error) => {
           setUpdateStatus("ERROR");
-          console.error("Erreur lors de la mise à jour de l'e-mail: ", error);
-          alert("Erreur lors de la mise à jour de l'e-mail.");
+          console.error("Error while updating email: ", error);
+          alert("Error while updating email.");
         });
     }
   };
@@ -116,20 +116,20 @@ const Profile: React.FC = () => {
       sendPasswordResetEmail(authInstance, user.email)
         .then(() => {
           alert(
-            "Lien de réinitialisation du mot de passe envoyé à votre e-mail!"
+            "Password reset link sent to your email!"
           );
         })
         .catch((error) => {
           console.error(
-            "Erreur lors de l'envoi du lien de réinitialisation: ",
+            "Error while sending password reset link: ",
             error
           );
-          alert("Erreur lors de l'envoi du lien de réinitialisation.");
+          alert("Error while sending password reset link.");
         });
     }
   };
 
-  if (!user) return <p>Chargement...</p>;
+  if (!user) return <p>Loading...</p>;
   const defaultTheme = createTheme();
 
   return (
@@ -148,12 +148,12 @@ const Profile: React.FC = () => {
         }}
         className="fond"
       >
-        <Box className="profil">
+        <Box className="profile">
           <Typography component="h1" variant="h5" sx={{ color: "white" }}>
-            Profil:
+            Profile:
           </Typography>
           <Typography component="p" variant="h5" sx={{ color: "white" }}>
-            Email actuel: {user.email}
+            Your Email: {user.email}
           </Typography>
           <TextField
             margin="normal"
@@ -164,7 +164,7 @@ const Profile: React.FC = () => {
             type="email"
             onChange={(e) => setNewEmail(e.target.value)}
           >
-            Nouvel Email
+            New Email
           </TextField>
           <Button
             className="button-p"
@@ -174,81 +174,63 @@ const Profile: React.FC = () => {
             sx={{ mt: 3, mb: 2, backgroundColor: "red" }}
             onClick={handleEmailUpdate}
           >
-            {updateStatus === "PENDING"
-              ? "Mise à jour..."
-              : "Mettre à jour l'e-mail"}
+            {updateStatus === "PENDING" ? "Loading..." : "Update Email"}
           </Button>
 
           {!user.emailVerified && (
             <>
               <Button
-               className="button-p"
+                className="button-p"
                 type="submit"
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
                 onClick={handleSendEmailVerification}
               >
-                Envoyer l'e-mail de vérification
+                Send Email Verification
               </Button>
               <Typography component="p" variant="h5" sx={{ color: "white" }}>
-                Si vous n'avez pas reçu l'e-mail, veuillez vérifier votre
-                dossier de spam.
+                If you have not received the email, please check your spam
               </Typography>
             </>
           )}
-          {updateStatus === "SUCCESS" && <p>Email mis à jour avec succès!</p>}
+          {updateStatus === "SUCCESS" && <p>Email updated successfully!</p>}
           {updateStatus === "ERROR" && (
             <Typography component="p" variant="h5" sx={{ color: "white" }}>
-              Erreur lors de la mise à jour de l'e-mail.
+              Error while updating the email
             </Typography>
           )}
 
           {user.emailVerified && (
             <Button
-            className="button-p"
+              className="button-p"
               type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
               onClick={handleSendPasswordResetEmail}
             >
-              Réinitialiser le mot de passe
+              Reset Password
             </Button>
           )}
           <Button
-           className="button-p"
+            className="button-p"
             type="submit"
             fullWidth
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
             onClick={handleSignOut}
           >
-            Déconnexion
+            Logout
           </Button>
           <Button
-           className="button-p"
+            className="button-p"
             href="/genres"
             variant="contained"
-            sx={{ mt: 3, mb: 2, backgroundColor: "red"}}
+            sx={{ mt: 3, mb: 2, backgroundColor: "red" }}
           >
-            Gerer vos preferences
+            Change your favorite genres
           </Button>
-          {/* <Autocomplete
-      options={options}
-      renderInput={(params) => (
-        <TextField
-          {...params}
-          label="Rechercher"
-          variant="outlined"
-          className="genre"
-        />
-      )}
-      renderOption={(props, option) => (
-        <li {...props}>{option}</li>
-      )}
-      fullWidth
-    /> */}
         </Box>
       </Grid>
     </ThemeProvider>

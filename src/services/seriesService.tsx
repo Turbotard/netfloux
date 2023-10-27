@@ -1,5 +1,4 @@
 import { updateDoc, arrayUnion } from "@firebase/firestore";
-import { doc } from "prettier";
 import { arrayRemove, doc as doc2, getDoc } from "firebase/firestore";
 import { firestore } from "../db/db";
 
@@ -32,20 +31,20 @@ interface Season {
 export const fetchDetailsFromTMDb = async (tmdbId: number): Promise<{ poster: string, genres: string[], synopsis: string }> => {
 
     if (!tmdbApiKey) {
-        console.error("La clé API (REACT_APP_TMDB_API_KEY) n'est pas définie.");
+        console.error("API key (REACT_APP_TMDB_API_KEY) is not defined.");
         return { poster: '', genres: [], synopsis: '' };
     }
 
     try {
         const response = await fetch(`${TMDB_BASE_URL}/tv/${tmdbId}?api_key=${tmdbApiKey}`);
         if (!response.ok) {
-            console.error(`Erreur lors de la requête à l'API TMDb pour l'ID: ${tmdbId} - Status: ${response.statusText}`);
+            console.error(`Error while fetching data from TMDb API for ID: ${tmdbId} - Status: ${response.statusText}`);
             return { poster: '', genres: [], synopsis: '' };
         }
         const data = await response.json();
 
         if (!data.poster_path) {
-            console.warn(`Poster path manquant pour l'ID TMDb: ${tmdbId}`);
+            console.warn(`Poster path missing for TMDb ID: ${tmdbId}`);
         }
 
         const genres = data.genres.map((genre: { id: number, name: string }) => genre.name);
@@ -55,7 +54,7 @@ export const fetchDetailsFromTMDb = async (tmdbId: number): Promise<{ poster: st
             synopsis: data.overview
         };
     } catch (error) {
-        console.error("Erreur lors de la récupération des détails depuis TMDb:", error);
+        console.error("Error while fetching details from TMDb:", error);
         return { poster: '', genres: [], synopsis: '' };
     }
 }
@@ -64,11 +63,11 @@ export const fetchAllSeriesFromTMDb = async (page: number, limit: number, search
     const tmdbApiKey = process.env.REACT_APP_TMDB_API_KEY;
 
     if (!tmdbApiKey) {
-        console.error("La clé API (REACT_APP_TMDB_API_KEY) n'est pas définie.");
+        console.error("API key (REACT_APP_TMDB_API_KEY) is not defined.");
         return [];
     }
 
-    // Choisir l'endpoint en fonction de la présence de searchQuery
+    // Choose the endpoint based on the presence of searchQuery
     const seriesEndpoint = searchQuery
         ? `https://api.themoviedb.org/3/search/tv?query=${encodeURIComponent(searchQuery)}&page=${page}&api_key=${tmdbApiKey}`
         : `https://api.themoviedb.org/3/discover/tv?page=${page}&api_key=${tmdbApiKey}`;
@@ -78,7 +77,7 @@ export const fetchAllSeriesFromTMDb = async (page: number, limit: number, search
         const seriesData = await seriesResponse.json();
 
         if (seriesResponse.status !== 200) {
-            throw new Error(`Erreur lors de la requête à l'API TMDb - Status: ${seriesResponse.statusText}`);
+            throw new Error(`Error while fetching data from TMDb API - Status: ${seriesResponse.statusText}`);
         }
 
         const genreMap = await fetchAllGenresFromTMDb();
@@ -86,7 +85,7 @@ export const fetchAllSeriesFromTMDb = async (page: number, limit: number, search
         const detailedSeriesData = await Promise.all(
             seriesData.results.map(async (serie: any) => {
                 if (!serie.id) {
-                    console.warn("ID de série manquant:", serie);
+                    console.warn("Missing series ID:", serie);
                     return null;
                 }
 
@@ -94,12 +93,12 @@ export const fetchAllSeriesFromTMDb = async (page: number, limit: number, search
                 const serieDetail = await serieDetailResponse.json();
 
                 return {
-                    title: serie.name ?? 'Titre non disponible',
+                    title: serie.name ?? 'Title not available',
                     year: new Date(serie.first_air_date).getFullYear(),
                     poster: `https://image.tmdb.org/t/p/w500${serie.poster_path}`,
                     genres: serie.genre_ids.map((id: number) => genreMap.get(id) || "N/A"),
                     rating: serieDetail.vote_average,
-                    synopsis: serieDetail.overview ?? 'Synopsis non disponible',
+                    synopsis: serieDetail.overview ?? 'Synopsis not available',
                     numberOfSeasons: serieDetail.number_of_seasons,
                     numberOfEpisodes: serieDetail.number_of_episodes,
                     seasons: serieDetail.seasons.map((season: any) => ({
@@ -113,7 +112,7 @@ export const fetchAllSeriesFromTMDb = async (page: number, limit: number, search
 
         return detailedSeriesData.filter(Boolean) as Show[];
     } catch (error) {
-        console.error("Erreur lors de la récupération des séries depuis TMDb:", error);
+        console.error("Error while fetching series from TMDb:", error);
         return [];
     }
 };
@@ -128,16 +127,16 @@ export const fetchAllGenresFromTMDb = async (): Promise<Map<number, string>> => 
         });
         return genreMap;
     } catch (error) {
-        console.error("Erreur lors de la récupération des genres depuis TMDb:", error);
+        console.error("Error while fetching genres from TMDb:", error);
         return new Map();
     }
 };
 
-//TRAKT
+// TRAKT
 export const fetchNextShowingDate = async (showId: number): Promise<string> => {
     const traktApiKey = process.env.REACT_APP_TRAKT_API_CLIENT_ID;
     if (!traktApiKey) {
-        console.error("La clé API (REACT_APP_TRAKT_API_CLIENT_ID) n'est pas définie.");
+        console.error("API key (REACT_APP_TRAKT_API_CLIENT_ID) is not defined.");
         return '';
     }
 
@@ -153,25 +152,26 @@ export const fetchNextShowingDate = async (showId: number): Promise<string> => {
         const data = await response.json();
 
         if (!response.ok) {
-            console.error(`Erreur lors de la récupération de la prochaine date de diffusion pour la série avec l'ID ${showId}: ${response.statusText}`);
+            console.error(`Error while fetching the next airing date for the series with ID ${showId}: ${response.statusText}`);
             return '';
         }
 
         if (data && data.first_aired) {
             return data.first_aired;
         } else {
-            console.error(`Pas de prochaine date de diffusion trouvée pour la série avec l'ID ${showId}`, data);
+            console.error(`No next airing date found for the series with ID ${showId}`, data);
             return "N/A"; 
         }
     } catch (error) {
-        console.error("Erreur lors de la récupération de la prochaine date de diffusion:", error);
+        console.error("Error while fetching the next airing date:", error);
         return '';
     }
 }
+
 export const fetchRatingFromTrakt = async (showId: number): Promise<number> => {
     const traktApiKey = process.env.REACT_APP_TRAKT_API_CLIENT_ID;
     if (!traktApiKey) {
-        console.error("La clé API (REACT_APP_TRAKT_API_CLIENT_ID) n'est pas définie.");
+        console.error("API key (REACT_APP_TRAKT_API_CLIENT_ID) is not defined.");
         return 0;
     }
 
@@ -188,7 +188,7 @@ export const fetchRatingFromTrakt = async (showId: number): Promise<number> => {
 
         return data.rating;
     } catch (error) {
-        console.error("Erreur lors de la récupération des évaluations depuis Trakt:", error);
+        console.error("Error while fetching ratings from Trakt:", error);
         return 0;
     }
 }
@@ -197,7 +197,7 @@ export const fetchAllGenresFromTrakt = async (): Promise<string[]> => {
     const traktApiKey = process.env.REACT_APP_TRAKT_API_CLIENT_ID;
 
     if (!traktApiKey) {
-        console.error("La clé API (REACT_APP_TRAKT_API_CLIENT_ID) n'est pas définie.");
+        console.error("API key (REACT_APP_TRAKT_API_CLIENT_ID) is not defined.");
         return [];
     }
 
@@ -213,19 +213,20 @@ export const fetchAllGenresFromTrakt = async (): Promise<string[]> => {
         const genres = data.map((genre: { name: string }) => genre.name);
         return genres;
     } catch (error) {
-        console.error("Erreur lors de la récupération des genres depuis Trakt:", error);
+        console.error("Error while fetching genres from Trakt:", error);
         return [];
     }
 }
+
 export const fetchPopularSeriesFromTrakt = async (page: number = 1, limit: number = 15, searchQuery?: string): Promise<Show[]> => {
     const traktApiKey = process.env.REACT_APP_TRAKT_API_CLIENT_ID;
 
     if (!traktApiKey) {
-        console.error("La clé API (REACT_APP_TRAKT_API_CLIENT_ID) n'est pas définie.");
+        console.error("API key (REACT_APP_TRAKT_API_CLIENT_ID) is not defined.");
         return [];
     }
 
-    // Choisir l'endpoint en fonction de la présence de searchQuery
+    // Choose the endpoint based on the presence of searchQuery
     const seriesEndpoint = searchQuery
         ? `${TRAKT_BASE_URL}search/show?query=${encodeURIComponent(searchQuery)}&page=${page}&limit=${limit}`
         : `${TRAKT_BASE_URL}shows/popular?page=${page}&limit=${limit}`;
@@ -240,17 +241,16 @@ export const fetchPopularSeriesFromTrakt = async (page: number = 1, limit: numbe
         });
 
         if (!response.ok) {
-            throw new Error(`Erreur lors de la requête à l'API Trakt.tv - Status: ${response.statusText}`);
+            throw new Error(`Error while making a request to the Trakt.tv API - Status: ${response.statusText}`);
         }
 
         const rawData = await response.json();
 
-        // Si c'est une recherche, nous devons extraire les données de show des résultats
         const showsData = searchQuery ? rawData.map((item: any) => item.show) : rawData;
 
         showsData.forEach(({ ids, title, year, ...rest }: any) => {
             if (!ids) {
-                console.warn('ids non fonctionnel', { title, year, ...rest });
+                console.warn('Non-functional IDs', { title, year, ...rest });
             }
         });
 
@@ -259,26 +259,27 @@ export const fetchPopularSeriesFromTrakt = async (page: number = 1, limit: numbe
                 const { poster, genres, synopsis } = await fetchDetailsFromTMDb(show.ids.tmdb);
                 const rating = await fetchRatingFromTrakt(show.ids.trakt);
                 return {
-                    title: show.title ?? 'Titre non disponible',
+                    title: show.title ?? 'Title not available',
                     year: show.year ?? new Date().getFullYear(),
                     poster: poster,
                     genres: genres,
                     rating: rating,
-                    synopsis: synopsis ?? 'Synopsis non disponible'
+                    synopsis: synopsis ?? 'Synopsis not available'
                 };
             } else {
-                console.warn("Données manquantes ou mal formées pour:", show);
+                console.warn("Missing or malformed data for:", show);
                 return null;
             }
         }));
 
         return popularShowsDetails.filter(Boolean) as Show[];
     } catch (error) {
-        console.error("Erreur lors de la récupération des séries populaires depuis Trakt:", error);
+        console.error("Error while fetching popular series from Trakt:", error);
         return [];
     }
     
 }
+
 export const addToFavorites = async (userId: string, seriesName: string) => {
     const userDocRef = doc2(firestore, 'users', userId);
 
@@ -287,19 +288,20 @@ export const addToFavorites = async (userId: string, seriesName: string) => {
             fav: arrayUnion(seriesName)
         });
     } catch (error) {
-        console.error("Erreur lors de l'ajout aux favoris: ", error);
+        console.error("Error while adding to favorites: ", error);
         throw error;
     }
 };
+
 export const removeFromFavorites = async (userId: string, seriesName: string) => {
     const userDocRef = doc2(firestore, 'users', userId);
 
     try {
         await updateDoc(userDocRef, {
-            fav: arrayRemove(seriesName)  // Utilise arrayRemove pour supprimer le nom de la série des favoris
+            fav: arrayRemove(seriesName) 
         });
     } catch (error) {
-        console.error("Erreur lors de la suppression des favoris: ", error);
+        console.error("Error while removing from favorites: ", error);
         throw error;
     }
 };
