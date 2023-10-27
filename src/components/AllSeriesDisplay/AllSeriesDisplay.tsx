@@ -238,7 +238,7 @@ const AllSeriesDisplay: React.FC<AllSeriesDisplayProps> = ({ searchQuery }) => {
               </Typography>
               </Box>
               
-              <Box component="fieldset" borderColor="rgba(206, 27, 27)">
+              <Box component="fieldset" borderColor="#343434">
                 <Typography component="legend">Noter cette série:</Typography>
                 <Rating
                   name="rating-value"
