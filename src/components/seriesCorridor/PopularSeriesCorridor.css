@@ -73,9 +73,10 @@
 
 .card-c-description {
     position: absolute;
-    bottom: -42%;
+    bottom: -32%;
     width: 80%;
-    margin-left: 2.5%;
+    left: 50%;
+    transform: translate(-50%);
     background-color: rgba(0, 0, 0, 0.95);
     transition: bottom 0.3s ease-in-out;
     font-size: 1rem;
@@ -87,6 +88,10 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+}
+
+.card-box{
+    box-shadow: 5px 5px 5px 5px black;
 }
 
 .card:hover .card-c-description {

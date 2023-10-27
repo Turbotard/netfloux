@@ -126,7 +126,7 @@ const Suivis: React.FC = () => {
         <Typography variant="h4" className="titre">
           Vos series et films favoris:
         </Typography>
-        <Box display="flex" flexWrap="wrap" gap={2}>
+        <Box display="flex" flexWrap="wrap" gap={2} className="card-container">
           {series.map((serie, index) => (
             <Card
               key={index}
@@ -147,6 +147,7 @@ const Suivis: React.FC = () => {
                   Genres:
                   <Box className="card-d">{serie.genres.join(", ")}</Box>
                 </Typography>
+
                 <Button
                   variant="contained"
                   color="secondary"
@@ -206,6 +207,11 @@ const Suivis: React.FC = () => {
           )}
         </Dialog>
 
+        <Box className="boutons"   >
+          <Button
+            onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+            className="button-suivis"
+          >
         <Box mt={3} display="flex" justifyContent="center">
           <Button onClick={handlePrevious} className="button-suivis">
             Précédent

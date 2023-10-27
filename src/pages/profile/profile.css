@@ -10,13 +10,12 @@ span.css-12wnr2w-MuiButtonBase-root-MuiCheckbox-root {
     color: white;
 }
 
-div.profil{
+div.profile{
     background-color: black;
     width: 30%;
     height: 65vh;
     margin: auto;
-    margin-top: 1.6%;
-    padding: 5%;
+    padding: 3%;
     opacity:0.90;
 }
 div.css-154xyx0-MuiInputBase-root-MuiOutlinedInput-root{
