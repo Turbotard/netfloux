@@ -74,7 +74,7 @@ const Suivis: React.FC = () => {
         );
       } catch (error) {
         console.error(
-          "Erreur lors de la suppression de la série des favoris: ",
+          "Error while remove from followed",
           error
         );
       }
@@ -135,7 +135,7 @@ const Suivis: React.FC = () => {
                   className="button-delete"
                   onClick={() => handleRemoveFromFavorites(serie.title)}
                 >
-                  Supprimer des favoris
+                  Unfollow
                 </Button>
               </CardContent>
             </Card>
@@ -170,7 +170,7 @@ const Suivis: React.FC = () => {
               </Box>
               
               <Box component="fieldset" borderColor="#343434">
-                <Typography component="legend">Noter cette série:</Typography>
+                <Typography component="legend">Rate this serie</Typography>
                 <Rating
                   name="rating-value"
                   value={ratingValue}
@@ -181,7 +181,7 @@ const Suivis: React.FC = () => {
             </DialogContent>
             <DialogActions>
               <Button onClick={handleClose} className="button-all">
-                Fermer
+                Close
               </Button>
             </DialogActions>
           </Grid>
