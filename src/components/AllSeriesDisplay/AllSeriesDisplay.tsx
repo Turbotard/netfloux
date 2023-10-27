@@ -16,6 +16,7 @@ import {
   DialogContent,
   DialogActions,
   Grid,
+  DialogTitle,
 } from "@mui/material";
 import { doc, setDoc, getDoc } from "firebase/firestore";
 import { firestore } from "../../db/db";
@@ -163,7 +164,6 @@ const AllSeriesDisplay: React.FC<AllSeriesDisplayProps> = ({ searchQuery }) => {
       );
     }
   };
-
   return (
     <Box className="series-container">
       <Box className="series-wrapper">
@@ -184,48 +184,24 @@ const AllSeriesDisplay: React.FC<AllSeriesDisplayProps> = ({ searchQuery }) => {
                 {serie.title}
               </Typography>
               <Typography variant="subtitle1" className="card-genres">
-                Genres: {serie.genres.join(", ")}
-
-            <CardContent className="card-description">
-              <Typography className="title">
-                {serie.title}
+                Genres: {serie.genres.join(', ')}
               </Typography>
-              <Typography variant="subtitle1">
-                Genres: 
-                <Box className="card-d">{serie.genres.join(", ")}</Box>
-              </Typography>
-              <Box component="fieldset" borderColor="transparent">
-                <Typography component="legend">Rating:</Typography>
-                <Rating
-                  name="read-only"
-                  value={serie.rating / 2}
-                  readOnly
-                  precision={0.5}
-                  className="card-rating"
-                />
-              </Box>
             </CardContent>
           </Card>
         ))}
       </Box>
 
-      <Dialog open={open} onClose={handleClose} >
+      <Dialog open={open} onClose={handleClose}>
         {selectedSeries && (
           <>
             <Box className="fav">
+              <DialogTitle>{selectedSeries.title}</DialogTitle>
               <Button onClick={handleFavoriteClick}>
-
-          <Grid  className="background-dia">
-          <Box className="fav">
-              <DialogTitle >{selectedSeries.title}</DialogTitle>
-              <Button 
-              onClick={handleFavoriteClick}
-              >
                 <StarIcon className="star" />
               </Button>
             </Box>
 
-            <DialogContent >
+            <DialogContent>
               <CardMedia
                 component="img"
                 alt={selectedSeries.title}
@@ -234,34 +210,40 @@ const AllSeriesDisplay: React.FC<AllSeriesDisplayProps> = ({ searchQuery }) => {
                 image={selectedSeries.poster}
               />
               <Box className="details">
-              <Typography variant="h6">{selectedSeries.title}</Typography>
-              <Typography variant="subtitle1">
-                {selectedSeries.synopsis}
-              </Typography>
-              <Typography variant="subtitle2">
-                Acteurs: {selectedSeries.actors?.join(", ")}
-              </Typography>
-              <Typography variant="subtitle2">
-                Nombre de saisons: {selectedSeries.numberOfSeasons}
-              </Typography>
+                <Typography variant="h6">{selectedSeries.title}</Typography>
+                <Typography variant="subtitle1">
+                  {selectedSeries.synopsis}
+                </Typography>
+                <Typography variant="subtitle2">
+                  Acteurs: {selectedSeries.actors?.join(', ')}
+                </Typography>
+                <Typography variant="subtitle2">
+                  Nombre de saisons: {selectedSeries.numberOfSeasons}
+                </Typography>
 
-              {selectedSeries.seasons && selectedSeries.seasons.map((season) => (
-                  <Typography variant="subtitle2" key={season.seasonNumber}>
-                      Saison {season.seasonNumber}: {season.episodeCount} épisodes
+                {selectedSeries.seasons &&
+                  selectedSeries.seasons.map((season) => (
+                    <Typography
+                      variant="subtitle2"
+                      key={season.seasonNumber}
+                    >
+                      Saison {season.seasonNumber}: {season.episodeCount}{' '}
+                      épisodes
+                    </Typography>
+                  ))}
+                <Box component="fieldset" borderColor="transparent"></Box>
+
+                <Box component="fieldset" borderColor="rgba(206, 27, 27)">
+                  <Typography component="legend">
+                    Noter cette série:
                   </Typography>
-              ))}
-              <Box component="fieldset" borderColor="transparent">
-
-              </Box>
-              
-              <Box component="fieldset" borderColor="rgba(206, 27, 27)">
-                <Typography component="legend">Noter cette série:</Typography>
-                <Rating
-                  name="rating-value"
-                  value={ratingValue}
-                  onChange={handleRatingChange}
-                  className="note"
-                />
+                  <Rating
+                    name="rating-value"
+                    value={ratingValue}
+                    onChange={handleRatingChange}
+                    className="note"
+                  />
+                </Box>
               </Box>
             </DialogContent>
             <DialogActions>
@@ -272,17 +254,20 @@ const AllSeriesDisplay: React.FC<AllSeriesDisplayProps> = ({ searchQuery }) => {
                 Envoyer la note
               </Button>
             </DialogActions>
-          </Grid>
-           
           </>
         )}
       </Dialog>
 
       <Box mt={3} display="flex" justifyContent="center">
-        <Button onClick={() => setPage((prev) => Math.max(prev - 1, 1))} className="button-all">
+        <Button
+          onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+          className="button-all"
+        >
           Précédent
         </Button>
-        <Button onClick={() => setPage((prev) => prev + 1)} className="button-all">Suivant</Button>
+        <Button onClick={() => setPage((prev) => prev + 1)} className="button-all">
+          Suivant
+        </Button>
       </Box>
     </Box>
   );

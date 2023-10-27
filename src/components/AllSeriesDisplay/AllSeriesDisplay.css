@@ -13,6 +13,7 @@
     gap: 2rem;
     width: 100%;
     justify-items: center;
+}
 .background-dia{
     background-color: rgba(0, 0, 0);
     color: #fff;
@@ -50,7 +51,7 @@
     text-align: center;
 }
 
-.card-title {
+.card-title {}
 .card-description {
     position: absolute;
     bottom: -33%;
@@ -121,4 +122,5 @@ button.button-note:hover{
     margin-top: 5%;
     background-color: rgba(206, 27, 27);
     margin-bottom: 2%;
+}
 }
