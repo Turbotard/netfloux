@@ -73,9 +73,9 @@
 
 .card-c-description {
     position: absolute;
-    bottom: -32%;
+    bottom: -42%;
     width: 80%;
-    margin-left: 4.5%;
+    margin-left: 2.5%;
     background-color: rgba(0, 0, 0, 0.95);
     transition: bottom 0.3s ease-in-out;
     font-size: 1rem;

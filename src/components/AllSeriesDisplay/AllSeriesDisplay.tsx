@@ -210,6 +210,24 @@ const AllSeriesDisplay: React.FC<AllSeriesDisplayProps> = ({ searchQuery }) => {
                 image={selectedSeries.poster}
               />
               <Box className="details">
+              <Typography variant="h6">{selectedSeries.title}</Typography>
+              <Typography variant="subtitle1">
+                {selectedSeries.synopsis}
+              </Typography>
+              <Typography variant="subtitle2">
+                Acteurs: {selectedSeries.actors?.join(", ")}
+              </Typography>
+              </Box>
+              
+              <Box component="fieldset" borderColor="#343434">
+                <Typography component="legend">Noter cette série:</Typography>
+                <Rating
+                  name="rating-value"
+                  value={ratingValue}
+                  onChange={handleRatingChange}
+                  className="note"
+                />
+
                 <Typography variant="h6">{selectedSeries.title}</Typography>
                 <Typography variant="subtitle1">
                   {selectedSeries.synopsis}

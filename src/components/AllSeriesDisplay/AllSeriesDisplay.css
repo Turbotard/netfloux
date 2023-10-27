@@ -19,7 +19,7 @@
     color: #fff;
 }
 .note{
-    background-color: rgba(206, 27, 27);
+    background-color: #343434;
 }
 
 .card-d{
@@ -120,7 +120,8 @@ button.button-note:hover{
 }
 .details{
     margin-top: 5%;
-    background-color: rgba(206, 27, 27);
+    background-color: #343434;
     margin-bottom: 2%;
+    padding: 3%;
 }
 }
