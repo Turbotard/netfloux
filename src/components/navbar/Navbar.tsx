@@ -18,9 +18,9 @@ const Navbar = () => {
     navigate("/list")
   }
   const Routes = [
-    { path: 'profile', icon: <ProfileIcon />, name: 'Profil Utilisateur' },
-    { path: 'suivis', icon: <StarIcon />, name: 'Films et series suisvis' },
-    { path: 'calendar', icon: <CalendarIcon />, name: 'Calendrier' },
+    { path: 'profile', icon: <ProfileIcon />, name: 'Profil' },
+    { path: 'suivis', icon: <StarIcon />, name: 'Followed film and series' },
+    { path: 'calendar', icon: <CalendarIcon />, name: 'Calendar' },
   ];
 
   return (
