@@ -21,6 +21,7 @@ import { doc, getDoc, arrayRemove } from "firebase/firestore";
 import { firestore } from "../../db/db";
 import { Auth, User, getAuth, onAuthStateChanged } from "@firebase/auth";
 import Navbar from "../../components/navbar/Navbar";
+import { useNavigate } from "react-router-dom";
 
 const Suivis: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -29,6 +30,7 @@ const Suivis: React.FC = () => {
   const defaultTheme = createTheme();
   const authInstance: Auth = getAuth();
   const [ratingValue, setRatingValue] = useState<number>(0);
+  const navigate = useNavigate();
   const handleRatingChange = (
     event: React.ChangeEvent<{}>,
     newValue: number | null
@@ -51,6 +53,8 @@ const Suivis: React.FC = () => {
             );
             setSeries(filteredSeries);
           }
+        }else{
+          navigate("/login");
         }
       }
     );
