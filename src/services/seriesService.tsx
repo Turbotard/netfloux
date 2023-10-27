@@ -19,7 +19,6 @@ const TMDB_IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
 const tmdbApiKey = process.env.REACT_APP_TMDB_API_KEY;
 
 export interface Show {
-  nextEpisodeDate: boolean;
   id: number;
   title: string;
   year: number;
@@ -33,6 +32,8 @@ export interface Show {
   numberOfSeasons: number;
   numberOfEpisodes: number;
   seasons: Season[];
+  nextEpisodeDate: string | undefined;
+  nextEpisodeTitle?: string;
 }
 
 interface Season {
