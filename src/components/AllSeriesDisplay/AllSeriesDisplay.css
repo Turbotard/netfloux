@@ -1,0 +1,53 @@
+.card-d{
+    font-size: 0.75rem;
+    width: 100%;
+    display: flex;
+   justify-content: center;
+   align-items: center;
+}
+.rating{
+    background-color: #343434;
+    opacity: 0.9;
+}
+.card {
+    transition: all 0.3s ease-in-out;
+    z-index: 0;
+    overflow: hidden;
+    width: 100%;
+    height: auto;
+    position: relative;
+}
+
+
+.card-description {
+    position: absolute;
+    bottom: -25%;
+    width: 80%;
+    margin-left: 4.5%;
+    background-color: rgba(0, 0, 0, 0.95);
+    transition: bottom 0.3s ease-in-out;
+    font-size: 1rem;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.card:hover .card-description {
+    bottom: 0;
+}
+.star{
+    color: #343434;
+}
+/* .star{
+    color: red;
+} */
+.fav{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
