@@ -1,0 +1,15 @@
+.calendar-week {
+    display: flex;
+    justify-content: center;
+}
+
+.calendar-day {
+    border: 1px solid black;
+    padding: 10px;
+    flex: 1;
+}
+
+.day-title {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
