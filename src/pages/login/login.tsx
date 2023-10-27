@@ -63,8 +63,8 @@ const LoginPage = () => {
 
       navigate("/list");
     } catch (error) {
-      console.error("Erreur de connexion avec Google :", error);
-      setError("Une erreur s'est produite lors de la connexion.");
+      console.error("Error when signing in with Google:", error);
+      setError("An error occurred while signing in.");
     }
   };
 
@@ -76,37 +76,37 @@ const LoginPage = () => {
       setUser({ uid: auth.currentUser!.uid, email: email });
       navigate("/list");
     } catch (error: any) {
-      console.error("Erreur de connexion avec e-mail :", error);
+      console.error("Error when signing in with email:", error);
       let errorMessage = "";
       if (error && error.code === "auth/invalid-login-credentials") {
         errorMessage =
-          "Les informations de connexion sont invalides. Vérifiez votre e-mail et votre mot de passe.";
+          "Invalid login credentials. Please check your email and password.";
       } else if (error && error.code === "auth/user-not-found") {
-        errorMessage = "Aucun utilisateur avec cet e-mail n'a été trouvé.";
+        errorMessage = "No user found with this email.";
       } else if (error && error.code === "auth/wrong-password") {
-        errorMessage = "Le mot de passe est incorrect.";
+        errorMessage = "Incorrect password.";
       } else {
-        errorMessage = "Une erreur s'est produite lors de la connexion.";
+        errorMessage = "An error occurred while signing in.";
       }
       setError(errorMessage);
-      alert(errorMessage);  
+      alert(errorMessage);
       setAuthing(false);
     }
   };
-  
+
   const handleResetPassword = () => {
     if (email) {
       sendPasswordResetEmail(authInstance, email)
         .then(() => {
-          alert("Lien de réinitialisation du mot de passe envoyé!");
+          alert("Password reset link sent!");
           setOpen(false);
         })
         .catch((error) => {
           console.error(
-            "Erreur lors de l'envoi du lien de réinitialisation:",
+            "Error while sending password reset link:",
             error
           );
-          alert("Erreur lors de l'envoi du lien de réinitialisation.");
+          alert("Error while sending password reset link.");
         });
     }
   };
@@ -133,7 +133,7 @@ const LoginPage = () => {
             backgroundPosition: "center",
           }}
         />
-        <Grid item xs={12} sm={8} md={5} sx={{ backgroundColor: "black" }} >
+        <Grid item xs={12} sm={8} md={5} sx={{ backgroundColor: "black" }}>
           <Box
             sx={{
               my: 8,
@@ -141,7 +141,7 @@ const LoginPage = () => {
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
-              backgroundColor: "tansparent",
+              backgroundColor: "transparent",
             }}
           >
             <Typography component="h1" variant="h5" sx={{ color: "white" }}>
@@ -174,7 +174,7 @@ const LoginPage = () => {
                 onChange={(e) => setPassword(e.target.value)}
               />
               <Button
-              className="button-l"
+                className="button-l"
                 type="submit"
                 fullWidth
                 variant="contained"
@@ -184,7 +184,7 @@ const LoginPage = () => {
                 Sign In
               </Button>
               <Button
-              className="button-l"
+                className="button-l"
                 type="submit"
                 fullWidth
                 variant="contained"
@@ -199,7 +199,9 @@ const LoginPage = () => {
                 <Link onClick={() => setOpen(true)} to={""} className="link">
                   {"Forgot Password?"}
                 </Link>
-                <Link to="/signup" className="link">{"Don't have an account? Sign Up"}</Link>
+                <Link to="/signup" className="link">
+                  {"Don't have an account? Sign Up"}
+                </Link>
               </Grid>
             </Grid>
           </Box>
@@ -210,51 +212,42 @@ const LoginPage = () => {
         onClose={() => setOpen(false)}
         PaperProps={{
           style: {
-            backgroundColor: "black", // Fond noir pour la boîte de dialogue
+            backgroundColor: "black", // Black background for the dialog
           },
         }}
       >
-        <DialogTitle style={{ color: "white" }}>
-          Réinitialiser le mot de passe
-        </DialogTitle>
+        <DialogTitle style={{ color: "white" }}>Reset Password </DialogTitle>
         <DialogContent>
           <DialogContentText style={{ color: "white" }}>
-            Pour réinitialiser votre mot de passe, veuillez entrer votre adresse
-            e-mail.
+            To reset your password, please enter your email address here.
           </DialogContentText>
           <TextField
             autoFocus
             margin="dense"
             id="name"
-            label="Adresse e-mail"
+            label="Email Address"
             type="email"
             fullWidth
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             InputProps={{
               style: {
-                color: "white", // Texte en blanc pour le champ
+                color: "white", // White text for the input field
               },
             }}
             InputLabelProps={{
               style: {
-                color: "white", // Texte en blanc pour le label
+                color: "white", // White text for the label
               },
             }}
           />
         </DialogContent>
         <DialogActions>
-          <Button
-            onClick={() => setOpen(false)}
-            className="button-l"
-          >
-            Annuler
+          <Button onClick={() => setOpen(false)} className="button-l">
+            Cancel
           </Button>
-          <Button
-            onClick={handleResetPassword}
-             className="button-l"
-          >
-            Envoyer
+          <Button onClick={handleResetPassword} className="button-l">
+            Send
           </Button>
         </DialogActions>
       </Dialog>
