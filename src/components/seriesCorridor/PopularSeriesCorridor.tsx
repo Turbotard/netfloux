@@ -67,10 +67,12 @@ const PopularSeriesCorridor: React.FC = () => {
                             </Typography>
 
                             <Typography variant="subtitle1">
+                                <Box className="genre">
                                 Genres:
-                                <br />
                                 <Box className="card-c-d">
                                     {show.genres.join(', ')}
+                                </Box>
+                                    
                                 </Box>
                             </Typography>
 

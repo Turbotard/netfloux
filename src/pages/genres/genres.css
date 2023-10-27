@@ -29,11 +29,11 @@ div.css-154xyx0-MuiInputBase-root-MuiOutlinedInput-root{
 span.css-8je8zh-MuiTouchRipple-root:hover{
     background-color: #fff;
 }
-button.button{
+button.button-g{
     background-color: red;
     color: #fff;
 }
-button.button:hover{
+button.button-g:hover{
     background-color: #fff;
     color: red;
 }

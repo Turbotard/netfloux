@@ -6,17 +6,22 @@ import Signup from "./pages/signup/signup";
 import Profile from "./pages/profile/profile";
 import ListPage from "./pages/list/List";
 import Genres from "./pages/genres/genres"
+import Suivis from "./pages/suivis/suivis"
+import { useLocation } from "react-router-dom";
+import { CSSTransition, TransitionGroup } from "react-transition-group";
 
 function App(): React.ReactElement {
   return (
     <div className="App">
       <Router>
         <Routes>
+        <Route path="/" element={<ListPage />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/list" element={<ListPage />} />
           <Route path="/genres" element={<Genres />} />
+          <Route path="/suivis" element={<Suivis/>} />
         </Routes>
       </Router>
     </div>
