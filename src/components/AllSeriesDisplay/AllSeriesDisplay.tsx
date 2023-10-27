@@ -3,7 +3,6 @@ import {
   Show,
   addToFavorites,
   fetchAllSeriesFromTMDb,
-  fetchPopularSeriesFromTrakt,
 } from "../../services/seriesService";
 import {
   Box,
@@ -19,13 +18,12 @@ import {
   DialogActions,
   Grid,
 } from "@mui/material";
-import { doc, setDoc, getDoc, arrayUnion } from "firebase/firestore";
+import { doc, setDoc, getDoc } from "firebase/firestore";
 import { firestore } from "../../db/db";
 import { Auth, User, getAuth, onAuthStateChanged } from "@firebase/auth";
 import { useNavigate } from "react-router";
 import StarIcon from "@mui/icons-material/Star";
 import "./AllSeriesDisplay.css";
-import { PassThrough } from "stream";
 
 interface AllSeriesDisplayProps {
   searchQuery: string;
@@ -95,7 +93,7 @@ const AllSeriesDisplay: React.FC<AllSeriesDisplayProps> = ({ searchQuery }) => {
     return () => {
       unsubscribe();
     };
-  }, [page, searchQuery, user]);
+  }, [authInstance, navigate, page, searchQuery, user]);
 
   const handleOpen = async (serie: any) => {
     if (user) {
