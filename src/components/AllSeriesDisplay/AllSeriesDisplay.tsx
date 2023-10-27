@@ -13,10 +13,10 @@ import {
   CardContent,
   Rating,
   Dialog,
+  DialogTitle,
   DialogContent,
   DialogActions,
   Grid,
-  DialogTitle,
 } from "@mui/material";
 import { doc, setDoc, getDoc } from "firebase/firestore";
 import { firestore } from "../../db/db";
@@ -123,7 +123,7 @@ const AllSeriesDisplay: React.FC<AllSeriesDisplayProps> = ({ searchQuery }) => {
     setRatingValue(newValue as number);
   };
   const formatSeriesName = (name: string) => {
-    return name.replace(/[^a-zA-Z0-9]/g, "_");
+    return name.replace(/[^a-zA-Z0-9]/g, "_"); // Remplace les caractères non-alphanumériques par des underscores
   };
   const handleSendRating = async () => {
     if (!user) return alert("Veuillez vous connecter pour noter cette série!");
@@ -140,7 +140,7 @@ const AllSeriesDisplay: React.FC<AllSeriesDisplayProps> = ({ searchQuery }) => {
 
     const evalDocRef = doc(firestore, "eval", docId);
     try {
-      await setDoc(evalDocRef, evalData, { merge: true });
+      await setDoc(evalDocRef, evalData, { merge: true }); // use merge: true to update or create
       alert("Votre note a été envoyée avec succès!");
       handleClose();
     } catch (error) {
@@ -164,44 +164,61 @@ const AllSeriesDisplay: React.FC<AllSeriesDisplayProps> = ({ searchQuery }) => {
       );
     }
   };
+
   return (
-    <Box className="series-container">
-      <Box className="series-wrapper">
+    <Box>
+      <Box display="flex" flexWrap="wrap" gap={2}>
         {series.map((serie, index) => (
           <Card
             key={index}
-            className="series-card"
+            style={{ maxWidth: "300px" }}
             onClick={() => handleOpen(serie)}
+            className="card"
           >
             <CardMedia
               component="img"
               alt={serie.title}
-              className="series-card-media"
+              height="auto"
+              width="70%"
               image={serie.poster}
             />
-            <CardContent className="card-content">
-              <Typography variant="h6" className="card-title">
+            <CardContent className="card-description">
+              <Typography className="title">
                 {serie.title}
               </Typography>
-              <Typography variant="subtitle1" className="card-genres">
-                Genres: {serie.genres.join(', ')}
+              <Typography variant="subtitle1">
+                Genres: 
+                <Box className="card-d">{serie.genres.join(", ")}</Box>
               </Typography>
+              <Box component="fieldset" borderColor="transparent">
+                <Typography component="legend">Rating:</Typography>
+                <Rating
+                  name="read-only"
+                  value={serie.rating / 2}
+                  readOnly
+                  precision={0.5}
+                  className="rating"
+                />
+              </Box>
             </CardContent>
           </Card>
         ))}
       </Box>
 
-      <Dialog open={open} onClose={handleClose}>
+      <Dialog open={open} onClose={handleClose} >
         {selectedSeries && (
           <>
-            <Box className="fav">
-              <DialogTitle>{selectedSeries.title}</DialogTitle>
-              <Button onClick={handleFavoriteClick}>
+          <Grid  className="background-dia">
+          <Box className="fav">
+              <DialogTitle >{selectedSeries.title}</DialogTitle>
+              <Button 
+              onClick={handleFavoriteClick}
+              >
                 <StarIcon className="star" />
               </Button>
             </Box>
 
-            <DialogContent>
+            <DialogContent >
               <CardMedia
                 component="img"
                 alt={selectedSeries.title}
@@ -227,41 +244,6 @@ const AllSeriesDisplay: React.FC<AllSeriesDisplayProps> = ({ searchQuery }) => {
                   onChange={handleRatingChange}
                   className="note"
                 />
-
-                <Typography variant="h6">{selectedSeries.title}</Typography>
-                <Typography variant="subtitle1">
-                  {selectedSeries.synopsis}
-                </Typography>
-                <Typography variant="subtitle2">
-                  Acteurs: {selectedSeries.actors?.join(', ')}
-                </Typography>
-                <Typography variant="subtitle2">
-                  Nombre de saisons: {selectedSeries.numberOfSeasons}
-                </Typography>
-
-                {selectedSeries.seasons &&
-                  selectedSeries.seasons.map((season) => (
-                    <Typography
-                      variant="subtitle2"
-                      key={season.seasonNumber}
-                    >
-                      Saison {season.seasonNumber}: {season.episodeCount}{' '}
-                      épisodes
-                    </Typography>
-                  ))}
-                <Box component="fieldset" borderColor="transparent"></Box>
-
-                <Box component="fieldset" borderColor="rgba(206, 27, 27)">
-                  <Typography component="legend">
-                    Noter cette série:
-                  </Typography>
-                  <Rating
-                    name="rating-value"
-                    value={ratingValue}
-                    onChange={handleRatingChange}
-                    className="note"
-                  />
-                </Box>
               </Box>
             </DialogContent>
             <DialogActions>
@@ -272,20 +254,17 @@ const AllSeriesDisplay: React.FC<AllSeriesDisplayProps> = ({ searchQuery }) => {
                 Envoyer la note
               </Button>
             </DialogActions>
+          </Grid>
+           
           </>
         )}
       </Dialog>
 
       <Box mt={3} display="flex" justifyContent="center">
-        <Button
-          onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
-          className="button-all"
-        >
+        <Button onClick={() => setPage((prev) => Math.max(prev - 1, 1))} className="button-all">
           Précédent
         </Button>
-        <Button onClick={() => setPage((prev) => prev + 1)} className="button-all">
-          Suivant
-        </Button>
+        <Button onClick={() => setPage((prev) => prev + 1)} className="button-all">Suivant</Button>
       </Box>
     </Box>
   );
