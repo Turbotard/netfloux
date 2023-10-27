@@ -22,7 +22,7 @@ import { doc, setDoc, getDoc } from "firebase/firestore";
 import { firestore } from "../../db/db";
 import { Auth, User, getAuth, onAuthStateChanged } from "@firebase/auth";
 import { useNavigate } from "react-router";
-import StarIcon from "@mui/icons-material/Star";
+import HeartIcon from "@mui/icons-material/Favorite";
 import "./AllSeriesDisplay.css";
 
 interface AllSeriesDisplayProps {
@@ -177,11 +177,11 @@ const AllSeriesDisplay: React.FC<AllSeriesDisplayProps> = ({ searchQuery }) => {
             <CardMedia
               component="img"
               alt={serie.title}
-              height="auto"
+              height="100%"
               width="70%"
               image={serie.poster}
             />
-            <CardContent className="card-description">
+            <CardContent className="card-all-description">
               <Typography className="title">{serie.title}</Typography>
               <Typography variant="subtitle1">
                 Genres:
@@ -209,7 +209,7 @@ const AllSeriesDisplay: React.FC<AllSeriesDisplayProps> = ({ searchQuery }) => {
               <Box className="fav">
                 <DialogTitle>{selectedSeries.title}</DialogTitle>
                 <Button onClick={handleFavoriteClick}>
-                  <StarIcon className="star" />
+                  <HeartIcon className="star" />
                 </Button>
               </Box>
 
@@ -221,17 +221,22 @@ const AllSeriesDisplay: React.FC<AllSeriesDisplayProps> = ({ searchQuery }) => {
                   width="70%"
                   image={selectedSeries.poster}
                 />
-                <Box className="details">
-                  <Typography variant="h6">{selectedSeries.title}</Typography>
-                  <Typography variant="subtitle1">
-                    {selectedSeries.synopsis}
-                  </Typography>
-                  <Typography variant="subtitle2">
-                    Actors: {selectedSeries.actors?.join(", ")}
-                  </Typography>
+                <Box className="detail">
+                  <Box className="details">
+                    <Typography variant="h6">{selectedSeries.title}</Typography>
+                    <Typography variant="subtitle1">
+                      {selectedSeries.synopsis}
+                    </Typography>
+                    <Typography variant="subtitle2">
+                      Actors: {selectedSeries.actors?.join(", ")}
+                    </Typography>
+                  </Box>
                 </Box>
 
-                <Box component="fieldset" borderColor="#343434">
+
+                <hr />
+                <Box className="rate">
+                <Box component="fieldset" borderColor="#343434" className="rate-star">
                   <Typography component="legend">Rate this series:</Typography>
                   <Rating
                     name="rating-value"
@@ -240,6 +245,26 @@ const AllSeriesDisplay: React.FC<AllSeriesDisplayProps> = ({ searchQuery }) => {
                     className="note"
                   />
                 </Box>
+                </Box>
+   
+                <hr />
+                <Typography variant="subtitle2" className="saison-titre">
+                  <Box className="saison-titre-baxkground">
+                    Nombre de saisons: {selectedSeries.numberOfSeasons}
+                  </Box>
+
+                </Typography>
+                <hr />
+                {selectedSeries.seasons && selectedSeries.seasons.map((season) => (
+                  <Typography variant="subtitle2" key={season.seasonNumber} className='saison'>
+                    <Box className="episode">
+                      <hr />
+                      Saison {season.seasonNumber}: {season.episodeCount} épisodes
+                      <hr />
+                    </Box>
+
+                  </Typography>
+                ))}
               </DialogContent>
               <DialogActions>
                 <Button onClick={handleClose} className="button-all">

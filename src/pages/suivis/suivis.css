@@ -18,7 +18,13 @@
     background-color: #680e0e;
     opacity: 0.9;
 }
+.card-container{
+    display: grid;
+    justify-content: center;
+    grid-template-columns: repeat(auto-fill, 300px);
+}
 .card {
+    margin-top: 1%;
     transition: all 0.3s ease-in-out;
     z-index: 0;
     overflow: hidden;
@@ -30,7 +36,7 @@
 
 .card-description {
     position: absolute;
-    bottom: -24.5%;
+    bottom: -25%;
     width: 80%;
     margin-left: 4.5%;
     background-color: rgba(206, 27, 27, 0.95);
@@ -98,4 +104,16 @@ button.button-delete:hover{
     padding: 1%;
     color: #fff;
     background-color:transparent;
+}
+.boutons{
+    margin-top: 15%;
+    display:"flex"; 
+    justify-content: center;
+    align-items:"flex-end"; 
+    position:"absolute";
+}
+.background{
+    background-color: rgba(0, 0, 0);
+    color: #fff;
+    height: 100;
 }
