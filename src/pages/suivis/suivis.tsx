@@ -209,6 +209,20 @@ const Suivis: React.FC = () => {
           )}
         </Dialog>
 
+        <Box className="boutons"   >
+          <Button
+            onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+            className="button-suivis">
+            Précédent
+          </Button>
+          <Button
+            onClick={handleNext}
+            className="button-suivis"
+            disabled={!canGoNext}
+          >
+            Suivant
+          </Button>
+
         <Box className="boutons">
           <Box mt={3} display="flex" justifyContent="center">
             <Button
@@ -226,6 +240,7 @@ const Suivis: React.FC = () => {
             </Button>
           </Box>
         </Box>
+
       </Grid>
     </ThemeProvider>
   );

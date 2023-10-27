@@ -144,7 +144,6 @@ const Profile: React.FC = () => {
               ? t.palette.grey[50]
               : t.palette.grey[900],
           backgroundSize: "cover",
-          backgroundPosition: "center",
         }}
         className="fond"
       >
