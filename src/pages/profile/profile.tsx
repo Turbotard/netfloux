@@ -65,7 +65,7 @@ const Profile: React.FC = () => {
         }
       }
     } catch (error) {
-      console.error("Erreur lors de la récupération des genres: ", error);
+      console.error("Error while fetching genres: ", error);
     }
   };
   const handleSignOut = () => {
@@ -74,7 +74,7 @@ const Profile: React.FC = () => {
         navigate("/login");
       })
       .catch((error) => {
-        console.error("Erreur lors de la déconnexion: ", error);
+        console.error("Error while signing out: ", error);
       });
   };
 
@@ -82,14 +82,14 @@ const Profile: React.FC = () => {
     if (user) {
       sendEmailVerification(user)
         .then(() => {
-          alert("E-mail de vérification envoyé!");
+          alert("Verification email sent!");
         })
         .catch((error) => {
           console.error(
-            "Erreur lors de l'envoi de l'e-mail de vérification: ",
+            "Error while sending email verification: ",
             error
           );
-          alert("Erreur lors de l'envoi de l'e-mail de vérification.");
+          alert("Error while sending email verification.");
         });
     }
   };
@@ -100,13 +100,13 @@ const Profile: React.FC = () => {
       updateEmail(user, newEmail)
         .then(() => {
           setUpdateStatus("SUCCESS");
-          alert("Email mis à jour avec succès!");
+          alert("Email updated successfully!");
           setUser(authInstance.currentUser);
         })
         .catch((error) => {
           setUpdateStatus("ERROR");
-          console.error("Erreur lors de la mise à jour de l'e-mail: ", error);
-          alert("Erreur lors de la mise à jour de l'e-mail.");
+          console.error("Error while updating email: ", error);
+          alert("Error while updating email.");
         });
     }
   };
@@ -116,15 +116,15 @@ const Profile: React.FC = () => {
       sendPasswordResetEmail(authInstance, user.email)
         .then(() => {
           alert(
-            "Lien de réinitialisation du mot de passe envoyé à votre e-mail!"
+            "Password reset link sent to your email!"
           );
         })
         .catch((error) => {
           console.error(
-            "Erreur lors de l'envoi du lien de réinitialisation: ",
+            "Error while sending password reset link: ",
             error
           );
-          alert("Erreur lors de l'envoi du lien de réinitialisation.");
+          alert("Error while sending password reset link.");
         });
     }
   };
@@ -148,12 +148,12 @@ const Profile: React.FC = () => {
         }}
         className="fond"
       >
-        <Box className="profil">
+        <Box className="profile">
           <Typography component="h1" variant="h5" sx={{ color: "white" }}>
-            Profil:
+            Profile:
           </Typography>
           <Typography component="p" variant="h5" sx={{ color: "white" }}>
-            Your Email : {user.email}
+            Your Email: {user.email}
           </Typography>
           <TextField
             margin="normal"
@@ -164,7 +164,7 @@ const Profile: React.FC = () => {
             type="email"
             onChange={(e) => setNewEmail(e.target.value)}
           >
-            Nouvel Email
+            New Email
           </TextField>
           <Button
             className="button-p"
@@ -194,7 +194,7 @@ const Profile: React.FC = () => {
               </Typography>
             </>
           )}
-          {updateStatus === "SUCCESS" && <p>Email updated successfully !</p>}
+          {updateStatus === "SUCCESS" && <p>Email updated successfully!</p>}
           {updateStatus === "ERROR" && (
             <Typography component="p" variant="h5" sx={{ color: "white" }}>
               Error while updating the email

@@ -59,7 +59,6 @@ const Suivis: React.FC = () => {
       }
     );
 
-    // Se désabonner de l'écouteur lors de la suppression du composant
     return () => unsubscribe();
   }, [page]);
 
@@ -72,7 +71,7 @@ const Suivis: React.FC = () => {
         );
       } catch (error) {
         console.error(
-          "Erreur lors de la suppression de la série des favoris: ",
+          "Error removing serie from favorites in firestore",
           error
         );
       }

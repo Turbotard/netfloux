@@ -63,8 +63,8 @@ const LoginPage = () => {
 
       navigate("/list");
     } catch (error) {
-      console.error("Erreur de connexion avec Google :", error);
-      setError("Une erreur s'est produite lors de la connexion.");
+      console.error("Error when signing in with Google:", error);
+      setError("An error occurred while signing in.");
     }
   };
 
@@ -76,17 +76,17 @@ const LoginPage = () => {
       setUser({ uid: auth.currentUser!.uid, email: email });
       navigate("/list");
     } catch (error: any) {
-      console.error("Erreur de connexion avec e-mail :", error);
+      console.error("Error when signing in with email:", error);
       let errorMessage = "";
       if (error && error.code === "auth/invalid-login-credentials") {
         errorMessage =
-          "Les informations de connexion sont invalides. Vérifiez votre e-mail et votre mot de passe.";
+          "Invalid login credentials. Please check your email and password.";
       } else if (error && error.code === "auth/user-not-found") {
-        errorMessage = "Aucun utilisateur avec cet e-mail n'a été trouvé.";
+        errorMessage = "No user found with this email.";
       } else if (error && error.code === "auth/wrong-password") {
-        errorMessage = "Le mot de passe est incorrect.";
+        errorMessage = "Incorrect password.";
       } else {
-        errorMessage = "Une erreur s'est produite lors de la connexion.";
+        errorMessage = "An error occurred while signing in.";
       }
       setError(errorMessage);
       alert(errorMessage);
@@ -98,15 +98,15 @@ const LoginPage = () => {
     if (email) {
       sendPasswordResetEmail(authInstance, email)
         .then(() => {
-          alert("Lien de réinitialisation du mot de passe envoyé!");
+          alert("Password reset link sent!");
           setOpen(false);
         })
         .catch((error) => {
           console.error(
-            "Erreur lors de l'envoi du lien de réinitialisation:",
+            "Error while sending password reset link:",
             error
           );
-          alert("Erreur lors de l'envoi du lien de réinitialisation.");
+          alert("Error while sending password reset link.");
         });
     }
   };
@@ -141,7 +141,7 @@ const LoginPage = () => {
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
-              backgroundColor: "tansparent",
+              backgroundColor: "transparent",
             }}
           >
             <Typography component="h1" variant="h5" sx={{ color: "white" }}>
@@ -212,32 +212,32 @@ const LoginPage = () => {
         onClose={() => setOpen(false)}
         PaperProps={{
           style: {
-            backgroundColor: "black", // Fond noir pour la boîte de dialogue
+            backgroundColor: "black", // Black background for the dialog
           },
         }}
       >
         <DialogTitle style={{ color: "white" }}>Reset Password </DialogTitle>
         <DialogContent>
           <DialogContentText style={{ color: "white" }}>
-            For reset your password, please enter your email address here.
+            To reset your password, please enter your email address here.
           </DialogContentText>
           <TextField
             autoFocus
             margin="dense"
             id="name"
-            label="Adresse e-mail"
+            label="Email Address"
             type="email"
             fullWidth
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             InputProps={{
               style: {
-                color: "white", // Texte en blanc pour le champ
+                color: "white", // White text for the input field
               },
             }}
             InputLabelProps={{
               style: {
-                color: "white", // Texte en blanc pour le label
+                color: "white", // White text for the label
               },
             }}
           />

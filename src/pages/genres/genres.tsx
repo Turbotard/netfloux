@@ -57,7 +57,7 @@ const Genres: React.FC = () => {
         }
       }
     } catch (error) {
-      console.error("Erreur lors de la récupération des genres: ", error);
+      console.error("Error while fetching genres: ", error);
     }
   };
   const handleGenreChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -75,11 +75,11 @@ const Genres: React.FC = () => {
       try {
         const userRef = doc(firestore, "users", user.uid);
         await setDoc(userRef, { genres: selectedGenres }, { merge: true });
-        alert("Genres sauvegardés avec succès!");
+        alert("Genres saved successfully!");
         navigate("/profile");
 
       } catch (error) {
-        console.error("Erreur lors de la mise à jour des genres: ", error);
+        console.error("Error while updating genres: ", error);
       }
     }
   };

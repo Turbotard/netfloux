@@ -126,7 +126,7 @@ const AllSeriesDisplay: React.FC<AllSeriesDisplayProps> = ({ searchQuery }) => {
     return name.replace(/[^a-zA-Z0-9]/g, "_");
   };
   const handleSendRating = async () => {
-    if (!user) return alert("Veuillez vous connecter pour noter cette série!");
+    if (!user) return alert("Please log in to rate this series!");
 
     const docId = `${user.uid}_${formatSeriesName(
       selectedSeries?.title || ""
@@ -141,25 +141,25 @@ const AllSeriesDisplay: React.FC<AllSeriesDisplayProps> = ({ searchQuery }) => {
     const evalDocRef = doc(firestore, "eval", docId);
     try {
       await setDoc(evalDocRef, evalData, { merge: true });
-      alert("Votre note a été envoyée avec succès!");
+      alert("Your rating has been successfully sent!");
       handleClose();
     } catch (error) {
-      console.error("Erreur lors de l'envoi de la note: ", error);
-      alert("Une erreur s'est produite. Veuillez réessayer.");
+      console.error("Error while sending the rating: ", error);
+      alert("An error occurred. Please try again.");
     }
   };
   const handleFavoriteClick = async () => {
     if (!user) {
-      alert("Veuillez vous connecter pour ajouter cette série à vos favoris!");
+      alert("Please log in to add this series to your favorites!");
       return;
     }
 
     try {
       await addToFavorites(user.uid, selectedSeries?.title || "");
-      alert("Série ajoutée à vos favoris!");
+      alert("Series added to your favorites!");
     } catch (error) {
       alert(
-        "Une erreur s'est produite lors de l'ajout aux favoris. Veuillez réessayer."
+        "An error occurred while adding to favorites. Please try again."
       );
     }
   };
@@ -232,7 +232,7 @@ const AllSeriesDisplay: React.FC<AllSeriesDisplayProps> = ({ searchQuery }) => {
                 </Box>
 
                 <Box component="fieldset" borderColor="#343434">
-                  <Typography component="legend">Noter cette série:</Typography>
+                  <Typography component="legend">Rate this series:</Typography>
                   <Rating
                     name="rating-value"
                     value={ratingValue}
@@ -246,7 +246,7 @@ const AllSeriesDisplay: React.FC<AllSeriesDisplayProps> = ({ searchQuery }) => {
                   Close
                 </Button>
                 <Button onClick={handleSendRating} className="button-note">
-                  Send Note
+                  Send Rating
                 </Button>
               </DialogActions>
             </Grid>
@@ -259,13 +259,13 @@ const AllSeriesDisplay: React.FC<AllSeriesDisplayProps> = ({ searchQuery }) => {
           onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
           className="button-all"
         >
-          Précédent
+          Previous
         </Button>
         <Button
           onClick={() => setPage((prev) => prev + 1)}
           className="button-all"
         >
-          Suivant
+          Next
         </Button>
       </Box>
     </Box>
