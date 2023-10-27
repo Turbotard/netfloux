@@ -1,0 +1,73 @@
+div.MuiInputBase-root.MuiOutlinedInput-root.MuiInputBase-colorPrimary.MuiInputBase-fullWidth.MuiInputBase-formControl.css-md26zr-MuiInputBase-root-MuiOutlinedInput-root{
+    border-color: #fff;
+}
+fieldset.MuiOutlinedInput-notchedOutline.css-1d3z3hw-MuiOutlinedInput-notchedOutline{
+    border-color: #FFF;
+}
+
+label.css-rp6sv4-MuiFormLabel-root-MuiInputLabel-root {
+    color: #FFF;
+}
+label.css-14s5rfu-MuiFormLabel-root-MuiInputLabel-root  {
+    color:#fff;
+
+}
+div.css-md26zr-MuiInputBase-root-MuiOutlinedInput-root{
+    color: white;
+}
+button.button{
+    background-color: red;
+    color: #fff;
+}
+button.button:hover{
+    background-color: #fff;
+    color: red;
+}
+.link{
+    color: #FFF;
+    margin-right: 4%;
+   
+}
+.link:hover{
+    color:red
+}
+.divlink{
+    display: flex;
+    justify-content: flex-start;
+    width: 100%;
+}
+
+button.button-l{
+    background-color: red;
+    color: #fff;
+}
+button.button-l:hover{
+    background-color: #fff;
+    color: red;
+}
+.page-enter-left {
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .page-enter-right {
+    transform: translateX(100%);
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .page-enter-active {
+    transform: translateX(0);
+  }
+  
+  .page-exit-left {
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .page-exit-right {
+    transform: translateX(100%);
+    transition: transform 0.3s ease-in-out;
+  }
+
+
+

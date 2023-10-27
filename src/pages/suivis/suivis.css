@@ -1,0 +1,119 @@
+.background-dia{
+    background-color: rgba(0, 0, 0);
+    color: #fff;
+}
+.note{
+    background-color: #343434;
+}
+
+.card-d{
+    font-size: 0.65rem;
+    width: 100%;
+    display: flex;
+   justify-content: center;
+   align-items: center;
+
+}
+.rating{
+    background-color: #680e0e;
+    opacity: 0.9;
+}
+.card-container{
+    display: grid;
+    justify-content: center;
+    grid-template-columns: repeat(auto-fill, 300px);
+}
+.card {
+    margin-top: 1%;
+    transition: all 0.3s ease-in-out;
+    z-index: 0;
+    overflow: hidden;
+    width: 100%;
+    height: auto;
+    position: relative;
+}
+
+
+.card-description {
+    position: absolute;
+    bottom: -25%;
+    width: 80%;
+    margin-left: 4.5%;
+    background-color: rgba(206, 27, 27, 0.95);
+    transition: bottom 0.3s ease-in-out;
+    font-size: 1.5rem;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.card:hover .card-description {
+    bottom: 0;
+}
+.card:hover .popup-button {
+    transform: translateY(-30px);
+}
+
+.star{
+    color: #343434;
+}
+.star-red{
+    color: red;
+}
+.fav{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+button.button-suivis{
+    background-color: rgba(206, 27, 27);
+    color: #fff;
+    width: 20%;
+    margin: 2%;
+}
+button.button-suivis:hover{
+    background-color: #fff;
+    color: rgba(206, 27, 27);
+    width: 20%;
+    margin: 2%;
+}
+button.button-delete{
+    background-color: #fff;
+    color:  rgba(206, 27, 27);;
+    width: 100%;
+    margin: 2%;
+}
+button.button-delete:hover{
+    background-color:  rgba(206, 27, 27);
+    color:#fff ;
+    width: 100%;
+    margin: 2%;
+}
+.details{
+    margin-top: 5%;
+    background-color: #343434;
+    margin-bottom: 2%;
+    padding: 3%;
+}
+.titre{
+    padding: 1%;
+    color: #fff;
+    background-color:transparent;
+}
+.boutons{
+    margin-top: 15%;
+    display:"flex"; 
+    justify-content: center;
+    align-items:"flex-end"; 
+    position:"absolute";
+}
+.background{
+    background-color: rgba(0, 0, 0);
+    color: #fff;
+    height: 100;
+}

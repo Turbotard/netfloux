@@ -1,0 +1,170 @@
+.carousel-container {
+    width: 100%;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2% 0;
+}
+
+.carousel-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.6);
+    
+    z-index: 10;
+    border: none;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.carousel-button:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+    color: red;
+}
+.css-i4bv87-MuiSvgIcon-root{
+    color: red;
+}
+.carousel-button[disabled] {
+    visibility: hidden;
+}
+
+.carousel-button:first-child {
+    left: 0;
+}
+
+.carousel-button:last-child {
+    right: 0;
+}
+
+.carousel {
+    width: 100%;
+    display: flex;
+    overflow-x: auto;
+    gap: 16px;
+    padding: 0 50px;
+    scrollbar-width: thin;
+    scrollbar-color: #888 #202020;
+    background-color: transparent;
+}
+
+.carousel::-webkit-scrollbar {
+    width: 10px;
+}
+
+.carousel::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 10px;
+}
+
+.card {
+    transition: all 0.3s ease-in-out;
+    z-index: 0;
+    overflow: hidden;
+    width: 100%;
+    height: auto;
+    position: relative;
+}
+
+.card:hover {
+    
+    z-index: 1;
+}
+
+.card-c-description {
+    position: absolute;
+    bottom: -32%;
+    width: 80%;
+    left: 50%;
+    transform: translate(-50%);
+    background-color: rgba(0, 0, 0, 0.95);
+    transition: bottom 0.3s ease-in-out;
+    font-size: 1rem;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.card-box{
+    box-shadow: 5px 5px 5px 5px black;
+}
+
+.card:hover .card-c-description {
+    bottom: 0;
+}
+
+.card:hover .popup-button {
+    transform: translateY(-30px);
+}
+
+.series-details {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.9);
+    color: #fff;
+    width: 80%;
+    max-width: 800px;
+    z-index: 1000;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    overflow-y: auto;
+    max-height: 80vh;
+}
+
+.popup-header {
+    text-align: center;
+}
+
+.popup-header img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+
+.popup-body {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.popup-description {
+    flex: 1;
+    overflow-y: auto;
+    margin: 10px;
+    padding: 20px;
+    background-color: rgba(0, 0, 0, 0.9);
+    border-radius: 10px;
+}
+
+.popup-similar {
+    padding: 20px;
+    text-align: center;
+}
+
+.popup-close-button {
+    position: absolute;
+    top: 2%;
+    left: 92%;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+}
+.card-c-d{
+    font-size: 0.65rem;
+    width: 100%;
+    display: flex;
+   justify-content: center;
+   align-items: center;
+}
+.c-rating{
+    background-color: #343434;
+    opacity: 0.9;
+}

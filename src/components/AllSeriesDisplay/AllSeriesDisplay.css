@@ -1,0 +1,128 @@
+.background-dia{
+    background-color: rgba(0, 0, 0);
+    color: #fff;
+}
+.note{
+    background-color: #343434;
+}
+
+.card-d{
+    font-size: 0.65rem;
+    width: 100%;
+    display: flex;
+   justify-content: center;
+   align-items: center;
+
+}
+.rating{
+    background-color: #680e0e;
+    opacity: 0.9;
+}
+.card {
+    transition: all 0.3s ease-in-out;
+    z-index: 0;
+    overflow: hidden;
+    width: 100%;
+    height: auto;
+    position: relative;
+}
+
+
+.card-all-description {
+    position: absolute;
+    bottom: -32%;
+    width: 80%;
+    margin-left: 4.5%;
+    background-color: rgba(206, 27, 27, 0.95);
+    transition: bottom 0.3s ease-in-out;
+    font-size: 1.5rem;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.card:hover .card-all-description {
+    bottom: 0;
+}
+.card:hover .popup-button {
+    transform: translateY(-30px);
+}
+
+.star{
+    color: #343434;
+}
+.star:active{
+    color: red;
+}
+.fav{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+button.button-all{
+    background-color: rgba(206, 27, 27);
+    color: #fff;
+    width: 20%;
+    margin: 2%;
+}
+button.button-all:hover{
+    background-color: #fff;
+    color: rgba(206, 27, 27);
+    width: 20%;
+    margin: 2%;
+}
+button.button-note{
+    background-color: #fff;
+    color:  rgba(206, 27, 27);;
+    width: 30%;
+    margin: 2%;
+}
+button.button-note:hover{
+    background-color:  rgba(206, 27, 27);
+    color:#fff ;
+    width: 30%;
+    margin: 2%;
+}
+.details{
+    background-color: #343434;
+    padding: 3%;
+    width: 90%;
+}
+hr{
+    margin: 3%;
+}
+.saison{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+.saison-titre{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+.saison-titre-baxkground{
+    background-color: #343434;
+    width: 90%;
+    padding: 2%;
+}
+.detail{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.rate{
+    width: 90%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2%;
+}
