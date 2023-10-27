@@ -59,7 +59,6 @@ const Suivis: React.FC = () => {
       }
     );
 
-    // Se désabonner de l'écouteur lors de la suppression du composant
     return () => unsubscribe();
   }, [page]);
 

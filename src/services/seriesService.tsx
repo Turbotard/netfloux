@@ -2,6 +2,8 @@ import { updateDoc, arrayUnion } from "@firebase/firestore";
 import { doc } from "prettier";
 import { arrayRemove, doc as doc2, getDoc } from "firebase/firestore";
 import { firestore } from "../db/db";
+import axios from 'axios';
+import React, { useEffect, useState } from "react";
 
 const TRAKT_BASE_URL = 'http://localhost:8080/https://api.trakt.tv/';
 const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
@@ -13,7 +15,6 @@ export interface Show {
     title: string;
     year: number;
     poster: string;
-    nextShowingDate: string;
     genres: string[];
     rating: number;
     synopsis: string;
@@ -22,6 +23,8 @@ export interface Show {
     numberOfSeasons: number;
     numberOfEpisodes: number;
     seasons: Season[];
+    nextEpisodeDate: string | undefined;
+    nextEpisodeTitle?: string;
 }
 
 interface Season {
@@ -60,7 +63,43 @@ export const fetchDetailsFromTMDb = async (tmdbId: number): Promise<{ poster: st
     }
 }
 
-export const fetchAllSeriesFromTMDb = async (page: number, limit: number, searchQuery?: string): Promise<Show[]> => {
+
+async function fetchSeriesIdByTitle(title: string): Promise<number | null> {
+    const apiKey = 'votre_api_key';
+    const url = `https://api.themoviedb.org/3/search/tv?api_key=${apiKey}&query=${encodeURIComponent(title)}`;
+
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (data.results && data.results.length > 0) {
+            return data.results[0].id;
+        }
+
+        return null;
+
+    } catch (error: any) {
+        console.error(`Erreur lors de la recherche de la série par le titre: ${title} - ${(error as Error).message}`);
+        return null;
+    }
+}
+
+export const fetchLastEpisodeAirDateFromTMDb = async (seriesId: number): Promise<string | null> => {
+    const apiKey = 'votre_api_key'; // Remplacez par votre clé API TMDb
+    const url = `https://api.themoviedb.org/3/tv/${seriesId}?api_key=${apiKey}`;
+
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+
+        return data.last_air_date;
+    } catch (error: any) {
+        console.error(`Erreur lors de la récupération de la dernière date de diffusion depuis TMDb pour l'ID: ${seriesId} - ${(error as Error).message}`);
+        return null;
+    }
+}
+
+export const fetchAllSeriesFromTMDb = async (page: number, _limit: number, searchQuery?: string): Promise<Show[]> => {
     const tmdbApiKey = process.env.REACT_APP_TMDB_API_KEY;
 
     if (!tmdbApiKey) {
@@ -68,7 +107,6 @@ export const fetchAllSeriesFromTMDb = async (page: number, limit: number, search
         return [];
     }
 
-    // Choisir l'endpoint en fonction de la présence de searchQuery
     const seriesEndpoint = searchQuery
         ? `https://api.themoviedb.org/3/search/tv?query=${encodeURIComponent(searchQuery)}&page=${page}&api_key=${tmdbApiKey}`
         : `https://api.themoviedb.org/3/discover/tv?page=${page}&api_key=${tmdbApiKey}`;
@@ -90,23 +128,24 @@ export const fetchAllSeriesFromTMDb = async (page: number, limit: number, search
                     return null;
                 }
 
-                const serieDetailResponse = await fetch(`https://api.themoviedb.org/3/tv/${serie.id}?api_key=${tmdbApiKey}&append_to_response=credits`);
-                const serieDetail = await serieDetailResponse.json();
+                const lastEpisodeDate = await fetchLastEpisodeAirDateFromTMDb(serie.id); // Utilisation de l'ID ici
 
                 return {
+                    id: serie.id, // Utilisation de l'ID ici
                     title: serie.name ?? 'Titre non disponible',
                     year: new Date(serie.first_air_date).getFullYear(),
                     poster: `https://image.tmdb.org/t/p/w500${serie.poster_path}`,
+                    nextShowingDate: lastEpisodeDate,
                     genres: serie.genre_ids.map((id: number) => genreMap.get(id) || "N/A"),
-                    rating: serieDetail.vote_average,
-                    synopsis: serieDetail.overview ?? 'Synopsis non disponible',
-                    numberOfSeasons: serieDetail.number_of_seasons,
-                    numberOfEpisodes: serieDetail.number_of_episodes,
-                    seasons: serieDetail.seasons.map((season: any) => ({
+                    rating: serie.vote_average,
+                    synopsis: serie.overview ?? 'Synopsis non disponible',
+                    numberOfSeasons: serie.number_of_seasons,
+                    numberOfEpisodes: serie.number_of_episodes,
+                    seasons: serie.seasons.map((season: any) => ({
                         seasonNumber: season.season_number,
                         episodeCount: season.episode_count
                     })),
-                    actors: serieDetail.credits?.cast?.slice(0, 5).map((actor: any) => actor.name) || []
+                    actors: serie.credits?.cast?.slice(0, 5).map((actor: any) => actor.name) || []
                 };
             })
         );
@@ -117,6 +156,7 @@ export const fetchAllSeriesFromTMDb = async (page: number, limit: number, search
         return [];
     }
 };
+
 
 export const fetchAllGenresFromTMDb = async (): Promise<Map<number, string>> => {
     try {
@@ -134,40 +174,7 @@ export const fetchAllGenresFromTMDb = async (): Promise<Map<number, string>> => 
 };
 
 //TRAKT
-export const fetchNextShowingDate = async (showId: number): Promise<string> => {
-    const traktApiKey = process.env.REACT_APP_TRAKT_API_CLIENT_ID;
-    if (!traktApiKey) {
-        console.error("La clé API (REACT_APP_TRAKT_API_CLIENT_ID) n'est pas définie.");
-        return '';
-    }
 
-    try {
-        const response = await fetch(`${TRAKT_BASE_URL}/shows/${showId}/last_episode`, {
-            headers: {
-                'Content-Type': 'application/json',
-                'trakt-api-version': '2',
-                'trakt-api-key': traktApiKey
-            }
-        });
-
-        const data = await response.json();
-
-        if (!response.ok) {
-            console.error(`Erreur lors de la récupération de la prochaine date de diffusion pour la série avec l'ID ${showId}: ${response.statusText}`);
-            return '';
-        }
-
-        if (data && data.first_aired) {
-            return data.first_aired;
-        } else {
-            console.error(`Pas de prochaine date de diffusion trouvée pour la série avec l'ID ${showId}`, data);
-            return "N/A"; 
-        }
-    } catch (error) {
-        console.error("Erreur lors de la récupération de la prochaine date de diffusion:", error);
-        return '';
-    }
-}
 export const fetchRatingFromTrakt = async (showId: number): Promise<number> => {
     const traktApiKey = process.env.REACT_APP_TRAKT_API_CLIENT_ID;
     if (!traktApiKey) {
