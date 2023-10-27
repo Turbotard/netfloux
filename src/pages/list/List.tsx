@@ -13,7 +13,7 @@ const ListPage: React.FC = () => {
     return (
         <ThemeProvider theme={defaultTheme}>
             <Navbar/>
-            <Grid className='background'
+            <Grid className='background-l'
                  
                 >
             <Grid className="populaires"
