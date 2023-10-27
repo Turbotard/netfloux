@@ -13,7 +13,7 @@ const Home = () => {
         
                 const updatedSeriesData = await Promise.all(
                     series.map(async (serie: Show) => {
-                        const lastEpisodeAirDate = await fetchLastEpisodeAirDateFromTMDb(serie.id);
+                        const lastEpisodeAirDate = await fetchLastEpisodeAirDateFromTMDb(serie.id); // Utilisez l'ID de la série
                         return {
                             ...serie,
                             nextEpisodeDate: lastEpisodeAirDate || undefined

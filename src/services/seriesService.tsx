@@ -63,44 +63,26 @@ export const fetchDetailsFromTMDb = async (tmdbId: number): Promise<{ poster: st
     }
 }
 
-
-async function fetchSeriesIdByTitle(title: string): Promise<number | null> {
-    const apiKey = 'votre_api_key';
-    const url = `https://api.themoviedb.org/3/search/tv?api_key=${apiKey}&query=${encodeURIComponent(title)}`;
-
-    try {
-        const response = await fetch(url);
-        const data = await response.json();
-
-        if (data.results && data.results.length > 0) {
-            return data.results[0].id;
-        }
-
-        return null;
-
-    } catch (error: any) {
-        console.error(`Erreur lors de la recherche de la série par le titre: ${title} - ${(error as Error).message}`);
-        return null;
-    }
-}
-
 export const fetchLastEpisodeAirDateFromTMDb = async (seriesId: number): Promise<string | null> => {
-    const apiKey = 'votre_api_key'; // Remplacez par votre clé API TMDb
-    const url = `https://api.themoviedb.org/3/tv/${seriesId}?api_key=${apiKey}`;
+    const url = `https://api.themoviedb.org/3/tv/${seriesId}?api_key=${tmdbApiKey}`;
 
     try {
         const response = await fetch(url);
         const data = await response.json();
 
-        return data.last_air_date;
+        if (data.next_episode_to_air) {
+            return data.next_episode_to_air.air_date;
+        } else {
+            console.warn(`Prochain épisode non disponible pour la série avec l'ID: ${seriesId}`);
+            return null;
+        }
     } catch (error: any) {
-        console.error(`Erreur lors de la récupération de la dernière date de diffusion depuis TMDb pour l'ID: ${seriesId} - ${(error as Error).message}`);
+        console.error(`Erreur lors de la récupération de la date du prochain épisode depuis TMDb pour l'ID: ${seriesId} - ${(error as Error).message}`);
         return null;
     }
 }
 
 export const fetchAllSeriesFromTMDb = async (page: number, _limit: number, searchQuery?: string): Promise<Show[]> => {
-    const tmdbApiKey = process.env.REACT_APP_TMDB_API_KEY;
 
     if (!tmdbApiKey) {
         console.error("La clé API (REACT_APP_TMDB_API_KEY) n'est pas définie.");
@@ -128,24 +110,26 @@ export const fetchAllSeriesFromTMDb = async (page: number, _limit: number, searc
                     return null;
                 }
 
-                const lastEpisodeDate = await fetchLastEpisodeAirDateFromTMDb(serie.id); // Utilisation de l'ID ici
+                const serieDetailResponse = await fetch(`https://api.themoviedb.org/3/tv/${serie.id}?api_key=${tmdbApiKey}&append_to_response=credits`);
+                const serieDetail = await serieDetailResponse.json();
+                const lastEpisodeDate = await fetchLastEpisodeAirDateFromTMDb(serie.id);
 
                 return {
-                    id: serie.id, // Utilisation de l'ID ici
+                    id: serie.id,
                     title: serie.name ?? 'Titre non disponible',
                     year: new Date(serie.first_air_date).getFullYear(),
                     poster: `https://image.tmdb.org/t/p/w500${serie.poster_path}`,
-                    nextShowingDate: lastEpisodeDate,
+                    nextEpisodeDate: lastEpisodeDate,
                     genres: serie.genre_ids.map((id: number) => genreMap.get(id) || "N/A"),
-                    rating: serie.vote_average,
-                    synopsis: serie.overview ?? 'Synopsis non disponible',
-                    numberOfSeasons: serie.number_of_seasons,
-                    numberOfEpisodes: serie.number_of_episodes,
-                    seasons: serie.seasons.map((season: any) => ({
+                    rating: serieDetail.vote_average,
+                    synopsis: serieDetail.overview ?? 'Synopsis non disponible',
+                    numberOfSeasons: serieDetail.number_of_seasons,
+                    numberOfEpisodes: serieDetail.number_of_episodes,
+                    seasons: serieDetail.seasons.map((season: any) => ({
                         seasonNumber: season.season_number,
                         episodeCount: season.episode_count
                     })),
-                    actors: serie.credits?.cast?.slice(0, 5).map((actor: any) => actor.name) || []
+                    actors: serieDetail.credits?.cast?.slice(0, 5).map((actor: any) => actor.name) || []
                 };
             })
         );

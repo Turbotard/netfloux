@@ -12,7 +12,7 @@ interface SeriesWeekCalendarProps {
 
 const SeriesCalendar: React.FC<SeriesWeekCalendarProps> = ({ seriesData }) => {
     const [user, setUser] = useState<User | null>(null);
-    const [series, setSeries] = useState<Show[]>([]);
+    const [userFavorites, setUserFavorites] = useState<string[]>([]);
     const authInstance: Auth = getAuth();
 
     useEffect(() => {
@@ -20,12 +20,8 @@ const SeriesCalendar: React.FC<SeriesWeekCalendarProps> = ({ seriesData }) => {
             const userDocRef = doc(firestore, "users", currentUser.uid);
             const userDoc = await getDoc(userDocRef);
             if (userDoc.exists()) {
-                const userFavorites = userDoc.data().fav;
-                const allSeries = await fetchAllSeriesFromTMDb(1, 10);
-                const filteredSeries = allSeries.filter(serie =>
-                    userFavorites.includes(serie.title)
-                );
-                setSeries(filteredSeries);
+                const favorites = userDoc.data().fav;
+                setUserFavorites(favorites);
             }
         };
 
@@ -38,20 +34,21 @@ const SeriesCalendar: React.FC<SeriesWeekCalendarProps> = ({ seriesData }) => {
     }, []);
 
     const tileContent = ({ date }: { date: Date }) => {
-        const seriesOnThisDate = series.filter(serie => 
-            serie.nextEpisodeDate && new Date(serie.nextEpisodeDate).toDateString() === date.toDateString()
-        );
-
         return (
             <div>
-                {seriesOnThisDate.map(serie => (
-                    <div key={serie.id}>
-                        {serie.title} - Next Episode: {serie.nextEpisodeTitle}
-                    </div>
-                ))}
+                {seriesData.map(serie => {
+                    if (serie.nextEpisodeDate && new Date(serie.nextEpisodeDate).toDateString() === date.toDateString()) {
+                        return (
+                            <div key={serie.id}>
+                                {serie.title} - Next Episode: {serie.nextEpisodeDate}
+                            </div>
+                        );
+                    }
+                    return null;
+                })}
             </div>
         );
-    }
+    };
 
     return (
         <div>
