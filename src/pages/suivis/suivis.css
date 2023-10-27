@@ -49,6 +49,10 @@
 .card:hover .card-description {
     bottom: 0;
 }
+.card:hover .popup-button {
+    transform: translateY(-30px);
+}
+
 .star{
     color: #343434;
 }

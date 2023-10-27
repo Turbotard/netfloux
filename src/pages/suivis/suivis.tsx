@@ -62,8 +62,6 @@ const Suivis: React.FC = () => {
         }
       }
     );
-
-    // Se désabonner de l'écouteur lors de la suppression du composant
     return () => unsubscribe();
   }, [page]);
 
@@ -123,7 +121,6 @@ const Suivis: React.FC = () => {
                 alt={serie.title}
                 height="auto"
                 width="70%"
-                className="card"
                 image={serie.poster}
               />
               <CardContent className="card-description">
