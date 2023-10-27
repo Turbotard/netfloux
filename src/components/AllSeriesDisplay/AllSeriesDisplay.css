@@ -28,9 +28,9 @@
 }
 
 
-.card-description {
+.card-all-description {
     position: absolute;
-    bottom: -33%;
+    bottom: -32%;
     width: 80%;
     margin-left: 4.5%;
     background-color: rgba(206, 27, 27, 0.95);
@@ -46,7 +46,7 @@
     align-items: center;
 }
 
-.card:hover .card-description {
+.card:hover .card-all-description {
     bottom: 0;
 }
 .card:hover .popup-button {
@@ -56,7 +56,7 @@
 .star{
     color: #343434;
 }
-.star-red{
+.star:active{
     color: red;
 }
 .fav{
@@ -89,8 +89,40 @@ button.button-note:hover{
     margin: 2%;
 }
 .details{
-    margin-top: 5%;
     background-color: #343434;
-    margin-bottom: 2%;
     padding: 3%;
+    width: 90%;
+}
+hr{
+    margin: 3%;
+}
+.saison{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+.saison-titre{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+.saison-titre-baxkground{
+    background-color: #343434;
+    width: 90%;
+    padding: 2%;
+}
+.detail{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.rate{
+    width: 90%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2%;
 }

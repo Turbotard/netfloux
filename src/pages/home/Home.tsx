@@ -1,29 +1,63 @@
-import React from 'react';
-import SeriesWeekCalendar from '../../components/SeriesWeekCalendar/SeriesWeekCalendar';
+import React, { useEffect, useState } from "react";
+import {
+  Show,
+  fetchAllSeriesFromTMDb,
+  fetchLastEpisodeAirDateFromTMDb,
+} from "../../services/seriesService";
+import SeriesWeekCalendar from "../../components/SeriesCalendar/SeriesCalendar";
+import Navbar from "../../components/navbar/Navbar";
+import { Box } from "@mui/material";
 
-const Home: React.FC = () => {
-    const dummySeriesData = [
-        { 
-            title: 'Série A', 
-            releaseDate: new Date(2023, 9, 27).toISOString(), 
-            lastEpisodeReleaseDate: new Date(2023, 9, 26).toISOString() 
-        },
-        { 
-            title: 'Série B', 
-            releaseDate: new Date(2023, 9, 29).toISOString(), 
-            lastEpisodeReleaseDate: new Date(2023, 9, 28).toISOString() 
-        }
-    ];    
+const Home = () => {
+  const [seriesData, setSeriesData] = useState<Show[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-    return (
-        <div className="home-container">
-            <h1>Bienvenue sur la page d'accueil !</h1>
-            <div className="calendar-section">
-                <h2>Calendrier des séries de cette semaine :</h2>
-                <SeriesWeekCalendar seriesData={dummySeriesData} />
-            </div>
-        </div>
-    );
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const series = await fetchAllSeriesFromTMDb(1, 20);
+
+        const updatedSeriesData = await Promise.all(
+          series.map(async (serie: Show) => {
+            const lastEpisodeAirDate = await fetchLastEpisodeAirDateFromTMDb(
+              serie.id
+            );
+            return {
+              ...serie,
+              nextEpisodeDate: lastEpisodeAirDate || undefined,
+            };
+          })
+        );
+
+        setSeriesData(updatedSeriesData);
+      } catch (error) {
+        console.error(
+          "Erreur lors de la récupération des données des séries:",
+          error
+        );
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  return (
+    <Box className="home-container">
+      <Navbar />
+      {isLoading ? (
+        <p>Chargement des données des séries...</p>
+      ) : (
+        <Box className="calendar-container">
+          <Box className="calendar-section">
+            <h2>Calendrier des séries de cette semaine :</h2>
+            <SeriesWeekCalendar seriesData={seriesData} />
+          </Box>
+        </Box>
+      )}
+    </Box>
+  );
 };
 
 export default Home;

@@ -10,6 +10,8 @@ import {
   where,
 } from "firebase/firestore";
 import { firestore } from "../db/db";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 
 const TRAKT_BASE_URL = "http://localhost:8080/https://api.trakt.tv/";
 const TMDB_BASE_URL = "https://api.themoviedb.org/3";
@@ -30,6 +32,8 @@ export interface Show {
   numberOfSeasons: number;
   numberOfEpisodes: number;
   seasons: Season[];
+  nextEpisodeDate: string | undefined;
+  nextEpisodeTitle?: string;
 }
 
 interface Season {
@@ -87,7 +91,6 @@ export const fetchAllSeriesFromTMDb = async (
     return [];
   }
 
-  // Choose the endpoint based on the presence of searchQuery
   const seriesEndpoint = searchQuery
     ? `https://api.themoviedb.org/3/search/tv?query=${encodeURIComponent(
         searchQuery
@@ -148,32 +151,31 @@ export const fetchAllSeriesFromTMDb = async (
     return [];
   }
 };
+
 export const fetchSeriesDetailsByTitle = async (
-    title: string
-  ): Promise<Show | null> => {
-    try {
-      const seriesResponse = await fetchAllSeriesFromTMDb(1, 100, title);
-  
-      if (!seriesResponse || seriesResponse.length === 0) {
-        console.warn(`No series found for title: ${title}`);
-        return null;
-      }
-  
-      const matchedSeries = seriesResponse.find((serie) => serie.title === title);
-  
-      if (!matchedSeries) {
-        console.warn(`No exact match found for title: ${title}`);
-        return null;
-      }
-  
-      return matchedSeries;
-  
-    } catch (error) {
-      console.error("Error while fetching series details by title:", error);
+  title: string
+): Promise<Show | null> => {
+  try {
+    const seriesResponse = await fetchAllSeriesFromTMDb(1, 100, title);
+
+    if (!seriesResponse || seriesResponse.length === 0) {
+      console.warn(`No series found for title: ${title}`);
       return null;
     }
-  };
-  
+
+    const matchedSeries = seriesResponse.find((serie) => serie.title === title);
+
+    if (!matchedSeries) {
+      console.warn(`No exact match found for title: ${title}`);
+      return null;
+    }
+
+    return matchedSeries;
+  } catch (error) {
+    console.error("Error while fetching series details by title:", error);
+    return null;
+  }
+};
 
 export const fetchAllGenresFromTMDb = async (): Promise<
   Map<number, string>
@@ -300,7 +302,6 @@ export const fetchPopularSeriesFromTrakt = async (
     return [];
   }
 
-  // Choose the endpoint based on the presence of searchQuery
   const seriesEndpoint = searchQuery
     ? `${TRAKT_BASE_URL}search/show?query=${encodeURIComponent(
         searchQuery
@@ -397,3 +398,22 @@ export const removeFromFavorites = async (
     throw error;
   }
 };
+export const fetchLastEpisodeAirDateFromTMDb = async (seriesId: number): Promise<string | null> => {
+    const url = `https://api.themoviedb.org/3/tv/${seriesId}?api_key=${tmdbApiKey}`;
+
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (data.next_episode_to_air) {
+            return data.next_episode_to_air.air_date;
+        } else {
+            console.warn(`Prochain épisode non disponible pour la série avec l'ID: ${seriesId}`);
+            return null;
+        }
+    } catch (error: any) {
+        console.error(`Erreur lors de la récupération de la date du prochain épisode depuis TMDb pour l'ID: ${seriesId} - ${(error as Error).message}`);
+        return null;
+    }
+}
+
