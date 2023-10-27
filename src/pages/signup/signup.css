@@ -26,11 +26,11 @@ div.link{
 .link2{
     color: white;
 }
-button.button{
+button.button-s{
     background-color: red;
     color: #fff;
 }
-button.button:hover{
+button.button-s:hover{
     background-color: #fff;
     color: red;
 }
@@ -43,3 +43,26 @@ input.textfield{
 .textfield:hover{
     color: red;
 }
+.page-enter-left {
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .page-enter-right {
+    transform: translateX(100%);
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .page-enter-active {
+    transform: translateX(0);
+  }
+  
+  .page-exit-left {
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .page-exit-right {
+    transform: translateX(100%);
+    transition: transform 0.3s ease-in-out;
+  }

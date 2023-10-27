@@ -13,6 +13,25 @@
     gap: 2rem;
     width: 100%;
     justify-items: center;
+.background-dia{
+    background-color: rgba(0, 0, 0);
+    color: #fff;
+}
+.note{
+    background-color: rgba(206, 27, 27);
+}
+
+.card-d{
+    font-size: 0.65rem;
+    width: 100%;
+    display: flex;
+   justify-content: center;
+   align-items: center;
+
+}
+.rating{
+    background-color: #680e0e;
+    opacity: 0.9;
 }
 
 .series-card {
@@ -32,6 +51,15 @@
 }
 
 .card-title {
+.card-description {
+    position: absolute;
+    bottom: -33%;
+    width: 80%;
+    margin-left: 4.5%;
+    background-color: rgba(206, 27, 27, 0.95);
+    transition: bottom 0.3s ease-in-out;
+    font-size: 1.5rem;
+    overflow: hidden;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -56,4 +84,41 @@
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
+
+.star-red{
+    color: red;
+}
+.fav{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+button.button-all{
+    background-color: rgba(206, 27, 27);
+    color: #fff;
+    width: 20%;
+    margin: 2%;
+}
+button.button-all:hover{
+    background-color: #fff;
+    color: rgba(206, 27, 27);
+    width: 20%;
+    margin: 2%;
+}
+button.button-note{
+    background-color: #fff;
+    color:  rgba(206, 27, 27);;
+    width: 30%;
+    margin: 2%;
+}
+button.button-note:hover{
+    background-color:  rgba(206, 27, 27);
+    color:#fff ;
+    width: 30%;
+    margin: 2%;
+}
+.details{
+    margin-top: 5%;
+    background-color: rgba(206, 27, 27);
+    margin-bottom: 2%;
 }

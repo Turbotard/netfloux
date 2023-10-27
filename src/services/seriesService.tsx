@@ -1,5 +1,6 @@
 import { updateDoc, arrayUnion } from "@firebase/firestore";
-import { doc as doc2 } from "firebase/firestore";
+import { doc } from "prettier";
+import { arrayRemove, doc as doc2, getDoc } from "firebase/firestore";
 import { firestore } from "../db/db";
 
 const TRAKT_BASE_URL = 'http://localhost:8080/https://api.trakt.tv/';
@@ -216,7 +217,7 @@ export const fetchAllGenresFromTrakt = async (): Promise<string[]> => {
         return [];
     }
 }
-export const fetchPopularSeriesFromTrakt = async (page: number = 1, limit: number = 10, searchQuery?: string): Promise<Show[]> => {
+export const fetchPopularSeriesFromTrakt = async (page: number = 1, limit: number = 15, searchQuery?: string): Promise<Show[]> => {
     const traktApiKey = process.env.REACT_APP_TRAKT_API_CLIENT_ID;
 
     if (!traktApiKey) {
@@ -283,10 +284,22 @@ export const addToFavorites = async (userId: string, seriesName: string) => {
 
     try {
         await updateDoc(userDocRef, {
-            fav: arrayUnion(seriesName)  // utilise arrayUnion pour s'assurer que les doublons ne sont pas ajoutés
+            fav: arrayUnion(seriesName)
         });
     } catch (error) {
         console.error("Erreur lors de l'ajout aux favoris: ", error);
+        throw error;
+    }
+};
+export const removeFromFavorites = async (userId: string, seriesName: string) => {
+    const userDocRef = doc2(firestore, 'users', userId);
+
+    try {
+        await updateDoc(userDocRef, {
+            fav: arrayRemove(seriesName)  // Utilise arrayRemove pour supprimer le nom de la série des favoris
+        });
+    } catch (error) {
+        console.error("Erreur lors de la suppression des favoris: ", error);
         throw error;
     }
 };
