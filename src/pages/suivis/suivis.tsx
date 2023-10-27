@@ -55,7 +55,7 @@ const Suivis: React.FC = () => {
           const userDocRef = doc(firestore, "users", currentUser.uid);
           const userDoc = await getDoc(userDocRef);
           if (userDoc.exists()) {
-            const userFavoritesTitles = userDoc.data().fav;
+            const userFavoritesTitles = userDoc.data().fav || [];
             setUserFavoritesTitles(userFavoritesTitles);
 
             const startIndex = (page - 1) * PAGE_SIZE;
@@ -70,6 +70,8 @@ const Suivis: React.FC = () => {
               )
             );
             setSeries(allSeries);
+          }else{
+            alert("Vous n'avez pas de séries favorites")
           }
         }
       }
