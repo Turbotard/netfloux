@@ -4,12 +4,12 @@ import { Card, CardMedia, Typography, Button, Box, Modal } from '@mui/material';
 import { Title } from '@mui/icons-material';
 
 const ListGenre: React.FC = () => {
-    const [genres, setGenres] = useState<string[]>([]);  // État pour stocker les genres
+    const [genres, setGenres] = useState<string[]>([]);
 
     useEffect(() => {
         const testFetchGenres = async () => {
             const fetchedGenres = await fetchAllGenresFromTrakt();
-            setGenres(fetchedGenres);  // Mettre à jour l'état avec les genres récupérés
+            setGenres(fetchedGenres);
         };
 
         testFetchGenres();

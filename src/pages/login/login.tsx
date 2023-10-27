@@ -212,7 +212,7 @@ const LoginPage = () => {
         onClose={() => setOpen(false)}
         PaperProps={{
           style: {
-            backgroundColor: "black", // Black background for the dialog
+            backgroundColor: "black",
           },
         }}
       >
@@ -232,12 +232,12 @@ const LoginPage = () => {
             onChange={(e) => setEmail(e.target.value)}
             InputProps={{
               style: {
-                color: "white", // White text for the input field
+                color: "white",
               },
             }}
             InputLabelProps={{
               style: {
-                color: "white", // White text for the label
+                color: "white",
               },
             }}
           />

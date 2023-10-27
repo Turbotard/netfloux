@@ -21,7 +21,7 @@ const Home = () => {
           series.map(async (serie: Show) => {
             const lastEpisodeAirDate = await fetchLastEpisodeAirDateFromTMDb(
               serie.id
-            ); // Utilisez l'ID de la série
+            );
             return {
               ...serie,
               nextEpisodeDate: lastEpisodeAirDate || undefined,
