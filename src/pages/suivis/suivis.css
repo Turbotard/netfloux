@@ -30,7 +30,7 @@
 
 .card-description {
     position: absolute;
-    bottom: -25%;
+    bottom: -24.5%;
     width: 80%;
     margin-left: 4.5%;
     background-color: rgba(206, 27, 27, 0.95);
@@ -70,7 +70,7 @@ button.button-suivis{
     width: 20%;
     margin: 2%;
 }
-button.button-delete:hover{
+button.button-suivis:hover{
     background-color: #fff;
     color: rgba(206, 27, 27);
     width: 20%;

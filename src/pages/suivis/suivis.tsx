@@ -26,7 +26,6 @@ import { firestore } from "../../db/db";
 import { Auth, User, getAuth, onAuthStateChanged } from "@firebase/auth";
 import Navbar from "../../components/navbar/Navbar";
 import './suivis.css'
-import { useNavigate } from "react-router-dom";
 
 const Suivis: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -37,7 +36,7 @@ const Suivis: React.FC = () => {
   const [open, setOpen] = useState<boolean>(false);
   const [selectedSeries, setSelectedSeries] = useState<Show | null>(null);
   const authInstance: Auth = getAuth();
-  const navigate = useNavigate();
+
   const handleRatingChange = (
     event: React.ChangeEvent<{}>,
     newValue: number | null
@@ -60,15 +59,9 @@ const Suivis: React.FC = () => {
             );
             setSeries(filteredSeries);
           }
-        } else {
-          navigate("/login");
         }
       }
     );
-<<<<<<< HEAD
-=======
-
->>>>>>> 0e2f77098ac9f1f702b8d46b07733927f74df230
     return () => unsubscribe();
   }, [page]);
 
@@ -81,7 +74,7 @@ const Suivis: React.FC = () => {
         );
       } catch (error) {
         console.error(
-          "Error removing serie from favorites in firestore",
+          "Error while remove from followed",
           error
         );
       }
@@ -142,7 +135,7 @@ const Suivis: React.FC = () => {
                   className="button-delete"
                   onClick={() => handleRemoveFromFavorites(serie.title)}
                 >
-                  Supprimer des favoris
+                  Unfollow
                 </Button>
               </CardContent>
             </Card>
@@ -177,7 +170,7 @@ const Suivis: React.FC = () => {
               </Box>
               
               <Box component="fieldset" borderColor="#343434">
-                <Typography component="legend">Note this serie:</Typography>
+                <Typography component="legend">Rate this serie</Typography>
                 <Rating
                   name="rating-value"
                   value={ratingValue}
@@ -188,17 +181,7 @@ const Suivis: React.FC = () => {
             </DialogContent>
             <DialogActions>
               <Button onClick={handleClose} className="button-all">
-                Fermer
-
-                Genres : 
-                <Box className="card-d">{serie.genres.join(", ")}</Box>
-              </Typography>
-              <Button
-                variant="contained"
-                color="secondary"
-                onClick={() => handleRemoveFromFavorites(serie.title)}
-              >
-                unfollow
+                Close
               </Button>
             </DialogActions>
           </Grid>
@@ -212,13 +195,13 @@ const Suivis: React.FC = () => {
             onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
             className="button-suivis"
           >
-            Previous
+            Précédent
           </Button>
           <Button
             onClick={() => setPage((prev) => prev + 1)}
             className="button-suivis"
           >
-            Next
+            Suivant
           </Button>
         </Box>
       </Grid>
