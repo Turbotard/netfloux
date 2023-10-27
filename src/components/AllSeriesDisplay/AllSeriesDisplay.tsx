@@ -13,7 +13,6 @@ import {
   CardContent,
   Rating,
   Dialog,
-  DialogTitle,
   DialogContent,
   DialogActions,
   Grid,
@@ -166,22 +165,27 @@ const AllSeriesDisplay: React.FC<AllSeriesDisplayProps> = ({ searchQuery }) => {
   };
 
   return (
-    <Box>
-      <Box display="flex" flexWrap="wrap" gap={2}>
+    <Box className="series-container">
+      <Box className="series-wrapper">
         {series.map((serie, index) => (
           <Card
             key={index}
-            style={{ maxWidth: "300px" }}
+            className="series-card"
             onClick={() => handleOpen(serie)}
-            className="card"
           >
             <CardMedia
               component="img"
               alt={serie.title}
-              height="auto"
-              width="70%"
+              className="series-card-media"
               image={serie.poster}
             />
+            <CardContent className="card-content">
+              <Typography variant="h6" className="card-title">
+                {serie.title}
+              </Typography>
+              <Typography variant="subtitle1" className="card-genres">
+                Genres: {serie.genres.join(", ")}
+
             <CardContent className="card-description">
               <Typography className="title">
                 {serie.title}
@@ -197,7 +201,7 @@ const AllSeriesDisplay: React.FC<AllSeriesDisplayProps> = ({ searchQuery }) => {
                   value={serie.rating / 2}
                   readOnly
                   precision={0.5}
-                  className="rating"
+                  className="card-rating"
                 />
               </Box>
             </CardContent>
@@ -208,6 +212,9 @@ const AllSeriesDisplay: React.FC<AllSeriesDisplayProps> = ({ searchQuery }) => {
       <Dialog open={open} onClose={handleClose} >
         {selectedSeries && (
           <>
+            <Box className="fav">
+              <Button onClick={handleFavoriteClick}>
+
           <Grid  className="background-dia">
           <Box className="fav">
               <DialogTitle >{selectedSeries.title}</DialogTitle>
@@ -234,6 +241,17 @@ const AllSeriesDisplay: React.FC<AllSeriesDisplayProps> = ({ searchQuery }) => {
               <Typography variant="subtitle2">
                 Acteurs: {selectedSeries.actors?.join(", ")}
               </Typography>
+              <Typography variant="subtitle2">
+                Nombre de saisons: {selectedSeries.numberOfSeasons}
+              </Typography>
+
+              {selectedSeries.seasons && selectedSeries.seasons.map((season) => (
+                  <Typography variant="subtitle2" key={season.seasonNumber}>
+                      Saison {season.seasonNumber}: {season.episodeCount} épisodes
+                  </Typography>
+              ))}
+              <Box component="fieldset" borderColor="transparent">
+
               </Box>
               
               <Box component="fieldset" borderColor="rgba(206, 27, 27)">
