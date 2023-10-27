@@ -1,0 +1,8 @@
+.calendar-container{
+    display: flex;
+    justify-content: center;
+}
+.calendar-section{
+    width: 70%;
+    height: 90%;
+}
