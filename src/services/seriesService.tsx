@@ -10,6 +10,8 @@ import {
   where,
 } from "firebase/firestore";
 import { firestore } from "../db/db";
+import axios from 'axios';
+import React, { useEffect, useState } from "react";
 
 const TRAKT_BASE_URL = "http://localhost:8080/https://api.trakt.tv/";
 const TMDB_BASE_URL = "https://api.themoviedb.org/3";
@@ -61,6 +63,27 @@ export const fetchDetailsFromTMDb = async (
       console.warn(`Poster path missing for TMDb ID: ${tmdbId}`);
     }
 
+export const fetchLastEpisodeAirDateFromTMDb = async (seriesId: number): Promise<string | null> => {
+    const url = `https://api.themoviedb.org/3/tv/${seriesId}?api_key=${tmdbApiKey}`;
+
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (data.next_episode_to_air) {
+            return data.next_episode_to_air.air_date;
+        } else {
+            console.warn(`Prochain épisode non disponible pour la série avec l'ID: ${seriesId}`);
+            return null;
+        }
+    } catch (error: any) {
+        console.error(`Erreur lors de la récupération de la date du prochain épisode depuis TMDb pour l'ID: ${seriesId} - ${(error as Error).message}`);
+        return null;
+    }
+}
+
+export const fetchAllSeriesFromTMDb = async (page: number, _limit: number, searchQuery?: string): Promise<Show[]> => {
+
     const genres = data.genres.map(
       (genre: { id: number; name: string }) => genre.name
     );
@@ -104,6 +127,10 @@ export const fetchAllSeriesFromTMDb = async (
       );
     }
 
+    const seriesEndpoint = searchQuery
+        ? `https://api.themoviedb.org/3/search/tv?query=${encodeURIComponent(searchQuery)}&page=${page}&api_key=${tmdbApiKey}`
+        : `https://api.themoviedb.org/3/discover/tv?page=${page}&api_key=${tmdbApiKey}`;
+
     const genreMap = await fetchAllGenresFromTMDb();
 
     const detailedSeriesData = await Promise.all(
@@ -112,6 +139,38 @@ export const fetchAllSeriesFromTMDb = async (
           console.warn("Missing series ID:", serie);
           return null;
         }
+
+        const genreMap = await fetchAllGenresFromTMDb();
+
+        const detailedSeriesData = await Promise.all(
+            seriesData.results.map(async (serie: any) => {
+                if (!serie.id) {
+                    console.warn("ID de série manquant:", serie);
+                    return null;
+                }
+
+                const serieDetailResponse = await fetch(`https://api.themoviedb.org/3/tv/${serie.id}?api_key=${tmdbApiKey}&append_to_response=credits`);
+                const serieDetail = await serieDetailResponse.json();
+                const lastEpisodeDate = await fetchLastEpisodeAirDateFromTMDb(serie.id);
+
+                return {
+                    id: serie.id,
+                    title: serie.name ?? 'Titre non disponible',
+                    year: new Date(serie.first_air_date).getFullYear(),
+                    poster: `https://image.tmdb.org/t/p/w500${serie.poster_path}`,
+                    nextEpisodeDate: lastEpisodeDate,
+                    genres: serie.genre_ids.map((id: number) => genreMap.get(id) || "N/A"),
+                    rating: serieDetail.vote_average,
+                    synopsis: serieDetail.overview ?? 'Synopsis non disponible',
+                    numberOfSeasons: serieDetail.number_of_seasons,
+                    numberOfEpisodes: serieDetail.number_of_episodes,
+                    seasons: serieDetail.seasons.map((season: any) => ({
+                        seasonNumber: season.season_number,
+                        episodeCount: season.episode_count
+                    })),
+                    actors: serieDetail.credits?.cast?.slice(0, 5).map((actor: any) => actor.name) || []
+                };
+            })
 
         const serieDetailResponse = await fetch(
           `https://api.themoviedb.org/3/tv/${serie.id}?api_key=${tmdbApiKey}&append_to_response=credits`
@@ -148,6 +207,10 @@ export const fetchAllSeriesFromTMDb = async (
     return [];
   }
 };
+
+
+export const fetchAllGenresFromTMDb = async (): Promise<Map<number, string>> => {
+
 export const fetchSeriesDetailsByTitle = async (
     title: string
   ): Promise<Show | null> => {
@@ -193,6 +256,26 @@ export const fetchAllGenresFromTMDb = async (): Promise<
     return new Map();
   }
 };
+
+//TRAKT
+
+export const fetchRatingFromTrakt = async (showId: number): Promise<number> => {
+    const traktApiKey = process.env.REACT_APP_TRAKT_API_CLIENT_ID;
+    if (!traktApiKey) {
+        console.error("La clé API (REACT_APP_TRAKT_API_CLIENT_ID) n'est pas définie.");
+        return 0;
+    }
+
+    try {
+        const response = await fetch(`${TRAKT_BASE_URL}shows/${showId}/ratings`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'trakt-api-version': '2',
+                'trakt-api-key': traktApiKey
+            }
+        });
+
+        const data = await response.json();
 
 // TRAKT
 export const fetchNextShowingDate = async (showId: number): Promise<string> => {
@@ -380,6 +463,16 @@ export const addToFavorites = async (userId: string, seriesid: string) => {
     console.error("Error while adding to favorites: ", error);
     throw error;
   }
+};
+
+    try {
+        await updateDoc(userDocRef, {
+            fav: arrayRemove(seriesName)  // Utilise arrayRemove pour supprimer le nom de la série des favoris
+        });
+    } catch (error) {
+        console.error("Erreur lors de la suppression des favoris: ", error);
+        throw error;
+    }
 };
 
 export const removeFromFavorites = async (
