@@ -40,6 +40,11 @@ Feel the need to forge your own path? Ejecting gives you complete control over c
 - Explore the vast lands of [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 - Take a journey through the grand canyons of [React documentation](https://reactjs.org/).
 
+## Autors
+
+- Romain JAHIER (scrum master)
+- Esteban Dardillac (dev front)
+- Benjamin Tisserand (dev back)
 ---
 
 🎉🎆 **Thank you for embracing the American spirit with this React app! Here's to coding, liberty, and the pursuit of awesome apps!** 🍔🍟🥤
