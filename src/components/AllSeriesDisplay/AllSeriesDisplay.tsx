@@ -16,6 +16,7 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
+  Grid,
 } from "@mui/material";
 import { doc, setDoc, getDoc } from "firebase/firestore";
 import { firestore } from "../../db/db";
@@ -152,10 +153,11 @@ const AllSeriesDisplay: React.FC<AllSeriesDisplayProps> = ({ searchQuery }) => {
       alert("Veuillez vous connecter pour ajouter cette série à vos favoris!");
       return;
     }
-
+    
     try {
       await addToFavorites(user.uid, selectedSeries?.title || "");
       alert("Série ajoutée à vos favoris!");
+      
     } catch (error) {
       alert(
         "Une erreur s'est produite lors de l'ajout aux favoris. Veuillez réessayer."
@@ -181,11 +183,12 @@ const AllSeriesDisplay: React.FC<AllSeriesDisplayProps> = ({ searchQuery }) => {
               image={serie.poster}
             />
             <CardContent className="card-description">
-              <Typography variant="h6" noWrap>
+              <Typography className="title">
                 {serie.title}
               </Typography>
               <Typography variant="subtitle1">
-                <Box className="card-d">Genres: {serie.genres.join(", ")}</Box>
+                Genres: 
+                <Box className="card-d">{serie.genres.join(", ")}</Box>
               </Typography>
               <Box component="fieldset" borderColor="transparent">
                 <Typography component="legend">Rating:</Typography>
@@ -202,17 +205,20 @@ const AllSeriesDisplay: React.FC<AllSeriesDisplayProps> = ({ searchQuery }) => {
         ))}
       </Box>
 
-      <Dialog open={open} onClose={handleClose}>
+      <Dialog open={open} onClose={handleClose} >
         {selectedSeries && (
           <>
-            <Box className="fav">
-              <DialogTitle>{selectedSeries.title}</DialogTitle>
-              <Button onClick={handleFavoriteClick}>
+          <Grid  className="background-dia">
+          <Box className="fav">
+              <DialogTitle >{selectedSeries.title}</DialogTitle>
+              <Button 
+              onClick={handleFavoriteClick}
+              >
                 <StarIcon className="star" />
               </Button>
             </Box>
 
-            <DialogContent>
+            <DialogContent >
               <CardMedia
                 component="img"
                 alt={selectedSeries.title}
@@ -220,6 +226,7 @@ const AllSeriesDisplay: React.FC<AllSeriesDisplayProps> = ({ searchQuery }) => {
                 width="70%"
                 image={selectedSeries.poster}
               />
+              <Box className="details">
               <Typography variant="h6">{selectedSeries.title}</Typography>
               <Typography variant="subtitle1">
                 {selectedSeries.synopsis}
@@ -227,32 +234,37 @@ const AllSeriesDisplay: React.FC<AllSeriesDisplayProps> = ({ searchQuery }) => {
               <Typography variant="subtitle2">
                 Acteurs: {selectedSeries.actors?.join(", ")}
               </Typography>
-              <Box component="fieldset" borderColor="transparent">
+              </Box>
+              
+              <Box component="fieldset" borderColor="rgba(206, 27, 27)">
                 <Typography component="legend">Noter cette série:</Typography>
                 <Rating
                   name="rating-value"
                   value={ratingValue}
                   onChange={handleRatingChange}
+                  className="note"
                 />
               </Box>
             </DialogContent>
             <DialogActions>
-              <Button onClick={handleClose} color="primary">
+              <Button onClick={handleClose} className="button-all">
                 Fermer
               </Button>
-              <Button onClick={handleSendRating} color="primary">
+              <Button onClick={handleSendRating} className="button-note">
                 Envoyer la note
               </Button>
             </DialogActions>
+          </Grid>
+           
           </>
         )}
       </Dialog>
 
       <Box mt={3} display="flex" justifyContent="center">
-        <Button onClick={() => setPage((prev) => Math.max(prev - 1, 1))}>
+        <Button onClick={() => setPage((prev) => Math.max(prev - 1, 1))} className="button-all">
           Précédent
         </Button>
-        <Button onClick={() => setPage((prev) => prev + 1)}>Suivant</Button>
+        <Button onClick={() => setPage((prev) => prev + 1)} className="button-all">Suivant</Button>
       </Box>
     </Box>
   );

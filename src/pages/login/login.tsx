@@ -61,7 +61,7 @@ const LoginPage = () => {
         });
       }
 
-      navigate("/profile");
+      navigate("/list");
     } catch (error) {
       console.error("Erreur de connexion avec Google :", error);
       setError("Une erreur s'est produite lors de la connexion.");
@@ -74,7 +74,7 @@ const LoginPage = () => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
       setUser({ uid: auth.currentUser!.uid, email: email });
-      navigate("/profile");
+      navigate("/list");
     } catch (error: any) {
       console.error("Erreur de connexion avec e-mail :", error);
       let errorMessage = "";
@@ -133,7 +133,7 @@ const LoginPage = () => {
             backgroundPosition: "center",
           }}
         />
-        <Grid item xs={12} sm={8} md={5} sx={{ backgroundColor: "black" }}>
+        <Grid item xs={12} sm={8} md={5} sx={{ backgroundColor: "black" }} >
           <Box
             sx={{
               my: 8,
@@ -174,7 +174,7 @@ const LoginPage = () => {
                 onChange={(e) => setPassword(e.target.value)}
               />
               <Button
-              className="button"
+              className="button-l"
                 type="submit"
                 fullWidth
                 variant="contained"
@@ -184,7 +184,7 @@ const LoginPage = () => {
                 Sign In
               </Button>
               <Button
-              className="button"
+              className="button-l"
                 type="submit"
                 fullWidth
                 variant="contained"
@@ -246,13 +246,13 @@ const LoginPage = () => {
         <DialogActions>
           <Button
             onClick={() => setOpen(false)}
-            className="button-p"
+            className="button-l"
           >
             Annuler
           </Button>
           <Button
             onClick={handleResetPassword}
-             className="button-p"
+             className="button-l"
           >
             Envoyer
           </Button>

@@ -205,7 +205,7 @@ export const fetchAllGenresFromTrakt = async (): Promise<string[]> => {
         return [];
     }
 }
-export const fetchPopularSeriesFromTrakt = async (page: number = 1, limit: number = 10, searchQuery?: string): Promise<Show[]> => {
+export const fetchPopularSeriesFromTrakt = async (page: number = 1, limit: number = 15, searchQuery?: string): Promise<Show[]> => {
     const traktApiKey = process.env.REACT_APP_TRAKT_API_CLIENT_ID;
 
     if (!traktApiKey) {
